@@ -4,7 +4,7 @@ branches:
         - arve2
 env:
     global:
-        - ENCRYPTION_LABEL: "56bf8f63e969"
+        - ENCRYPTION_LABEL: "d0a57c2d09c2"
         - COMMIT_AUTHOR_EMAIL: "philipp.sommer@unil.ch"
         - BUILD_DOCS: false
         - ONLINE_TESTS: false
