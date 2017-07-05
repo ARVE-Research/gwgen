@@ -1,0 +1,34 @@
+name: gwgen_conda
+version: GWGEN_VERSION
+
+channels:
+  - http://repo.continuum.io/pkgs/free/
+  - https://conda.anaconda.org/chilipp
+
+specs:
+    - conda
+    - python PYTHON_VERSION
+    - scipy
+    - matplotlib <2.0*
+    - dask
+    - xarray
+    - numpy
+    - netcdf4
+    - seaborn
+    - bottleneck
+    - statsmodels
+    - docrep
+    - model-organization
+    - f90nml
+    - sqlalchemy
+    - psycopg2
+
+packages:
+    - file://PSYPLOT_FILE
+    - file://PSY_SIMPLE_FILE
+    - file://PSY_REG_FILE
+    - file://GWGEN_FILE
+
+license_file: EULA.txt
+
+post_install: post.sh
