@@ -10,31 +10,12 @@ Installation
 Installing only the FORTRAN program
 -----------------------------------
 If you are only interested in the FORTRAN source files for the weather
-generator, you can use svn to export the src directory:
+generator, checkout the gwgen_f90_ repository.
 
-.. code-block:: bash
+It is implemented as a submodule in this repository in the src_ directory
 
-    svn export https://github.com/ARVE-Research/gwgen/trunk/gwgen/src gwgen_src
-
-To run only the weather generator, you then also need a FORTRAN 95 compiler,
-e.g. via::
-
-    sudo apt-get install gfortran
-
-on debian, or::
-
-    brew install gcc
-
-on Mac OSX using homebrew.
-
-To create the executable, just modify the Makefile_ with the correct fortran
-compiler and run::
-
-    make
-
-This will create the `weathergen` executable in the same directory.
-
-.. _Makefile: https://github.com/ARVE-Research/gwgen/blob/master/gwgen/src/Makefile
+.. _src: https://github.com/ARVE-Research/gwgen/blob/master/gwgen/src
+.. _gwgen_f90: https://github.com/ARVE-Research/gwgen_f90
 .. _Github: https://github.com/ARVE-Research/gwgen
 
 .. _install_full:
@@ -122,3 +103,10 @@ After having successfully installed python, just install the gwgen package via
 You can test whether it was successfully installed by typing::
 
     gwgen -h
+
+.. note::
+
+    If you download the repository from Github_, you have to initialize the
+    ``src`` submodule via::
+
+        git submodule update --init gwgen/src
