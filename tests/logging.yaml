@@ -1,0 +1,44 @@
+---
+# debug logging settings (sets the level of the nc2map logger to DEBUG)
+
+version: 1
+
+disable_existing_loggers: False
+
+formatters:
+
+    simple:
+
+        format: "[%(name)s] - %(levelname)s - %(message)s"
+
+    level_message:
+
+        format: "%(levelname)s: %(message)s"
+
+    full:
+        format: "%(asctime)s - [%(name)s.%(funcName)s] - %(levelname)s - %(message)s"
+
+
+handlers:
+
+    console:
+
+        class: logging.StreamHandler
+
+        level: DEBUG
+
+        formatter: full
+
+        stream: ext://sys.stdout
+
+loggers:
+
+    gwgen:
+
+        handlers: [console]
+
+        propagate: False
+
+        level: DEBUG
+
+...

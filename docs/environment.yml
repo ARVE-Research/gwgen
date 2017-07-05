@@ -1,0 +1,19 @@
+name: gwgen-docs
+channels:
+    - chilipp
+    - conda-forge
+dependencies:
+    - gcc
+    - matplotlib
+    - numpy
+    - sphinx
+    - seaborn
+    - ipython
+    - scipy
+    - jupyter_client
+    - psyplot
+    - pip:
+        - autodocsumm
+        - sphinx-argparse
+        - sphinxfortran
+        - model-organization
