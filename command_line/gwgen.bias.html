@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen bias &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Command Line API Reference" href="gwgen.html" />
+    <link rel="next" title="gwgen bias wind" href="gwgen.bias.wind.html" />
+    <link rel="prev" title="gwgen evaluate quants" href="gwgen.evaluate.quants.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gwgen-bias">
+<span id="id1"></span><h1>gwgen bias<a class="headerlink" href="#gwgen-bias" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.bias.wind.html">gwgen bias wind</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.bias.tmin.html">gwgen bias tmin</a></li>
+</ul>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen bias [-h] [-k] [-q f1[,f21[-f22[-f23]]]] [-ne] [-np]
+                  {wind,tmin} ...
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-k=False</span>, <span class="option">--keep=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If not True, the experiment configuration files are not modified.
+    Otherwise the `quants` section is kept for the given quantiles</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-q=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]</span>, <span class="option">--quantiles=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The quantiles to use for calculating the percentiles.
+
+    A comma (``&#8217;,&#8217;``) separated string. A single value in this string
+    represents one number, ranges can also be used via a separation by
+    comma (``&#8217;-&#8216;``). Hence, ``&#8216;2009,2012-2015&#8217;`` will be
+    converted to ``[2009,2012, 2013, 2014]`` and ``2009,2012-2015-2`` to
+    ``[2009, 2012, 2015]``.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ne=False</span>, <span class="option">--no-evaluation=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the existing evaluation in the configuration is used for
+    the bias correction</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in
+    `project_output` exists already</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>wind</strong></dt>
+<dd><p class="first">Undocumented</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen bias wind [-h] [-np] [-po str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in
+    `project_output` exists already</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-po</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the output file. If not specified, it defaults to
+    `&lt;exp_dir&gt;/postproc/&lt;vname&gt;_bias_correction.pdf`</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>tmin</strong></dt>
+<dd><p class="first">Undocumented</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen bias tmin [-h] [-np] [-po str] [-deg int]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in
+    `project_output` exists already</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-po</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the output file. If not specified, it defaults to
+    `&lt;exp_dir&gt;/postproc/&lt;vname&gt;_bias_correction.pdf`</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-deg=3</span></kbd></td>
+<td>    The degree of the fittet polynomial</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Command Line API Reference</a><ul>
+      <li>Previous: <a href="gwgen.evaluate.quants.html" title="previous chapter">gwgen evaluate quants</a></li>
+      <li>Next: <a href="gwgen.bias.wind.html" title="next chapter">gwgen bias wind</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/command_line/gwgen.bias.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/command_line/gwgen.bias.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

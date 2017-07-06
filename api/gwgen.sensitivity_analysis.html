@@ -1,0 +1,888 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.sensitivity_analysis module &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Python API Reference" href="gwgen.html" />
+    <link rel="next" title="gwgen.utils module" href="gwgen.utils.html" />
+    <link rel="prev" title="gwgen.preproc module" href="gwgen.preproc.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gwgen.sensitivity_analysis">
+<span id="gwgen-sensitivity-analysis-module"></span><h1>gwgen.sensitivity_analysis module<a class="headerlink" href="#module-gwgen.sensitivity_analysis" title="Permalink to this headline">¶</a></h1>
+<p>Module for a sensitivity analysis for one experiment</p>
+<p><strong>Classes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis" title="gwgen.sensitivity_analysis.SensitivityAnalysis"><code class="xref py py-obj docutils literal"><span class="pre">SensitivityAnalysis</span></code></a>(organizer)</td>
+<td>Class that performs and manages a sensitivity analysis for the given</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-obj docutils literal"><span class="pre">SensitivityPlot</span></code></a>(stations,&nbsp;config,&nbsp;...[,&nbsp;...])</td>
+<td>A base class for the plots of the <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis" title="gwgen.sensitivity_analysis.SensitivityAnalysis"><code class="xref py py-class docutils literal"><span class="pre">SensitivityAnalysis</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot1D" title="gwgen.sensitivity_analysis.SensitivityPlot1D"><code class="xref py py-obj docutils literal"><span class="pre">SensitivityPlot1D</span></code></a>(stations,&nbsp;config,&nbsp;...[,&nbsp;...])</td>
+<td>1d plots with the indicator on the y-axis and the namelist parameter on</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D" title="gwgen.sensitivity_analysis.SensitivityPlot2D"><code class="xref py py-obj docutils literal"><span class="pre">SensitivityPlot2D</span></code></a>(stations,&nbsp;config,&nbsp;...[,&nbsp;...])</td>
+<td>2d plots with one namelist parameter on the y-axis and one on the</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Functions</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.default_sens_config" title="gwgen.sensitivity_analysis.default_sens_config"><code class="xref py py-obj docutils literal"><span class="pre">default_sens_config</span></code></a>([sa,&nbsp;indicators,&nbsp;names,&nbsp;...])</td>
+<td>The default configuration for <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-class docutils literal"><span class="pre">SensitivityPlot</span></code></a> instances.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis">
+<em class="property">class </em><code class="descclassname">gwgen.sensitivity_analysis.</code><code class="descname">SensitivityAnalysis</code><span class="sig-paren">(</span><em>organizer</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Class that performs and manages a sensitivity analysis for the given
+organizer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>organizer</strong> (<a class="reference internal" href="gwgen.main.html#gwgen.main.GWGENOrganizer" title="gwgen.main.GWGENOrganizer"><em>gwgen.main.GWGENOrganizer</em></a>) &#8211; The organizer to perform thre sensitivity analysis for</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.__call__" title="gwgen.sensitivity_analysis.SensitivityAnalysis.__call__"><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code></a>(kws)</td>
+<td>Call the <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer.start" title="(in model-organization v0.1.8)"><code class="xref py py-meth docutils literal"><span class="pre">start()</span></code></a> of the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.compile_model" title="gwgen.sensitivity_analysis.SensitivityAnalysis.compile_model"><code class="xref py py-obj docutils literal"><span class="pre">compile_model</span></code></a>()</td>
+<td>Compile the sensitivity analysis model</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.evaluate" title="gwgen.sensitivity_analysis.SensitivityAnalysis.evaluate"><code class="xref py py-obj docutils literal"><span class="pre">evaluate</span></code></a>([experiments,&nbsp;loop_exps])</td>
+<td>Evaluate the experiments of the sensitivity analysis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.init" title="gwgen.sensitivity_analysis.SensitivityAnalysis.init"><code class="xref py py-obj docutils literal"><span class="pre">init</span></code></a>([nml,&nbsp;experiment,&nbsp;run_prepare,&nbsp;...])</td>
+<td>Initialize the experiments for the sensitivity analysis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.plot" title="gwgen.sensitivity_analysis.SensitivityAnalysis.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([indicators,&nbsp;names,&nbsp;meta])</td>
+<td>Plot the result of the sensitivity analysis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.remove" title="gwgen.sensitivity_analysis.SensitivityAnalysis.remove"><code class="xref py py-obj docutils literal"><span class="pre">remove</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Remove the project and files of the sensitivity analysis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.run" title="gwgen.sensitivity_analysis.SensitivityAnalysis.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>([experiments,&nbsp;remove])</td>
+<td>Run the analysis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.setup" title="gwgen.sensitivity_analysis.SensitivityAnalysis.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>([root_dir,&nbsp;projectname,&nbsp;link,&nbsp;no_move])</td>
+<td>Set up the experiments for the project</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.config" title="gwgen.sensitivity_analysis.SensitivityAnalysis.config"><code class="xref py py-obj docutils literal"><span class="pre">config</span></code></a></td>
+<td>The configuration of the sensitivity analysis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.exp_config" title="gwgen.sensitivity_analysis.SensitivityAnalysis.exp_config"><code class="xref py py-obj docutils literal"><span class="pre">exp_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.experiment" title="gwgen.sensitivity_analysis.SensitivityAnalysis.experiment"><code class="xref py py-obj docutils literal"><span class="pre">experiment</span></code></a></td>
+<td>The base experiment of this sensitivity analysis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.experiments" title="gwgen.sensitivity_analysis.SensitivityAnalysis.experiments"><code class="xref py py-obj docutils literal"><span class="pre">experiments</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.logger" title="gwgen.sensitivity_analysis.SensitivityAnalysis.logger"><code class="xref py py-obj docutils literal"><span class="pre">logger</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.project_config" title="gwgen.sensitivity_analysis.SensitivityAnalysis.project_config"><code class="xref py py-obj docutils literal"><span class="pre">project_config</span></code></a></td>
+<td>The project configuration of the sensitivity analysis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.projectname" title="gwgen.sensitivity_analysis.SensitivityAnalysis.projectname"><code class="xref py py-obj docutils literal"><span class="pre">projectname</span></code></a></td>
+<td>The projectname of the sensitivity analysis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.sa_organizer" title="gwgen.sensitivity_analysis.SensitivityAnalysis.sa_organizer"><code class="xref py py-obj docutils literal"><span class="pre">sa_organizer</span></code></a></td>
+<td>The organizer for this sensitivity analysis</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>kws</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer.start" title="(in model-organization v0.1.8)"><code class="xref py py-meth docutils literal"><span class="pre">start()</span></code></a> of the
+<code class="xref py py-attr docutils literal"><span class="pre">organizer</span></code> attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kws</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; Any keywords that are passed to the
+<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer.start" title="(in model-organization v0.1.8)"><code class="xref py py-meth docutils literal"><span class="pre">start()</span></code></a> method</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>model_organization.ModelOrganizer</em> &#8211;
+The <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.sa_organizer" title="gwgen.sensitivity_analysis.SensitivityAnalysis.sa_organizer"><code class="xref py py-attr docutils literal"><span class="pre">sa_organizer</span></code></a></li>
+<li><em>argparse.Namespace</em> &#8211;
+The return of the <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer.start" title="(in model-organization v0.1.8)"><code class="xref py py-meth docutils literal"><span class="pre">start()</span></code></a>
+method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.compile_model">
+<code class="descname">compile_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis.compile_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.compile_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile the sensitivity analysis model</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.config">
+<code class="descname">config</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The configuration of the sensitivity analysis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>experiments=None</em>, <em>loop_exps=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the experiments of the sensitivity analysis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>experiments</strong> (<em>list of str</em>) &#8211; The experiments to use. If None, all experiments are used</li>
+<li><strong>loop_exps</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True the experiments of the sensitivity analysis are called
+one after each other. Otherwise they are called in parallel, each
+on a single core (unless the the serial option in the global
+configuration is set)</li>
+<li><strong>stations</strong> (<em>str or list of str</em>) &#8211; either a list of stations to use or a filename containing a
+1-row table with stations</li>
+<li><strong>other_exp</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Use the configuration from another experiment</li>
+<li><strong>setup_from</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Determine where to get the data from. If <cite>scratch</cite>, the
+data will be calculated from the raw data. If <cite>file</cite>,
+the data will be loaded from a file, if <cite>db</cite>, the data
+will be loaded from a postgres database (Note that the
+<cite>database</cite> argument must be provided!).</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Save the data into a postgresql database (Note that the
+<cite>database</cite> argument must be provided!)</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Save the data into a csv file</li>
+<li><strong>database</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of a postgres data base to write the data to</li>
+<li><strong>norun</strong> (bool, list of str or <code class="docutils literal"><span class="pre">'all'</span></code>) &#8211; If True, only the data is set up and the configuration of the
+experiment is not affected. It can be either a list of  tasks or
+True or <code class="docutils literal"><span class="pre">'all'</span></code></li>
+<li><strong>to_return</strong> (list of str or <code class="docutils literal"><span class="pre">'all'</span></code>) &#8211; The names of the tasks to return. If None, only the ones with an
+<a class="reference internal" href="gwgen.utils.html#gwgen.utils.TaskBase.has_run" title="gwgen.utils.TaskBase.has_run"><code class="xref py py-attr docutils literal"><span class="pre">gwgen.utils.TaskBase.has_run</span></code></a> are returned.</li>
+<li><strong>complete</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, setup and run all possible tasks</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.exp_config">
+<code class="descname">exp_config</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.exp_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.experiment">
+<code class="descname">experiment</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base experiment of this sensitivity analysis</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.experiments">
+<code class="descname">experiments</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.experiments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.init">
+<code class="descname">init</code><span class="sig-paren">(</span><em>nml=None</em>, <em>experiment=None</em>, <em>run_prepare=False</em>, <em>use_param=False</em>, <em>no_move=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the experiments for the sensitivity analysis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nml</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; A mapping from namelist parameters to the values to use. Ranges
+might be lists of numbers or <code class="docutils literal"><span class="pre">'&lt;i&gt;err'</span></code> to use <code class="docutils literal"><span class="pre">'&lt;i&gt;'</span></code>-times
+the error from the parameterization. You might also provide up to
+three values in case on of them is a string with <code class="docutils literal"><span class="pre">'err'</span></code> in it,
+where the first value corresponds to the minimum, the second to
+the maximum and the third to the number of steps.</li>
+<li><strong>experiment</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The base experiment name to use. Should somehow contain a number
+which will be increased for each experiment. If None, it will
+default to <code class="docutils literal"><span class="pre">'&lt;id&gt;_sens0'</span></code></li>
+<li><strong>run_prepare</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True or no <code class="docutils literal"><span class="pre">'input'</span></code> key exists for the experiment, the
+<code class="docutils literal"><span class="pre">'prepare'</span></code> evaluation task is run to get the reference data.
+Otherwise, if False and the <code class="docutils literal"><span class="pre">'input'</span></code> key does not exist, the
+specified file is used</li>
+<li><strong>use_param</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True/set and the parameterization is required, use the
+parameterization of the original experiment</li>
+<li><strong>no_move</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the experiment in the configurations are not moved to the
+position right before the configuration of the current experiment</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.logger">
+<code class="descname">logger</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>indicators=['rsquared', 'slope', 'ks', 'quality'], names=['prcp', 'tmin', 'tmax', 'mean_cloud', 'wind'], meta=None, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the result of the sensitivity analysis</p>
+<p>2 different plots are made for each variable and quality indicator:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>1d plots with the indicator on the y-axis and the namelist
+parameter on the x-axis</li>
+<li>2d plots with one indicator on the x-axis and another on the
+y-axis for each possible combination</li>
+</ol>
+</div></blockquote>
+<p>You can disable one of the plot types via the <cite>only_1d</cite> and <cite>only_2d</cite>
+parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>indicators</strong> (<em>str or list of str</em>) &#8211; The name of the indicators from the <cite>quality</cite> evaluation task</li>
+<li><strong>names</strong> (<em>str or list of str</em>) &#8211; The name(s) of the variable(s) to plot</li>
+<li><strong>meta</strong> (<em>dict or path to yaml configuration file</em>) &#8211; Alternative meta information for the data set</li>
+<li><strong>**kwargs</strong> &#8211; Any task of the <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-class docutils literal"><span class="pre">SensitivityPlot</span></code></a> framework</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.project_config">
+<code class="descname">project_config</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.project_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The project configuration of the sensitivity analysis</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.projectname">
+<code class="descname">projectname</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.projectname" title="Permalink to this definition">¶</a></dt>
+<dd><p>The projectname of the sensitivity analysis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the project and files of the sensitivity analysis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>experiments=None</em>, <em>remove=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the analysis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>experiments</strong> (<em>list of str</em>) &#8211; The experiments to use. If None, all experiments are used</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the <cite>work_dir</cite> will be removed if it already exists</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.sa_organizer">
+<code class="descname">sa_organizer</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.sa_organizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The organizer for this sensitivity analysis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityAnalysis.setup">
+<code class="descname">setup</code><span class="sig-paren">(</span><em>root_dir=None</em>, <em>projectname=None</em>, <em>link=True</em>, <em>no_move=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityAnalysis.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityAnalysis.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the experiments for the project</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>root_dir</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the root directory where the experiments, etc. will
+be stored. If not given, a new directory will be created at the
+same location as the original project</li>
+<li><strong>projectname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the project that shall be initialized at <cite>root_dir</cite>. A
+new directory will be created namely
+<code class="docutils literal"><span class="pre">root_dir</span> <span class="pre">+</span> <span class="pre">'/'</span> <span class="pre">+</span> <span class="pre">projectname</span></code>. If not given, defaults to
+<code class="docutils literal"><span class="pre">'sensitivity_&lt;id&gt;'</span></code> where <code class="docutils literal"><span class="pre">'&lt;id&gt;'</span></code> is the experiment id</li>
+<li><strong>link</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If set, the source files are linked to the original ones instead
+of copied</li>
+<li><strong>no_move</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the project in the configuration files is not moved to the
+position right before the configuration of the current project</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot">
+<em class="property">class </em><code class="descclassname">gwgen.sensitivity_analysis.</code><code class="descname">SensitivityPlot</code><span class="sig-paren">(</span><em>stations</em>, <em>config</em>, <em>project_config</em>, <em>global_config</em>, <em>data=None</em>, <em>requirements=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gwgen.utils.html#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">gwgen.utils.TaskBase</span></code></a></p>
+<p>A base class for the plots of the <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis" title="gwgen.sensitivity_analysis.SensitivityAnalysis"><code class="xref py py-class docutils literal"><span class="pre">SensitivityAnalysis</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code> method</li>
+<li><strong>requirements</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code> instances) &#8211; The required instances. If None, you must call the
+<code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.add_meta" title="gwgen.sensitivity_analysis.SensitivityPlot.add_meta"><code class="xref py py-obj docutils literal"><span class="pre">add_meta</span></code></a>(ds)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_db" title="gwgen.sensitivity_analysis.SensitivityPlot.setup_from_db"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_db</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_file" title="gwgen.sensitivity_analysis.SensitivityPlot.setup_from_file"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_file</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_scratch" title="gwgen.sensitivity_analysis.SensitivityPlot.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.base_experiments" title="gwgen.sensitivity_analysis.SensitivityPlot.base_experiments"><code class="xref py py-obj docutils literal"><span class="pre">base_experiments</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.dbname" title="gwgen.sensitivity_analysis.SensitivityPlot.dbname"><code class="xref py py-obj docutils literal"><span class="pre">dbname</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.default_config" title="gwgen.sensitivity_analysis.SensitivityPlot.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.ds" title="gwgen.sensitivity_analysis.SensitivityPlot.ds"><code class="xref py py-obj docutils literal"><span class="pre">ds</span></code></a></td>
+<td>Gives the base dataset for the plot</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.err_nml_keys" title="gwgen.sensitivity_analysis.SensitivityPlot.err_nml_keys"><code class="xref py py-obj docutils literal"><span class="pre">err_nml_keys</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.meta" title="gwgen.sensitivity_analysis.SensitivityPlot.meta"><code class="xref py py-obj docutils literal"><span class="pre">meta</span></code></a></td>
+<td>dict() -&gt; new empty dictionary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.namelist" title="gwgen.sensitivity_analysis.SensitivityPlot.namelist"><code class="xref py py-obj docutils literal"><span class="pre">namelist</span></code></a></td>
+<td>The namelist of the sensitivity analysis holding the settings</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.organizer" title="gwgen.sensitivity_analysis.SensitivityPlot.organizer"><code class="xref py py-obj docutils literal"><span class="pre">organizer</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.ranges_nml_keys" title="gwgen.sensitivity_analysis.SensitivityPlot.ranges_nml_keys"><code class="xref py py-obj docutils literal"><span class="pre">ranges_nml_keys</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.sql_dtypes" title="gwgen.sensitivity_analysis.SensitivityPlot.sql_dtypes"><code class="xref py py-obj docutils literal"><span class="pre">sql_dtypes</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.task_data_dir" title="gwgen.sensitivity_analysis.SensitivityPlot.task_data_dir"><code class="xref py py-obj docutils literal"><span class="pre">task_data_dir</span></code></a></td>
+<td>The directory where to store data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.variables_meta" title="gwgen.sensitivity_analysis.SensitivityPlot.variables_meta"><code class="xref py py-obj docutils literal"><span class="pre">variables_meta</span></code></a></td>
+<td>dict() -&gt; new empty dictionary</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.add_meta">
+<code class="descname">add_meta</code><span class="sig-paren">(</span><em>ds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot.add_meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.add_meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.base_experiments">
+<code class="descname">base_experiments</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.base_experiments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.dbname">
+<code class="descname">dbname</code><em class="property"> = 'sensitivity_analysis'</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.dbname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.default_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.ds">
+<code class="descname">ds</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.ds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the base dataset for the plot</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.err_nml_keys">
+<code class="descname">err_nml_keys</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.err_nml_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.meta">
+<code class="descname">meta</code><em class="property"> = {'slope': {'long_name': 'Slope indicator'}, 'gp_shape': {'units': '-', 'long_name': 'Generalized Pareto Shape parameter'}, 'ks': {'long_name': 'Fraction of stations without significant difference'}, 'thresh': {'units': 'mm', 'long_name': 'Crossover point of Gamma-GP distribution'}, 'rsquared': {'long_name': 'Mean R$^2$ of all quantiles'}, 'quality': {'long_name': 'Quality indicator'}}</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.namelist">
+<code class="descname">namelist</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.namelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>The namelist of the sensitivity analysis holding the settings</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.organizer">
+<code class="descname">organizer</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.organizer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.ranges_nml_keys">
+<code class="descname">ranges_nml_keys</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.ranges_nml_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.setup_from_db">
+<code class="descname">setup_from_db</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot.setup_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.setup_from_file">
+<code class="descname">setup_from_file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot.setup_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.setup_from_scratch">
+<code class="descname">setup_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot.setup_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.sql_dtypes">
+<code class="descname">sql_dtypes</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.sql_dtypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.task_data_dir">
+<code class="descname">task_data_dir</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.task_data_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The directory where to store data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot.variables_meta">
+<code class="descname">variables_meta</code><em class="property"> = {'tmax': 'Max. Temperature', 'prcp': 'Precipitation', 'tmin': 'Min. Temperature', 'mean_cloud': 'Cloud fraction'}</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot.variables_meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot1D">
+<em class="property">class </em><code class="descclassname">gwgen.sensitivity_analysis.</code><code class="descname">SensitivityPlot1D</code><span class="sig-paren">(</span><em>stations</em>, <em>config</em>, <em>project_config</em>, <em>global_config</em>, <em>data=None</em>, <em>requirements=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot1D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-class docutils literal"><span class="pre">gwgen.sensitivity_analysis.SensitivityPlot</span></code></a></p>
+<p>1d plots with the indicator on the y-axis and the namelist parameter on
+the x-axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code> method</li>
+<li><strong>requirements</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code> instances) &#8211; The required instances. If None, you must call the
+<code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.create_project" title="gwgen.sensitivity_analysis.SensitivityPlot1D.create_project"><code class="xref py py-obj docutils literal"><span class="pre">create_project</span></code></a>(ds)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.fmt" title="gwgen.sensitivity_analysis.SensitivityPlot1D.fmt"><code class="xref py py-obj docutils literal"><span class="pre">fmt</span></code></a></td>
+<td>dict() -&gt; new empty dictionary</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.has_run" title="gwgen.sensitivity_analysis.SensitivityPlot1D.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.name" title="gwgen.sensitivity_analysis.SensitivityPlot1D.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.summary" title="gwgen.sensitivity_analysis.SensitivityPlot1D.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot1D.create_project">
+<code class="descname">create_project</code><span class="sig-paren">(</span><em>ds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot1D.create_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.create_project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot1D.fmt">
+<code class="descname">fmt</code><em class="property"> = {'plot': ' ', 'xlabel': '{desc}', 'title': '%(vname_long)s', 'color': 'coolwarm', 'ylabel': '%(long_name)s', 'marker': 'o'}</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.fmt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot1D.has_run">
+<code class="descname">has_run</code><em class="property"> = True</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.has_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot1D.name">
+<code class="descname">name</code><em class="property"> = 'plot1d'</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot1D.summary">
+<code class="descname">summary</code><em class="property"> = '1d plots with the indicator on the y-axis and the namelist parameter on the x-axis'</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot1D.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot2D">
+<em class="property">class </em><code class="descclassname">gwgen.sensitivity_analysis.</code><code class="descname">SensitivityPlot2D</code><span class="sig-paren">(</span><em>stations</em>, <em>config</em>, <em>project_config</em>, <em>global_config</em>, <em>data=None</em>, <em>requirements=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-class docutils literal"><span class="pre">gwgen.sensitivity_analysis.SensitivityPlot</span></code></a></p>
+<p>2d plots with one namelist parameter on the y-axis and one on the
+x-axis and a color coding the the indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code> method</li>
+<li><strong>requirements</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code> instances) &#8211; The required instances. If None, you must call the
+<code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.has_run" title="gwgen.sensitivity_analysis.SensitivityPlot2D.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.name" title="gwgen.sensitivity_analysis.SensitivityPlot2D.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.summary" title="gwgen.sensitivity_analysis.SensitivityPlot2D.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.run" title="gwgen.sensitivity_analysis.SensitivityPlot2D.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(info)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot2D.has_run">
+<code class="descname">has_run</code><em class="property"> = True</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.has_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot2D.name">
+<code class="descname">name</code><em class="property"> = 'plot2d'</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot2D.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#SensitivityPlot2D.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot2D.summary">
+<code class="descname">summary</code><em class="property"> = '2d plots with one namelist parameter on the y-axis and one on the x-axis and a color coding the the indicator'</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.sensitivity_analysis.default_sens_config">
+<code class="descclassname">gwgen.sensitivity_analysis.</code><code class="descname">default_sens_config</code><span class="sig-paren">(</span><em>sa=None, indicators=['rsquared', 'slope', 'ks', 'quality'], names=['prcp', 'tmin', 'tmax', 'mean_cloud', 'wind'], meta={}, *args, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#default_sens_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.default_sens_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default configuration for <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-class docutils literal"><span class="pre">SensitivityPlot</span></code></a> instances.
+See also the <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.default_config" title="gwgen.sensitivity_analysis.SensitivityPlot.default_config"><code class="xref py py-attr docutils literal"><span class="pre">SensitivityPlot.default_config</span></code></a> attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sa</strong> (<a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis" title="gwgen.sensitivity_analysis.SensitivityAnalysis"><em>SensitivityAnalysis</em></a>) &#8211; The analyser to use</li>
+<li><strong>indicators</strong> (<em>str or list of str</em>) &#8211; The name of the indicators from the <cite>quality</cite> evaluation task</li>
+<li><strong>names</strong> (<em>str or list of str</em>) &#8211; The name of the variables to plot</li>
+<li><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; Alternative meta information for the data set</li>
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the instance either from</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Python API Reference</a><ul>
+      <li>Previous: <a href="gwgen.preproc.html" title="previous chapter">gwgen.preproc module</a></li>
+      <li>Next: <a href="gwgen.utils.html" title="next chapter">gwgen.utils module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/gwgen.sensitivity_analysis.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/api/gwgen.sensitivity_analysis.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

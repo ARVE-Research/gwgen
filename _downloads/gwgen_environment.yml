@@ -1,0 +1,17 @@
+name: gwgen
+channels:
+    - conda-forge
+dependencies:
+    - psyplot
+    - dask
+    - xarray
+    - netCDF4
+    - cartopy
+    - seaborn
+    - bottleneck
+    - scipy
+    - pip:
+        - cyordereddict
+        - sqlalchemy
+        - model-organization
+

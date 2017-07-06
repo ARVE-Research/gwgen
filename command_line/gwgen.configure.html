@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen configure &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Command Line API Reference" href="gwgen.html" />
+    <link rel="next" title="gwgen preproc" href="gwgen.preproc.html" />
+    <link rel="prev" title="gwgen unarchive" href="gwgen.unarchive.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gwgen-configure">
+<span id="id1"></span><h1>gwgen configure<a class="headerlink" href="#gwgen-configure" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen configure [-h] [-u str or dict] [-max int] [-d str] [-db str]
+                       [-user str] [-host str] [-port int] [-chunksize int]
+                       [-c str] [-g] [-p] [-i str] [-f str] [-s]
+                       [-n int or &#39;all&#39;] [-update-from str]
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-u</span>, <span class="option">--update-nml</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    A python dict or path to a namelist to use for updating the
+    namelist of the experiment</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-max</span>, <span class="option">--max-stations</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The maximum number of stations to process in one parameterization
+    process. Does automatically impact global settings</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-d</span>, <span class="option">--datadir</span></kbd></td>
+<td>    Path to the data directory to use (impacts the project
+    configuration)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-db</span>, <span class="option">--database</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a postgres data base to write the data to</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-user</span></kbd></td>
+<td>    The username to use when logging into the database</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-host</span></kbd></td>
+<td>    the host which runs the database server</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-port</span></kbd></td>
+<td>    The port to use to log into the the database</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-chunksize</span></kbd></td>
+<td>    The chunksize to use for the parameterization and evaluation</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-c</span>, <span class="option">--compiler</span></kbd></td>
+<td>    The path to the fortran compiler to use</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-g=False</span>, <span class="option">--globally=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, the configuration are applied globally (already
+    existing and configured experiments are not impacted)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p=False</span>, <span class="option">--project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Apply the configuration on the entire project instance instead of
+    only the single experiment (already existing and configured
+    experiments are not impacted)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-i</span>, <span class="option">--ifile</span></kbd></td>
+<td>    The input file for the project. Must be a netCDF file with
+    population data</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--forcing</span></kbd></td>
+<td>    The input file for the project containing variables with population
+    evolution information. Possible variables in the netCDF file are
+    *movement* containing the number of people to move and *change*
+    containing the population change (positive or negative)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-s=False</span>, <span class="option">--serial=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Do the parameterization always serial (i.e. not in parallel on
+    multiple processors). Does automatically impact global settings</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-n</span>, <span class="option">--nprocs</span></kbd></td>
+<td>    Maximum number of processes to when making the parameterization in
+    parallel. Does automatically impact global settings and disables
+    `serial`</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-update-from</span></kbd></td>
+<td>    Path to a yaml configuration file to update the specified
+    configuration with it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Command Line API Reference</a><ul>
+      <li>Previous: <a href="gwgen.unarchive.html" title="previous chapter">gwgen unarchive</a></li>
+      <li>Next: <a href="gwgen.preproc.html" title="next chapter">gwgen preproc</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/command_line/gwgen.configure.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/command_line/gwgen.configure.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

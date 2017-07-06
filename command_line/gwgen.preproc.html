@@ -1,0 +1,406 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen preproc &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Command Line API Reference" href="gwgen.html" />
+    <link rel="next" title="gwgen preproc select" href="gwgen.preproc.select.html" />
+    <link rel="prev" title="gwgen configure" href="gwgen.configure.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gwgen-preproc">
+<span id="id1"></span><h1>gwgen preproc<a class="headerlink" href="#gwgen-preproc" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.preproc.select.html">gwgen preproc select</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.preproc.cloud.html">gwgen preproc cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.preproc.test.html">gwgen preproc test</a></li>
+</ul>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc [-h] {select,cloud,test} ...
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>select</strong></dt>
+<dd><p class="first">Select stations based upon a regular grid</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc select [-h] [-g str] [-og str] [-os str] [-k str]
+                            [-ok str] [-gdb str] [-sdb str] [-nc]
+                            [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; }]
+                            [-d { &#39;single&#39; | &#39;all&#39; }]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-g</span>, <span class="option">--grid</span></kbd></td>
+<td>    The path to a csv-file containing a lat and a lon column with the
+    information on the centers of the grid. If None, `igrid_key` must
+    not be None and point to a key in the configuration (either the one
+    of the experiment, or the project, or the global configuration)
+    specifying the path</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-og</span>, <span class="option">--grid-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The path to the csv-file where to store the mapping from grid
+    lat-lon to station id.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-os</span>, <span class="option">--stations-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The path to the csv-file where to store the mapping from station
+    to grid center point</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-k</span>, <span class="option">--igrid-key</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The key in the configuration where to store the path of the `grid`
+    input file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ok</span>, <span class="option">--grid-key</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The key in the configuration where to store the name of the
+    `grid_output` file.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-gdb</span>, <span class="option">--grid-db</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a data table to store the data of `stations_output` in</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sdb</span>, <span class="option">--stations-db</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a data table to store the data for `stations_output` in</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nc=False</span>, <span class="option">--no-prcp-check=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, we will not check for the values between 0.1 and 1.0 for
+    precipitation and save the result in the ``&#8217;best&#8217;`` column</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td>    The setup method for the daily data for the prcp check</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-d</span>, <span class="option">--download</span></kbd></td>
+<td><p class="first">    Handles how to manage missing files for the prcp check. If None
+    (default), an warning is printed and the file is ignored, if
+    ``&#8217;single&#8217;``, the missing file is downloaded, if ``&#8217;all&#8217;``, the
+    entire tarball is downloaded (strongly not recommended for this
+    function)</p>
+<p class="last">Possible choices: single, all</p>
+</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>cloud</strong></dt>
+<dd><p class="first">Cloud preprocessing</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud [-h] [-mf int] {eecra_inventory,eecra_ghcn_map} ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-mf</span>, <span class="option">--max-files</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The maximum number of files to process during one process. If None,
+    it is determined by the global ``&#8217;max_stations&#8217;`` key</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>eecra_inventory</strong></dt>
+<dd><p class="first">Compute the inventory of the EECRA stations</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_inventory [-h] [-ido str]
+                                           [-xstall bool or str]
+                                           [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                           [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-xstall=True</span></kbd></td>
+<td>    If True (default), download the XSTALL file from http://cdiac.ornl.gov/ftp/ndp026c/XSTALL.
+    This file contains some estimates of station longitude and latitude.
+    If ``False`` or empty string, the file is not used, otherwise, if set
+    with a string, it is interpreted as the path to the local file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>eecra_ghcn_map</strong></dt>
+<dd><p class="first">Compute the inventory of the EECRA stations</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_ghcn_map [-h] [-ido str] [-md float]
+                                          [-to-csv] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-md=1000.0</span>, <span class="option">--max-distance=1000.0</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The maximum distance in meters for which we consider two stations as
+    equal (Default: 1000m)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>test</strong></dt>
+<dd><p class="first">Create a test sample for selected GHCN stations</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc test [-h] [-nc] [-re float] [-a] str str or list of str
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Required Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">str</span></kbd></td>
+<td>    The path to the directory containing the test files from Github</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">str or list of str</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    either a list of GHCN stations to use or a filename containing a
+    1-row table with GHCN stations</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nc=False</span>, <span class="option">--no-cloud=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, no cloud stations are extracted</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-re=0</span>, <span class="option">--reduce-eecra=0</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The percentage by which to reduce the EECRA data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-a=False</span>, <span class="option">--keep-all=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True all years of the EECRA data are used. Otherwise, only the
+    years with complete temperature and cloud are kept. Note
+    that this has only an effect if `reduce_eecra` is not 0</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Command Line API Reference</a><ul>
+      <li>Previous: <a href="gwgen.configure.html" title="previous chapter">gwgen configure</a></li>
+      <li>Next: <a href="gwgen.preproc.select.html" title="next chapter">gwgen preproc select</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/command_line/gwgen.preproc.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/command_line/gwgen.preproc.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

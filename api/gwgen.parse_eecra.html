@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.parse_eecra module &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Python API Reference" href="gwgen.html" />
+    <link rel="next" title="gwgen.parseghcnrow module" href="gwgen.parseghcnrow.html" />
+    <link rel="prev" title="gwgen.parameterization module" href="gwgen.parameterization.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gwgen.parse_eecra">
+<span id="gwgen-parse-eecra-module"></span><h1>gwgen.parse_eecra module<a class="headerlink" href="#module-gwgen.parse_eecra" title="Permalink to this headline">¶</a></h1>
+<p><strong>Functions</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.parse_eecra.extract_data" title="gwgen.parse_eecra.extract_data"><code class="xref py py-obj docutils literal"><span class="pre">extract_data</span></code></a>(ids,&nbsp;src_dir,&nbsp;target_dir[,&nbsp;...])</td>
+<td>Extract the data for the given EECRA stations</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.parse_eecra.parse_file" title="gwgen.parse_eecra.parse_file"><code class="xref py py-obj docutils literal"><span class="pre">parse_file</span></code></a>(ifile[,&nbsp;year])</td>
+<td>Parse a raw data file from EECRA and as a pandas DataFrame</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="gwgen.parse_eecra.extract_data">
+<code class="descclassname">gwgen.parse_eecra.</code><code class="descname">extract_data</code><span class="sig-paren">(</span><em>ids, src_dir, target_dir, years=[1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009], imonths=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/parse_eecra.html#extract_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.parse_eecra.extract_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the data for the given EECRA stations</p>
+<p>This function extracts the data for the given <cite>ids</cite> from the EECRA data
+base stored in  <cite>src_dir</cite> into one file for each <em>id</em> in <cite>ids</cite>. The
+resulting filename will be like <em>id.csv</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ids</strong> (<em>np.ndarray of dtype int</em>) &#8211; The numpy integer array with the station ids to extract</li>
+<li><strong>src_dir</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the source directory containing the raw (uncompressed)
+EECRA database</li>
+<li><strong>target_dir</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the output directory</li>
+<li><strong>years</strong> (<em>np.ndarray of dtype int</em>) &#8211; The numpy integer array with the years to extract (by default, all
+years between 1971 and 2010)</li>
+<li><strong>imonths</strong> (<em>np.ndarray of dtype int</em>) &#8211; The numpy integer array with the months to extract (by default, all
+from january to december)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The paths of the filenames corresponding to ids</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)">numpy.ndarray</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.parse_eecra.parse_file">
+<code class="descclassname">gwgen.parse_eecra.</code><code class="descname">parse_file</code><span class="sig-paren">(</span><em>ifile</em>, <em>year=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/parse_eecra.html#parse_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.parse_eecra.parse_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a raw data file from EECRA and as a pandas DataFrame</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifile</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The raw (uncompressed) data file</li>
+<li><strong>year</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The first year in the data file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>ifile</cite> parsed into a dataframe</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)">pandas.DataFrame</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Python API Reference</a><ul>
+      <li>Previous: <a href="gwgen.parameterization.html" title="previous chapter">gwgen.parameterization module</a></li>
+      <li>Next: <a href="gwgen.parseghcnrow.html" title="next chapter">gwgen.parseghcnrow module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/gwgen.parse_eecra.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/api/gwgen.parse_eecra.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

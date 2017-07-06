@@ -1,0 +1,3870 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Command Line API Reference &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="gwgen setup" href="gwgen.setup.html" />
+    <link rel="prev" title="Getting started" href="../getting_started.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="command-line-api-reference">
+<span id="id1"></span><h1>Command Line API Reference<a class="headerlink" href="#command-line-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.setup.html">gwgen setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.compile.html">gwgen compile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.init.html">gwgen init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.set-value.html">gwgen set-value</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.get-value.html">gwgen get-value</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.del-value.html">gwgen del-value</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.info.html">gwgen info</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.unarchive.html">gwgen unarchive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.configure.html">gwgen configure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.preproc.html">gwgen preproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.param.html">gwgen param</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.run.html">gwgen run</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.evaluate.html">gwgen evaluate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.bias.html">gwgen bias</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.sens.html">gwgen sens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.archive.html">gwgen archive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwgen.remove.html">gwgen remove</a></li>
+</ul>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen [-h] [-id str] [-l] [-n] [-v] [-vl str or int] [-nm] [-E]
+             {setup,compile,init,set-value,get-value,del-value,info,unarchive,configure,preproc,param,run,evaluate,bias,sens,archive,remove}
+             ...
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-id</span>, <span class="option">--experiment</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>experiment: str
+    The id of the experiment to use. If the `init` argument is called, the `new` argument is automatically set. Otherwise, if not specified differently, the last created experiment is used.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-l=False</span>, <span class="option">--last=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the last experiment is used</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-n=False</span>, <span class="option">--new=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new experiment is created</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-v=False</span>, <span class="option">--verbose=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Increase the verbosity level to DEBUG. See also `verbosity_level`
+    for a more specific determination of the verbosity</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-vl</span>, <span class="option">--verbosity-level</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The verbosity level to use. Either one of ``&#8217;DEBUG&#8217;, &#8216;INFO&#8217;,
+    &#8216;WARNING&#8217;, &#8216;ERROR&#8217;`` or the corresponding integer (see pythons
+    logging module)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nm=False</span>, <span class="option">--no-modification=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, no modifications in the configuration files will be
+    done</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-E=False</span>, <span class="option">--match=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, interprete `experiment` as a regular expression
+    (regex) und use the matching experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>setup</strong></dt>
+<dd><p class="first">Perform the initial setup for the model</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen setup [-h] [-p str] [-link] [-src str] [-c str] str
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Required Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">str</span></kbd></td>
+<td>    The path to the root directory where the experiments, etc. will
+    be stored</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the project that shall be initialized at `root_dir`. A
+    new directory will be created namely
+    ``root_dir + &#8216;/&#8217; + projectname``</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-link=False</span></kbd></td>
+<td>    If set, the source files are linked to the original ones instead
+    of copied
+link: bool
+    If set, the source files are linked to the original ones instead
+    of copied</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-src</span>, <span class="option">--src-project</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Another model name to use the source model files from</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-c</span>, <span class="option">--compiler</span></kbd></td>
+<td>    The path to the compiler to use. If None, the global compiler
+    option is used</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>compile</strong></dt>
+<dd><p class="first">Compile the model</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen compile [-h] [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the project. If None, use the last one or the one
+    specified by the current experiment</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>init</strong></dt>
+<dd><p class="first">Initialize a new experiment</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen init [-h] [-p str] [-d str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the project that shall be used. If None, the last one
+    created will be used</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-d</span>, <span class="option">--description</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    A short summary of the experiment</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>set-value</strong></dt>
+<dd><p class="first">Set a value in the configuration</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen set-value [-h] [-a] [-P] [-g] [-p str] [-b str] [-dt str]
+                       level0.level1.level...=value
+                       [level0.level1.level...=value ...]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Required Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">level0.level1.level...=value</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>
+                The key-value pairs to set. If the configuration goes some
+                levels deeper, keys may be separated by a ``&#8217;.&#8217;`` (e.g.
+                ``&#8217;namelists.weathergen&#8217;``). Hence, to insert a  ``&#8217;,&#8217;``, it
+                must be escaped by a preceeding ``&#8217;&#8216;``.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-a=False</span>, <span class="option">--all=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, the information on all experiments are printed</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-P=False</span>, <span class="option">--on-projects=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, show information on the projects rather than the
+    experiment</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-g=False</span>, <span class="option">--globally=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, show the global configuration settings</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the project that shall be used. If provided and
+    `on_projects` is not True, the information on all experiments for
+    this project will be shown</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-b=</span>, <span class="option">--base=</span></kbd></td>
+<td>    A base string that shall be put in front of each key in `values` to
+    avoid typing it all the time</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-dt</span>, <span class="option">--dtype</span></kbd></td>
+<td><p class="first">    The name of the data type or a data type to cast the value to</p>
+<p class="last">Possible choices: ArithmeticError, AssertionError, AttributeError, BaseException, BufferError, BytesWarning, DeprecationWarning, EOFError, Ellipsis, EnvironmentError, Exception, False, FloatingPointError, FutureWarning, GeneratorExit, IOError, ImportError, ImportWarning, IndentationError, IndexError, KeyError, KeyboardInterrupt, LookupError, MemoryError, NameError, None, NotImplemented, NotImplementedError, OSError, OverflowError, PendingDeprecationWarning, ReferenceError, RuntimeError, RuntimeWarning, StandardError, StopIteration, SyntaxError, SyntaxWarning, SystemError, SystemExit, TabError, True, TypeError, UnboundLocalError, UnicodeDecodeError, UnicodeEncodeError, UnicodeError, UnicodeTranslateError, UnicodeWarning, UserWarning, ValueError, Warning, ZeroDivisionError, __debug__, __doc__, __import__, __name__, __package__, abs, all, any, apply, basestring, bin, bool, buffer, bytearray, bytes, callable, chr, classmethod, cmp, coerce, compile, complex, copyright, credits, delattr, dict, dir, divmod, enumerate, eval, execfile, exit, file, filter, float, format, frozenset, getattr, globals, hasattr, hash, help, hex, id, input, int, intern, isinstance, issubclass, iter, len, license, list, locals, long, map, max, memoryview, min, next, object, oct, open, ord, pow, print, property, quit, range, raw_input, reduce, reload, repr, reversed, round, set, setattr, slice, sorted, staticmethod, str, sum, super, tuple, type, unichr, unicode, vars, xrange, zip</p>
+</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>get-value</strong></dt>
+<dd><p class="first">Get one or more values in the configuration</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen get-value [-h] [-ep] [-pp] [-a] [-P] [-g] [-p str] [-nf] [-k]
+                       [-b str] [-arc]
+                       level0.level1.level... [level0.level1.level... ...]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Required Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">level0.level1.level...</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    A list of keys to get the values of. 
+    If the key goes some
+    levels deeper, keys may be separated by a ``&#8217;.&#8217;`` (e.g.
+    ``&#8217;namelists.weathergen&#8217;``). Hence, to insert a ``&#8217;,&#8217;``, it must
+    be escaped by a preceeding ``&#8217;&#8216;``.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ep=False</span>, <span class="option">--exp-path=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, print the filename of the experiment configuration</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-pp=False</span>, <span class="option">--project-path=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, print the filename on the project configuration</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-a=False</span>, <span class="option">--all=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, the information on all experiments are printed</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-P=False</span>, <span class="option">--on-projects=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, show information on the projects rather than the
+    experiment</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-g=False</span>, <span class="option">--globally=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, show the global configuration settings</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the project that shall be used. If provided and
+    `on_projects` is not True, the information on all experiments for
+    this project will be shown</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nf=False</span>, <span class="option">--no-fix=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, paths are given relative to the root directory of the
+    project</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-k=False</span>, <span class="option">--only-keys=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, only the keys of the given dictionary are printed</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-b=</span>, <span class="option">--base=</span></kbd></td>
+<td>    A base string that shall be put in front of each key in `values` to
+    avoid typing it all the time</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-arc=False</span>, <span class="option">--archives=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, print the archives and the corresponding experiments for
+    the specified project</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>del-value</strong></dt>
+<dd><p class="first">Delete a value in the configuration</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen del-value [-h] [-a] [-P] [-g] [-p str] [-b str] [-dtype DTYPE]
+                       level0.level1.level... [level0.level1.level... ...]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Required Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">level0.level1.level...</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    A list of keys to be deleted. 
+    If the key goes some
+    levels deeper, keys may be separated by a ``&#8217;.&#8217;`` (e.g.
+    ``&#8217;namelists.weathergen&#8217;``). Hence, to insert a ``&#8217;,&#8217;``, it must
+    be escaped by a preceeding ``&#8217;&#8216;``.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-a=False</span>, <span class="option">--all=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, the information on all experiments are printed</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-P=False</span>, <span class="option">--on-projects=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, show information on the projects rather than the
+    experiment</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-g=False</span>, <span class="option">--globally=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, show the global configuration settings</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the project that shall be used. If provided and
+    `on_projects` is not True, the information on all experiments for
+    this project will be shown</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-b=</span>, <span class="option">--base=</span></kbd></td>
+<td>    A base string that shall be put in front of each key in `values` to
+    avoid typing it all the time</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-dtype</span></kbd></td>
+<td>Undocumented</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>info</strong></dt>
+<dd><p class="first">Print information on the experiments</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen info [-h] [-ep] [-pp] [-gp] [-cp] [-a] [-nf] [-P] [-g] [-p str]
+                  [-k] [-arc]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ep=False</span>, <span class="option">--exp-path=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, print the filename of the experiment configuration</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-pp=False</span>, <span class="option">--project-path=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, print the filename on the project configuration</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-gp=False</span>, <span class="option">--global-path=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, print the filename on the global configuration</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-cp=False</span>, <span class="option">--config-path=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, print the path to the configuration directory</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-a=False</span>, <span class="option">--all=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, the information on all experiments are printed</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nf=False</span>, <span class="option">--no-fix=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, paths are given relative to the root directory of the
+    project</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-P=False</span>, <span class="option">--on-projects=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, show information on the projects rather than the
+    experiment</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-g=False</span>, <span class="option">--globally=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, show the global configuration settings</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the project that shall be used. If provided and
+    `on_projects` is not True, the information on all experiments for
+    this project will be shown</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-k=False</span>, <span class="option">--only-keys=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, only the keys of the given dictionary are printed</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-arc=False</span>, <span class="option">--archives=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, print the archives and the corresponding experiments for
+    the specified project</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>unarchive</strong></dt>
+<dd><p class="first">Extract archived experiments</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen unarchive [-h] [-ids exp1,[exp2[,...]]] [exp1,[exp2[,...]]] ...]]
+                       [-f str] [-a] [-pd] [-P] [-d str] [-p str]
+                       [-fmt { &#39;gztar&#39; | &#39;bztar&#39; | &#39;tar&#39; | &#39;zip&#39; }] [--force]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ids</span>, <span class="option">--experiments</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The experiments to extract. If None the current experiment is used</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--file</span></kbd></td>
+<td>    The path to an archive to extract the experiments from. If None,
+    we assume that the path to the archive has been stored in the
+    configuration when using the :meth:`archive` command</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-a=False</span>, <span class="option">--all=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, archives are extracted completely, not only the experiment
+    (implies ``project_data = True``)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-pd=False</span>, <span class="option">--project-data=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the data for the project is extracted as well</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-P=False</span>, <span class="option">--replace-project-config=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the project does already exist in the configuration, it
+    is updated with what is stored in the archive</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-d</span>, <span class="option">--root</span></kbd></td>
+<td>    An alternative root directory to use. Otherwise the experiment will
+    be exctracted to
+
+    1. the root directory specified in the configuration files
+       (if the project exists in it) and `replace_project_config` is
+       False
+    2. the root directory as stored in the archive</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The projectname to use. If None, use the one specified in the
+    archive</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-fmt</span></kbd></td>
+<td>    The format of the archive. If None, it is inferred</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--force=False</span></kbd></td>
+<td>    If True, force to overwrite the configuration of all experiments
+    from what is stored in `archive`. Otherwise, the configuration of
+    the experiments in `archive` are only used if missing in the
+    current configuration</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>configure</strong></dt>
+<dd><p class="first">Configure the projects and experiments</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen configure [-h] [-u str or dict] [-max int] [-d str] [-db str]
+                       [-user str] [-host str] [-port int] [-chunksize int]
+                       [-c str] [-g] [-p] [-i str] [-f str] [-s]
+                       [-n int or &#39;all&#39;] [-update-from str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-u</span>, <span class="option">--update-nml</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    A python dict or path to a namelist to use for updating the
+    namelist of the experiment</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-max</span>, <span class="option">--max-stations</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The maximum number of stations to process in one parameterization
+    process. Does automatically impact global settings</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-d</span>, <span class="option">--datadir</span></kbd></td>
+<td>    Path to the data directory to use (impacts the project
+    configuration)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-db</span>, <span class="option">--database</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a postgres data base to write the data to</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-user</span></kbd></td>
+<td>    The username to use when logging into the database</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-host</span></kbd></td>
+<td>    the host which runs the database server</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-port</span></kbd></td>
+<td>    The port to use to log into the the database</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-chunksize</span></kbd></td>
+<td>    The chunksize to use for the parameterization and evaluation</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-c</span>, <span class="option">--compiler</span></kbd></td>
+<td>    The path to the fortran compiler to use</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-g=False</span>, <span class="option">--globally=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, the configuration are applied globally (already
+    existing and configured experiments are not impacted)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p=False</span>, <span class="option">--project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Apply the configuration on the entire project instance instead of
+    only the single experiment (already existing and configured
+    experiments are not impacted)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-i</span>, <span class="option">--ifile</span></kbd></td>
+<td>    The input file for the project. Must be a netCDF file with
+    population data</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--forcing</span></kbd></td>
+<td>    The input file for the project containing variables with population
+    evolution information. Possible variables in the netCDF file are
+    *movement* containing the number of people to move and *change*
+    containing the population change (positive or negative)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-s=False</span>, <span class="option">--serial=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Do the parameterization always serial (i.e. not in parallel on
+    multiple processors). Does automatically impact global settings</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-n</span>, <span class="option">--nprocs</span></kbd></td>
+<td>    Maximum number of processes to when making the parameterization in
+    parallel. Does automatically impact global settings and disables
+    `serial`</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-update-from</span></kbd></td>
+<td>    Path to a yaml configuration file to update the specified
+    configuration with it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>preproc</strong></dt>
+<dd><p class="first">Preprocess the data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc [-h] {select,cloud,test} ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>select</strong></dt>
+<dd><p class="first">Select stations based upon a regular grid</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc select [-h] [-g str] [-og str] [-os str] [-k str]
+                            [-ok str] [-gdb str] [-sdb str] [-nc]
+                            [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; }]
+                            [-d { &#39;single&#39; | &#39;all&#39; }]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-g</span>, <span class="option">--grid</span></kbd></td>
+<td>    The path to a csv-file containing a lat and a lon column with the
+    information on the centers of the grid. If None, `igrid_key` must
+    not be None and point to a key in the configuration (either the one
+    of the experiment, or the project, or the global configuration)
+    specifying the path</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-og</span>, <span class="option">--grid-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The path to the csv-file where to store the mapping from grid
+    lat-lon to station id.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-os</span>, <span class="option">--stations-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The path to the csv-file where to store the mapping from station
+    to grid center point</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-k</span>, <span class="option">--igrid-key</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The key in the configuration where to store the path of the `grid`
+    input file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ok</span>, <span class="option">--grid-key</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The key in the configuration where to store the name of the
+    `grid_output` file.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-gdb</span>, <span class="option">--grid-db</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a data table to store the data of `stations_output` in</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sdb</span>, <span class="option">--stations-db</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a data table to store the data for `stations_output` in</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nc=False</span>, <span class="option">--no-prcp-check=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, we will not check for the values between 0.1 and 1.0 for
+    precipitation and save the result in the ``&#8217;best&#8217;`` column</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td>    The setup method for the daily data for the prcp check</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-d</span>, <span class="option">--download</span></kbd></td>
+<td><p class="first">    Handles how to manage missing files for the prcp check. If None
+    (default), an warning is printed and the file is ignored, if
+    ``&#8217;single&#8217;``, the missing file is downloaded, if ``&#8217;all&#8217;``, the
+    entire tarball is downloaded (strongly not recommended for this
+    function)</p>
+<p class="last">Possible choices: single, all</p>
+</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>cloud</strong></dt>
+<dd><p class="first">Cloud preprocessing</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud [-h] [-mf int] {eecra_inventory,eecra_ghcn_map} ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-mf</span>, <span class="option">--max-files</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The maximum number of files to process during one process. If None,
+    it is determined by the global ``&#8217;max_stations&#8217;`` key</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>eecra_inventory</strong></dt>
+<dd><p class="first">Compute the inventory of the EECRA stations</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_inventory [-h] [-ido str]
+                                           [-xstall bool or str]
+                                           [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                           [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-xstall=True</span></kbd></td>
+<td>    If True (default), download the XSTALL file from http://cdiac.ornl.gov/ftp/ndp026c/XSTALL.
+    This file contains some estimates of station longitude and latitude.
+    If ``False`` or empty string, the file is not used, otherwise, if set
+    with a string, it is interpreted as the path to the local file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>eecra_ghcn_map</strong></dt>
+<dd><p class="first">Compute the inventory of the EECRA stations</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_ghcn_map [-h] [-ido str] [-md float]
+                                          [-to-csv] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-md=1000.0</span>, <span class="option">--max-distance=1000.0</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The maximum distance in meters for which we consider two stations as
+    equal (Default: 1000m)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>test</strong></dt>
+<dd><p class="first">Create a test sample for selected GHCN stations</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc test [-h] [-nc] [-re float] [-a] str str or list of str
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Required Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">str</span></kbd></td>
+<td>    The path to the directory containing the test files from Github</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">str or list of str</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    either a list of GHCN stations to use or a filename containing a
+    1-row table with GHCN stations</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nc=False</span>, <span class="option">--no-cloud=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, no cloud stations are extracted</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-re=0</span>, <span class="option">--reduce-eecra=0</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The percentage by which to reduce the EECRA data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-a=False</span>, <span class="option">--keep-all=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True all years of the EECRA data are used. Otherwise, only the
+    years with complete temperature and cloud are kept. Note
+    that this has only an effect if `reduce_eecra` is not 0</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>param</strong></dt>
+<dd><p class="first">Parameterize the experiment</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param [-h] [-complete] [-s str or list of str] [-ido str]
+                   [-f str] [-to-db] [-to-csv] [-db str]
+                   [-nr [task1,task2,...]]
+                   {hourly_cloud,daily_cloud,day,month,yearly_cmonth,monthly_cloud,cmonthly_wind,yearly_cmonthly_wind,cday,temp,cdaily_cloud,cmonth,markov,cmonthly_cloud,cloud,yearly_cdaily_cloud,corr,yearly_cmonthly_cloud,yearly_cday,prcp,wind}
+                   ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-complete=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, setup and run all possible tasks</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-s</span>, <span class="option">--stations</span></kbd></td>
+<td>    either a list of stations to use or a filename containing a
+    1-row table with stations</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td>    Determine where to get the data from. If `scratch`, the
+    data will be calculated from the raw data. If `file`,
+    the data will be loaded from a file, if `db`, the data
+    will be loaded from a postgres database (Note that the
+    `database` argument must be provided!).</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db</span></kbd></td>
+<td>    Save the data into a postgresql database (Note that the
+    `database` argument must be provided!)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv</span></kbd></td>
+<td>    Save the data into a csv file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-db</span>, <span class="option">--database</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a postgres data base to write the data to</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nr=False</span>, <span class="option">--norun=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>If set without value or &#8220;all&#8221; or a number different from 0, the data is set up and the configuration of the experiment is not affected. Otherwise it can be a comma separated list of parameterization tasks for which to only setup the data</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>hourly_cloud</strong></dt>
+<dd><p class="first">Hourly cloud data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param hourly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
+                                [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+    files
+        Arguments are paths to raw EECRA files
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra, files</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>daily_cloud</strong></dt>
+<dd><p class="first">Calculate the daily cloud values from hourly cloud data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param daily_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
+                               [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                               [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+    files
+        Arguments are paths to raw EECRA files
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra, files</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>day</strong></dt>
+<dd><p class="first">Read in the daily GHCN data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param day [-h] [-ido str] [-d { &#39;single&#39; | &#39;all&#39; | None }]
+                       [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                       [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-d</span>, <span class="option">--download</span></kbd></td>
+<td><p class="first">    What to do if a stations file is missing. The default is ``None`` which
+    raises an Error.
+    Otherwise, if ``&#8217;single&#8217;``, download the missing file from ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/{}. If ``&#8217;all&#8217;``
+    the entire tarball is downloaded from ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_all.tar.gz</p>
+<p class="last">Possible choices: single, all</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>month</strong></dt>
+<dd><p class="first">Calculate monthly means from the daily GHCN data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param month [-h] [-ido str]
+                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                         [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>yearly_cmonth</strong></dt>
+<dd><p class="first">Extract the complete months from the monthly data in complete years</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonth [-h] [-ido str]
+                                 [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                 [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>monthly_cloud</strong></dt>
+<dd><p class="first">Calculate the monthly cloud values from daily cloud data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param monthly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
+                                 [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                 [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+    files
+        Arguments are paths to raw EECRA files
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra, files</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>cmonthly_wind</strong></dt>
+<dd><p class="first">Extract the months with complete wind data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonthly_wind [-h] [-ido str] [-at {ghcn,eecra,files}]
+                                 [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                 [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+    files
+        Arguments are paths to raw EECRA files
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra, files</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>yearly_cmonthly_wind</strong></dt>
+<dd><p class="first">Extract the months with complete wind data in complete years</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonthly_wind [-h] [-ido str] [-at {ghcn,eecra}]
+                                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                        [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>cday</strong></dt>
+<dd><p class="first">Get the days of the complete months</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cday [-h] [-ido str]
+                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                        [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>temp</strong></dt>
+<dd><p class="first">Temperature mean correlations</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param temp [-h] [-ido str] [-cutoff int]
+                        [-tmin-range1 floats with length 2 floats with length 2]
+                        [-tmin-range2 floats with length 2 floats with length 2]
+                        [-tmax-range1 floats with length 2 floats with length 2]
+                        [-tmax-range2 floats with length 2 floats with length 2]
+                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                        [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
+                        [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-cutoff=10</span></kbd></td>
+<td>    The minimum number of values that is required for fitting the standard
+    deviation. Default: 10</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-tmin-range1=[-50, -40]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The ranges ``[vmin, vmax]`` to use for the extrapolation of minimum
+    temperatures standard deviation below 0. The fit will be used for all
+    points below the given ``vmax``. Default: [-50, -40]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-tmin-range2=[25, 30]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The ranges ``[vmin, vmax]`` to use for the extrapolation of minimum
+    temperatures standard deviation above 0. The fit will be used for all
+    points above the given ``vmin``. Default: [25, 30]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-tmax-range1=[-40, -30]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The ranges ``[vmin, vmax]`` to use for the extrapolation of maximum
+    temperatures standard deviation  below 0. The fit will be used for all
+    points below the given ``vmax``. Default: [-40, -30]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-tmax-range2=[35, 45]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The ranges ``[vmin, vmax]`` to use for the extrapolation of maximum
+    temperatures standard deviation above 0. The fit will be used for all
+    points above the given ``vmin``. Default: [35, 45]</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>cdaily_cloud</strong></dt>
+<dd><p class="first">Get the days of the complete daily cloud months</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cdaily_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
+                                [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+    files
+        Arguments are paths to raw EECRA files
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra, files</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>cmonth</strong></dt>
+<dd><p class="first">Extract the complete months from the monthly data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonth [-h] [-ido str]
+                          [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                          [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>markov</strong></dt>
+<dd><p class="first">Calculate the markov chain parameterization</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param markov [-h] [-ido str]
+                          [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                          [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
+                          [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>cmonthly_cloud</strong></dt>
+<dd><p class="first">Extract the months with complete cloud data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonthly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
+                                  [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                  [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+    files
+        Arguments are paths to raw EECRA files
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra, files</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>cloud</strong></dt>
+<dd><p class="first">Parameterize the cloud data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cloud [-h] [-ido str] [-at {ghcn,eecra}]
+                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                         [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
+                         [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>yearly_cdaily_cloud</strong></dt>
+<dd><p class="first">Get the days of the complete daily cloud months in complete years</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cdaily_cloud [-h] [-ido str] [-at {ghcn,eecra}]
+                                       [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                       [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>corr</strong></dt>
+<dd><p class="first">Cross corellation between temperature and cloudiness</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param corr [-h] [-ido str]
+                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                        [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>yearly_cmonthly_cloud</strong></dt>
+<dd><p class="first">Extract the months with complete cloud data in complete years</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonthly_cloud [-h] [-ido str] [-at {ghcn,eecra}]
+                                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                         [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>yearly_cday</strong></dt>
+<dd><p class="first">Get the days of the complete months in complete years</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cday [-h] [-ido str]
+                               [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                               [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>prcp</strong></dt>
+<dd><p class="first">Calculate the precipitation distribution parameters of the hybrid Gamma-GP</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param prcp [-h] [-ido str] [-t float] [-t2c float [float ...]]
+                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                        [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
+                        [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t2c=[5, 7.5, 10, 12.5, 15, 17.5, 20]</span>, <span class="option">--threshs2compute=[5, 7.5, 10, 12.5, 15, 17.5, 20]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The thresholds to compute during the setup of the data</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t=5.0</span>, <span class="option">--thresh=5.0</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The threshold to use for the configuration. Default: 5.0</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>wind</strong></dt>
+<dd><p class="first">Parameterize the wind data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param wind [-h] [-ido str] [-at {ghcn,eecra}]
+                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
+                        [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
+                        [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+
+    ghcn
+        Stations are GHCN ids
+    eecra
+        Stations are EECRA station numbers
+Default: ghcn</p>
+<p class="last">Possible choices: ghcn, eecra</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>run</strong></dt>
+<dd><p class="first">Run the experiment</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen run [-h] [-i str] [-o str] [-od str] [-wd str] [-r]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-i</span>, <span class="option">--ifile</span></kbd></td>
+<td>    The path to the input file. If None, it is assumed that it is
+    stored in the ``&#8217;input&#8217;`` key in the experiment configuration</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-o</span>, <span class="option">--ofile</span></kbd></td>
+<td>    The path to the output file.  If None, it is assumed that it is
+    stored in the ``&#8217;input&#8217;`` key in the experiment configuration or
+    it will be stored in ``&#8217;odir/exp_id.csv&#8217;``. The output directory
+    ``&#8217;odir&#8217;`` is determined by the `odir` parameter</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-od</span>, <span class="option">--odir</span></kbd></td>
+<td>    The path to the output directory. If None and not already saved
+    in the configuration, it will default to
+    ``&#8217;experiment_dir/outdata&#8217;``</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-wd</span>, <span class="option">--work-dir</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The path to the work directory where the binaries are copied to.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-r=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the `work_dir` will be removed if it already exists</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>evaluate</strong></dt>
+<dd><p class="first">Evaluate the experiment</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen evaluate [-h] [-s str or list of str] [-ido str] [-f str]
+                      [-to-db] [-to-csv] [-db str] [-nr [task1,task2,...]]
+                      [-complete]
+                      {output,prepare,ks,quality,quants} ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-s</span>, <span class="option">--stations</span></kbd></td>
+<td>    either a list of stations to use or a filename containing a
+    1-row table with stations</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td>    Determine where to get the data from. If `scratch`, the
+    data will be calculated from the raw data. If `file`,
+    the data will be loaded from a file, if `db`, the data
+    will be loaded from a postgres database (Note that the
+    `database` argument must be provided!).</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db</span></kbd></td>
+<td>    Save the data into a postgresql database (Note that the
+    `database` argument must be provided!)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv</span></kbd></td>
+<td>    Save the data into a csv file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-db</span>, <span class="option">--database</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a postgres data base to write the data to</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nr=False</span>, <span class="option">--norun=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>If set without value or &#8220;all&#8221; or a number different from 0, the data is set up and the configuration of the experiment is not affected. Otherwise it can be a comma separated list of parameterization tasks for which to only setup the data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-complete=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, setup and run all possible tasks</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>output</strong></dt>
+<dd><p class="first">Load the output of the model</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen evaluate output [-h] [-ido str]
+                             [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                             [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>prepare</strong></dt>
+<dd><p class="first">Prepare the for experiment for evaluation</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen evaluate prepare [-h] [-ido str]
+                              [-fr { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                              [-raw2db] [-raw2csv] [-r str] [-i str]
+                              [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                              [-to-csv] [-to-db] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-fr</span>, <span class="option">--raw-from</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The method how to setup the raw data from GHCN and EECRA
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-raw2db=False</span></kbd></td>
+<td>    If True, the raw data from GHCN and EECRA is stored in a postgres database</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-raw2csv=False</span></kbd></td>
+<td>    If True, the raw data from GHCN and EECRA is stored in a csv file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-r</span>, <span class="option">--reference</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The path of the file where to store the reference data. If None and not
+    already set in the configuration, it will default to
+    ``&#8217;evaluation/reference.csv&#8217;``</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-i</span>, <span class="option">--input</span></kbd></td>
+<td>    The path of the file where to store the model input. If None, and not
+    already set in the configuration, it will default to
+    ``&#8217;inputdir/input.csv&#8217;`` where *inputdir* is the path to the input
+    directory (by default, *input* in the experiment directory)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>ks</strong></dt>
+<dd><p class="first">Perform a kolmogorov smirnoff test</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen evaluate ks [-h] [-ido str] [-nr] [-n variable [variable ...]]
+                         [-tw] [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                         [-to-csv] [-to-db] [-rm] [-o str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-n</span>, <span class="option">--names</span></kbd></td>
+<td><p class="first">    The list of variables use for calculation. If None, all variables will be
+    used</p>
+<p class="last">Possible choices: prcp, tmin, tmax, mean_cloud, wind</p>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-tw=False</span>, <span class="option">--transform-wind=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the square root of the wind is evaluated (as this is also
+    simulated in the weather generator)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nr=False</span>, <span class="option">--no-rounding=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Do not round the simulation to the infered precision of the
+    reference. The inferred precision is the minimum difference between
+    two values with in the entire data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>quality</strong></dt>
+<dd><p class="first">Estimate simulation quality using ks and quantile evaluation</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen evaluate quality [-h] [-q q1[,q1[,q2[,...]]]] [-ido str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-q</span>, <span class="option">--quantiles</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The quantiles to use for the quality analysis</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>quants</strong></dt>
+<dd><p class="first">Compare the quantiles of simulation and observation</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen evaluate quants [-h] [-ido str] [-nr]
+                             [-n variable [variable ...]] [-tw]
+                             [-q f1[;f21[,f22[,f23]]] [f1[;f21[,f22[,f23]]]
+                             ...]] [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                             [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
+                             [-op str] [-np] [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-n</span>, <span class="option">--names</span></kbd></td>
+<td><p class="first">    The list of variables use for calculation. If None, all variables will be
+    used</p>
+<p class="last">Possible choices: prcp, tmin, tmax, mean_cloud, wind</p>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-tw=False</span>, <span class="option">--transform-wind=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the square root of the wind is evaluated (as this is also
+    simulated in the weather generator)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nr=False</span>, <span class="option">--no-rounding=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Do not round the simulation to the infered precision of the
+    reference. The inferred precision is the minimum difference between
+    two values with in the entire data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-q=[1, 5, 10, 25, 50, 75, 90, 95, 99, 100]</span>, <span class="option">--quantiles=[1, 5, 10, 25, 50, 75, 90, 95, 99, 100]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The quantiles to use for calculating the percentiles.
+
+    A comma (``&#8217;,&#8217;``) separated string. A single value in this string
+    represents one number, ranges can also be used via a separation by
+    comma (``&#8217;-&#8216;``). Hence, ``&#8216;2009,2012-2015&#8217;`` will be
+    converted to ``[2009,2012, 2013, 2014]`` and ``2009,2012-2015-2`` to
+    ``[2009, 2012, 2015]``.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>bias</strong></dt>
+<dd><p class="first">Perform a bias correction for the data</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen bias [-h] [-k] [-q f1[,f21[-f22[-f23]]]] [-ne] [-np]
+                  {wind,tmin} ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-k=False</span>, <span class="option">--keep=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If not True, the experiment configuration files are not modified.
+    Otherwise the `quants` section is kept for the given quantiles</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-q=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]</span>, <span class="option">--quantiles=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The quantiles to use for calculating the percentiles.
+
+    A comma (``&#8217;,&#8217;``) separated string. A single value in this string
+    represents one number, ranges can also be used via a separation by
+    comma (``&#8217;-&#8216;``). Hence, ``&#8216;2009,2012-2015&#8217;`` will be
+    converted to ``[2009,2012, 2013, 2014]`` and ``2009,2012-2015-2`` to
+    ``[2009, 2012, 2015]``.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ne=False</span>, <span class="option">--no-evaluation=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the existing evaluation in the configuration is used for
+    the bias correction</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in
+    `project_output` exists already</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>wind</strong></dt>
+<dd><p class="first">Undocumented</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen bias wind [-h] [-np] [-po str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in
+    `project_output` exists already</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-po</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the output file. If not specified, it defaults to
+    `&lt;exp_dir&gt;/postproc/&lt;vname&gt;_bias_correction.pdf`</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>tmin</strong></dt>
+<dd><p class="first">Undocumented</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen bias tmin [-h] [-np] [-po str] [-deg int]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in
+    `project_output` exists already</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-po</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the output file. If not specified, it defaults to
+    `&lt;exp_dir&gt;/postproc/&lt;vname&gt;_bias_correction.pdf`</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-deg=3</span></kbd></td>
+<td>    The degree of the fittet polynomial</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>sens</strong></dt>
+<dd><p class="first">Perform a sensitivity analysis on the given parameters</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens [-h] {setup,compile,init,run,evaluate,plot,remove} ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>setup</strong></dt>
+<dd><p class="first">Set up the experiments for the project</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens setup [-h] [-root-dir str] [-p str] [-link] [-nm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-root-dir</span></kbd></td>
+<td>    The path to the root directory where the experiments, etc. will
+    be stored. If not given, a new directory will be created at the
+    same location as the original project</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the project that shall be initialized at `root_dir`. A
+    new directory will be created namely
+    ``root_dir + &#8216;/&#8217; + projectname``. If not given, defaults to
+    ``&#8217;sensitivity_&lt;id&gt;&#8217;`` where ``&#8217;&lt;id&gt;&#8217;`` is the experiment id</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-link=True</span></kbd></td>
+<td>    If set, the source files are linked to the original ones instead
+    of copied</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nm=False</span>, <span class="option">--no-move=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the project in the configuration files is not moved to the
+    position right before the configuration of the current project</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>compile</strong></dt>
+<dd><p class="first">Compile the sensitivity analysis model</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens compile [-h]
+</pre></div>
+</div>
+<dl class="last docutils">
+</dl>
+</dd>
+<dt><strong>init</strong></dt>
+<dd><p class="first">Initialize the experiments for the sensitivity analysis</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens init [-h] [-nml nml_key=f1[,f21[-f22[-f23]]]
+                       [nml_key=f1[,f21[-f22[-f23]]] ...]] [-id str] [-prep]
+                       [-use-param] [-nm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nml</span>, <span class="option">--namelist</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>A list from namelist parameters and their values to use.
+
+    A comma (``&#8217;,&#8217;``) separated string. A single value in this string
+    represents one number, ranges can also be used via a separation by
+    comma (``&#8217;-&#8216;``). Hence, ``&#8216;2009,2012-2015&#8217;`` will be
+    converted to ``[2009,2012, 2013, 2014]`` and ``2009,2012-2015-2`` to
+    ``[2009, 2012, 2015]``.
+You can also use ``&#8217;&lt;i&gt;err&#8217;`` in the list which will be
+interpreted as ``&#8217;&lt;i&gt;&#8217;``-times the error from the
+parameterization.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-id</span>, <span class="option">--experiment</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The base experiment name to use. Should somehow contain a number
+    which will be increased for each experiment. If None, it will
+    default to ``&#8217;&lt;id&gt;_sens0&#8217;``</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-prep=False</span>, <span class="option">--run-prepare=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True or no ``&#8217;input&#8217;`` key exists for the experiment, the
+    ``&#8217;prepare&#8217;`` evaluation task is run to get the reference data.
+    Otherwise, if False and the ``&#8217;input&#8217;`` key does not exist, the
+    specified file is used</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-use-param=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set and the parameterization is required, use the
+    parameterization of the original experiment</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nm=False</span>, <span class="option">--no-move=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the experiment in the configurations are not moved to the
+    position right before the configuration of the current experiment</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>run</strong></dt>
+<dd><p class="first">Run the sensitivity analysis experiments</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens run [-h] [-ids id1,id2,...] [-rm]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ids</span>, <span class="option">--experiments</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The experiments to use. If None, all experiments are used</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the `work_dir` will be removed if it already exists</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>evaluate</strong></dt>
+<dd><p class="first">Evaluate the sensitivity analysis experiments</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate [-h] [-ids id1,id2,...] [-loop]
+                           [-s str or list of str] [-ido str] [-f str]
+                           [-to-db] [-to-csv] [-db str]
+                           [-nr [task1,task2,...]] [-complete]
+                           {ks,quality,quants} ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ids</span>, <span class="option">--experiments</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The experiments to use. If None, all experiments are used</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-loop=False</span>, <span class="option">--loop-exps=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True the experiments of the sensitivity analysis are called
+    one after each other. Otherwise they are called in parallel, each
+    on a single core (unless the the serial option in the global
+    configuration is set)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-s</span>, <span class="option">--stations</span></kbd></td>
+<td>    either a list of stations to use or a filename containing a
+    1-row table with stations</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td>    Determine where to get the data from. If `scratch`, the
+    data will be calculated from the raw data. If `file`,
+    the data will be loaded from a file, if `db`, the data
+    will be loaded from a postgres database (Note that the
+    `database` argument must be provided!).</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db</span></kbd></td>
+<td>    Save the data into a postgresql database (Note that the
+    `database` argument must be provided!)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv</span></kbd></td>
+<td>    Save the data into a csv file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-db</span>, <span class="option">--database</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of a postgres data base to write the data to</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nr=False</span>, <span class="option">--norun=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>If set without value or &#8220;all&#8221; or a number different from 0, the data is set up and the configuration of the experiment is not affected. Otherwise it can be a comma separated list of parameterization tasks for which to only setup the data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-complete=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, setup and run all possible tasks</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>ks</strong></dt>
+<dd><p class="first">Perform a kolmogorov smirnoff test</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate ks [-h] [-ido str] [-nr]
+                              [-n variable [variable ...]] [-tw]
+                              [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                              [-to-csv] [-to-db] [-rm] [-o str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-n</span>, <span class="option">--names</span></kbd></td>
+<td><p class="first">    The list of variables use for calculation. If None, all variables will be
+    used</p>
+<p class="last">Possible choices: prcp, tmin, tmax, mean_cloud, wind</p>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-tw=False</span>, <span class="option">--transform-wind=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the square root of the wind is evaluated (as this is also
+    simulated in the weather generator)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nr=False</span>, <span class="option">--no-rounding=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Do not round the simulation to the infered precision of the
+    reference. The inferred precision is the minimum difference between
+    two values with in the entire data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>quality</strong></dt>
+<dd><p class="first">Estimate simulation quality using ks and quantile evaluation</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate quality [-h] [-q q1[,q1[,q2[,...]]]] [-ido str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-q</span>, <span class="option">--quantiles</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The quantiles to use for the quality analysis</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>quants</strong></dt>
+<dd><p class="first">Compare the quantiles of simulation and observation</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate quants [-h] [-ido str] [-nr]
+                                  [-n variable [variable ...]] [-tw]
+                                  [-q f1[;f21[,f22[,f23]]]
+                                  [f1[;f21[,f22[,f23]]] ...]]
+                                  [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                                  [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
+                                  [-op str] [-np] [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-n</span>, <span class="option">--names</span></kbd></td>
+<td><p class="first">    The list of variables use for calculation. If None, all variables will be
+    used</p>
+<p class="last">Possible choices: prcp, tmin, tmax, mean_cloud, wind</p>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-tw=False</span>, <span class="option">--transform-wind=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the square root of the wind is evaluated (as this is also
+    simulated in the weather generator)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-nr=False</span>, <span class="option">--no-rounding=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    Do not round the simulation to the infered precision of the
+    reference. The inferred precision is the minimum difference between
+    two values with in the entire data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-q=[1, 5, 10, 25, 50, 75, 90, 95, 99, 100]</span>, <span class="option">--quantiles=[1, 5, 10, 25, 50, 75, 90, 95, 99, 100]</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The quantiles to use for calculating the percentiles.
+
+    A comma (``&#8217;,&#8217;``) separated string. A single value in this string
+    represents one number, ranges can also be used via a separation by
+    comma (``&#8217;-&#8216;``). Hence, ``&#8216;2009,2012-2015&#8217;`` will be
+    converted to ``[2009,2012, 2013, 2014]`` and ``2009,2012-2015-2`` to
+    ``[2009, 2012, 2015]``.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>plot</strong></dt>
+<dd><p class="first">Plot the results sensitivity analysis experiments</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens plot [-h] [-i indicator[,indicator[,...]]]
+                       [-n variable,[variable[,...]]] [-meta &lt;yaml-file&gt;]
+                       {plot1d,plot2d} ...
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-i=['rsquared', 'slope', 'ks', 'quality']</span>, <span class="option">--indicators=['rsquared', 'slope', 'ks', 'quality']</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name of the indicators from the `quality` evaluation task</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-n=['prcp', 'tmin', 'tmax', 'mean_cloud', 'wind']</span>, <span class="option">--names=['prcp', 'tmin', 'tmax', 'mean_cloud', 'wind']</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    The name(s) of the variable(s) to plot</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-meta</span></kbd></td>
+<td>    Alternative meta information for the data set</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Sub-commands:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>plot1d</strong></dt>
+<dd><p class="first">1d plots with the indicator on the y-axis and the namelist parameter on the x-axis</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens plot plot1d [-h] [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                              [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
+                              [-op str] [-np] [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>plot2d</strong></dt>
+<dd><p class="first">2d plots with one namelist parameter on the y-axis and one on the x-axis and a color coding the the indicator</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens plot plot2d [-h] [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                              [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
+                              [-op str] [-np] [-p str]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Setup arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
+<td><p class="first">    The method how to setup the instance either from
+
+    ``&#8217;scratch&#8217;``
+        To set up the task from the raw data
+    ``&#8217;file&#8217;``
+        Set up the task from an existing file
+    ``&#8217;db&#8217;``
+        Set up the task from a database
+    ``None``
+        If the file name of this this task exists, use this one,
+        otherwise a database is provided, use this one, otherwise go
+        from scratch</p>
+<p class="last">Possible choices: scratch, file, db</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-csv=False</span></kbd></td>
+<td>    If True, the data at setup will be written to a csv file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-to-db=False</span></kbd></td>
+<td>    If True, the data at setup will be written to into a database</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>Run arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
+    netCDF file of the plot data</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
+    exists already</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
+<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>remove</strong></dt>
+<dd><p class="first">Remove the project and files of the sensitivity analysis</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens remove [-h] [-y] [-ap]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-y=False</span>, <span class="option">--yes=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, do not ask for confirmation</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ap=False</span>, <span class="option">--all-projects=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, all projects are removed</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><strong>archive</strong></dt>
+<dd><p class="first">Archive one or more experiments or a project instance</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen archive [-h] [-d str] [-f str]
+                     [-fmt { &#39;gztar&#39; | &#39;bztar&#39; | &#39;tar&#39; | &#39;zip&#39; }] [-p str]
+                     [-ids exp1,[exp2[,...]]]] [-P] [-na] [-np]
+                     [-e str [str ...]] [-k] [-rm] [-n] [-L]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-d</span>, <span class="option">--odir</span></kbd></td>
+<td>    The path where to store the archive</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f</span>, <span class="option">--aname</span></kbd></td>
+<td>    The name of the archive (minus any format-specific extension). If
+    None, defaults to the projectname</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-fmt</span></kbd></td>
+<td><p class="first">    The format of the archive. If None, it is tested whether an
+    archived with the name specified by `aname` already exists and if
+    yes, the format is inferred, otherwise ``&#8217;tar&#8217;`` is used</p>
+<p class="last">Possible choices: bztar, gztar, tar, zip</p>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If provided, the entire project is archived</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ids</span>, <span class="option">--experiments</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If provided, the given experiments are archived. Note that an error
+    is raised if they belong to multiple project instances</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-P=False</span>, <span class="option">--current-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, `projectname` is set to the current project</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-na=False</span>, <span class="option">--no-append=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    It True and the archive already exists, it is deleted</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-np=False</span>, <span class="option">--no-project-paths=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, paths outside the experiment directories are neglected</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-e</span>, <span class="option">--exclude</span></kbd></td>
+<td>    Filename patterns to ignore (see :func:`glob.fnmatch.fnmatch`)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-k=False</span>, <span class="option">--keep=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, the experiment directories are not removed and no
+    modification is made in the configuration</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-rm=False</span>, <span class="option">--rm-project=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, remove all the project files</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-n=False</span>, <span class="option">--dry-run=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, set, do not actually make anything</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-L=False</span>, <span class="option">--dereference=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, dereference symbolic links. Note: This is automatically set
+    for ``fmt==&#8217;zip&#8217;``</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+<dt><strong>remove</strong></dt>
+<dd><p class="first">Delete an existing experiment and/or projectname</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen remove [-h] [-p [str]] [-a] [-y] [-ap]
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>Optional Arguments</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The name for which the data shall be removed. If set without, argument, the project will be determined by the experiment. If specified, all experiments for the given project will be removed.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-a=False</span>, <span class="option">--all=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If set, delete not only the experiments and config files, but also
+    all the project files</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-y=False</span>, <span class="option">--yes=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, do not ask for confirmation</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-ap=False</span>, <span class="option">--all-projects=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True/set, all projects are removed</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../getting_started.html" title="previous chapter">Getting started</a></li>
+      <li>Next: <a href="gwgen.setup.html" title="next chapter">gwgen setup</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/command_line/gwgen.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/command_line/gwgen.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

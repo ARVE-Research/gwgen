@@ -1,0 +1,809 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.main module &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Python API Reference" href="gwgen.html" />
+    <link rel="next" title="gwgen.parameterization module" href="gwgen.parameterization.html" />
+    <link rel="prev" title="gwgen.evaluation module" href="gwgen.evaluation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gwgen.main">
+<span id="gwgen-main-module"></span><h1>gwgen.main module<a class="headerlink" href="#module-gwgen.main" title="Permalink to this headline">¶</a></h1>
+<p><strong>Classes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer" title="gwgen.main.GWGENOrganizer"><code class="xref py py-obj docutils literal"><span class="pre">GWGENOrganizer</span></code></a>([config])</td>
+<td>A class for organizing a model</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Functions</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.exponential_function" title="gwgen.main.exponential_function"><code class="xref py py-obj docutils literal"><span class="pre">exponential_function</span></code></a>(x,&nbsp;a,&nbsp;b)</td>
+<td>Exponential function used by <a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction" title="gwgen.main.GWGENOrganizer.wind_bias_correction"><code class="xref py py-meth docutils literal"><span class="pre">GWGENOrganizer.wind_bias_correction()</span></code></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.logistic_function" title="gwgen.main.logistic_function"><code class="xref py py-obj docutils literal"><span class="pre">logistic_function</span></code></a>(x,&nbsp;L,&nbsp;k,&nbsp;x0)</td>
+<td>Logistic function used in <a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction" title="gwgen.main.GWGENOrganizer.wind_bias_correction"><code class="xref py py-meth docutils literal"><span class="pre">GWGENOrganizer.wind_bias_correction()</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.main" title="gwgen.main.main"><code class="xref py py-obj docutils literal"><span class="pre">main</span></code></a>([args])</td>
+<td>Call the <code class="xref py py-meth docutils literal"><span class="pre">main()</span></code> method of the</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="gwgen.main.GWGENOrganizer">
+<em class="property">class </em><code class="descclassname">gwgen.main.</code><code class="descname">GWGENOrganizer</code><span class="sig-paren">(</span><em>config=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.8)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></p>
+<p>A class for organizing a model</p>
+<p>This class is indended to have hold the basic functions for organizing a
+model. You can subclass the functions <code class="docutils literal"><span class="pre">setup,</span> <span class="pre">init</span></code> to fit to your model.
+When using the model from the command line, you can also use the
+<code class="xref py py-meth docutils literal"><span class="pre">setup_parser()</span></code> method to create the argument parsers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.config.html#model_organization.config.Config" title="(in model-organization v0.1.8)"><em>model_organization.config.Config</em></a>) &#8211; The configuration of the organizer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.bias_correction" title="gwgen.main.GWGENOrganizer.bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">bias_correction</span></code></a>([keep,&nbsp;quantiles,&nbsp;...])</td>
+<td>Perform a bias correction for the data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.cloud_preproc" title="gwgen.main.GWGENOrganizer.cloud_preproc"><code class="xref py py-obj docutils literal"><span class="pre">cloud_preproc</span></code></a>([max_files,&nbsp;return_manager])</td>
+<td>Extract the inventory of EECRA stations</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.compile_model" title="gwgen.main.GWGENOrganizer.compile_model"><code class="xref py py-obj docutils literal"><span class="pre">compile_model</span></code></a>([projectname])</td>
+<td>Compile the model</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.configure" title="gwgen.main.GWGENOrganizer.configure"><code class="xref py py-obj docutils literal"><span class="pre">configure</span></code></a>([update_nml,&nbsp;max_stations,&nbsp;...])</td>
+<td>Configure the projects and experiments</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.create_test_sample" title="gwgen.main.GWGENOrganizer.create_test_sample"><code class="xref py py-obj docutils literal"><span class="pre">create_test_sample</span></code></a>(test_dir,&nbsp;stations[,&nbsp;...])</td>
+<td>Create a test sample for the given GHCN stations</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.evaluate" title="gwgen.main.GWGENOrganizer.evaluate"><code class="xref py py-obj docutils literal"><span class="pre">evaluate</span></code></a>([stations,&nbsp;other_exp,&nbsp;setup_from,&nbsp;...])</td>
+<td>Evaluate the experiment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.param" title="gwgen.main.GWGENOrganizer.param"><code class="xref py py-obj docutils literal"><span class="pre">param</span></code></a>([complete,&nbsp;stations,&nbsp;other_exp,&nbsp;...])</td>
+<td>Parameterize the experiment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.poly_bias_correction" title="gwgen.main.GWGENOrganizer.poly_bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">poly_bias_correction</span></code></a>(vname,&nbsp;what,&nbsp;info[,&nbsp;...])</td>
+<td>Perform a bias correction based on percentile and a polynomial fit</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.preproc" title="gwgen.main.GWGENOrganizer.preproc"><code class="xref py py-obj docutils literal"><span class="pre">preproc</span></code></a>(**kwargs)</td>
+<td>Preprocess the data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.run" title="gwgen.main.GWGENOrganizer.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>([ifile,&nbsp;ofile,&nbsp;odir,&nbsp;work_dir,&nbsp;remove])</td>
+<td>Run the experiment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.select" title="gwgen.main.GWGENOrganizer.select"><code class="xref py py-obj docutils literal"><span class="pre">select</span></code></a>([grid,&nbsp;grid_output,&nbsp;stations_output,&nbsp;...])</td>
+<td>Select stations based upon a regular grid</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.sensitivity_analysis" title="gwgen.main.GWGENOrganizer.sensitivity_analysis"><code class="xref py py-obj docutils literal"><span class="pre">sensitivity_analysis</span></code></a>(**kwargs)</td>
+<td>Perform a sensitivity analysis on the given parameters</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.setup" title="gwgen.main.GWGENOrganizer.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>(root_dir[,&nbsp;projectname,&nbsp;link,&nbsp;...])</td>
+<td>Perform the initial setup for the model</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.tmin_bias_correction" title="gwgen.main.GWGENOrganizer.tmin_bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">tmin_bias_correction</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Perform a bias correction for the minimum temperature data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction" title="gwgen.main.GWGENOrganizer.wind_bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">wind_bias_correction</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Perform a bias correction for the wind speed</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction_logistic" title="gwgen.main.GWGENOrganizer.wind_bias_correction_logistic"><code class="xref py py-obj docutils literal"><span class="pre">wind_bias_correction_logistic</span></code></a>(info[,&nbsp;...])</td>
+<td>Perform a bias correction for the data</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.bias_correction_methods" title="gwgen.main.GWGENOrganizer.bias_correction_methods"><code class="xref py py-obj docutils literal"><span class="pre">bias_correction_methods</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.commands" title="gwgen.main.GWGENOrganizer.commands"><code class="xref py py-obj docutils literal"><span class="pre">commands</span></code></a></td>
+<td>list() -&gt; new empty list</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.name" title="gwgen.main.GWGENOrganizer.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.parser_commands" title="gwgen.main.GWGENOrganizer.parser_commands"><code class="xref py py-obj docutils literal"><span class="pre">parser_commands</span></code></a></td>
+<td>mapping from the name of the parser command to the method name</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.paths" title="gwgen.main.GWGENOrganizer.paths"><code class="xref py py-obj docutils literal"><span class="pre">paths</span></code></a></td>
+<td>list of str. The keys describing paths for the model</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.preproc_funcs" title="gwgen.main.GWGENOrganizer.preproc_funcs"><code class="xref py py-obj docutils literal"><span class="pre">preproc_funcs</span></code></a></td>
+<td>A mapping from preproc commands to the corresponding function</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.bias_correction">
+<code class="descname">bias_correction</code><span class="sig-paren">(</span><em>keep=False, quantiles=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99], no_evaluation=False, new_project=False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.bias_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.bias_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a bias correction for the data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>keep</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If not True, the experiment configuration files are not modified.
+Otherwise the <cite>quants</cite> section is kept for the given quantiles</li>
+<li><strong>quantiles</strong> (<em>list of float</em>) &#8211; The quantiles to use for the bias correction. Does not have an
+effect if <cite>no_evaluation</cite> is set to True</li>
+<li><strong>no_evaluation</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the existing evaluation in the configuration is used for
+the bias correction</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in
+<cite>project_output</cite> exists already</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The results of the underlying bias correction methods</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.main.GWGENOrganizer.bias_correction_methods">
+<code class="descname">bias_correction_methods</code><a class="headerlink" href="#gwgen.main.GWGENOrganizer.bias_correction_methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.cloud_preproc">
+<code class="descname">cloud_preproc</code><span class="sig-paren">(</span><em>max_files=None</em>, <em>return_manager=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.cloud_preproc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.cloud_preproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the inventory of EECRA stations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>max_files</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The maximum number of files to process during one process. If None,
+it is determined by the global <code class="docutils literal"><span class="pre">'max_stations'</span></code> key</li>
+<li><strong>**kwargs</strong> &#8211; Any task in the <a class="reference internal" href="gwgen.preproc.html#gwgen.preproc.CloudPreproc" title="gwgen.preproc.CloudPreproc"><code class="xref py py-class docutils literal"><span class="pre">gwgen.preproc.CloudPreproc</span></code></a> framework</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.main.GWGENOrganizer.commands">
+<code class="descname">commands</code><em class="property"> = ['setup', 'compile_model', 'init', 'set_value', 'get_value', 'del_value', 'info', 'unarchive', 'configure', 'preproc', 'param', 'run', 'evaluate', 'bias_correction', 'sensitivity_analysis', 'archive', 'remove']</em><a class="headerlink" href="#gwgen.main.GWGENOrganizer.commands" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.compile_model">
+<code class="descname">compile_model</code><span class="sig-paren">(</span><em>projectname=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.compile_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.compile_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile the model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the project. If None, use the last one or the one
+specified by the current experiment</li>
+<li><strong>**kwargs</strong> &#8211; Keyword arguments passed to the <code class="xref py py-meth docutils literal"><span class="pre">app_main()</span></code> method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.configure">
+<code class="descname">configure</code><span class="sig-paren">(</span><em>update_nml=None</em>, <em>max_stations=None</em>, <em>datadir=None</em>, <em>database=None</em>, <em>user=None</em>, <em>host=None</em>, <em>port=None</em>, <em>chunksize=None</em>, <em>compiler=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the projects and experiments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True/set, the configuration are applied globally (already
+existing and configured experiments are not impacted)</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Apply the configuration on the entire project instance instead of
+only the single experiment (already existing and configured
+experiments are not impacted)</li>
+<li><strong>ifile</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The input file for the project. Must be a netCDF file with
+population data</li>
+<li><strong>forcing</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The input file for the project containing variables with population
+evolution information. Possible variables in the netCDF file are
+<em>movement</em> containing the number of people to move and <em>change</em>
+containing the population change (positive or negative)</li>
+<li><strong>serial</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Do the parameterization always serial (i.e. not in parallel on
+multiple processors). Does automatically impact global settings</li>
+<li><strong>nprocs</strong> (<em>int or 'all'</em>) &#8211; Maximum number of processes to when making the parameterization in
+parallel. Does automatically impact global settings and disables
+<cite>serial</cite></li>
+<li><strong>update_from</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Path to a yaml configuration file to update the specified
+configuration with it</li>
+<li><strong>**kwargs</strong> &#8211; Other keywords for the <code class="xref py py-meth docutils literal"><span class="pre">app_main()</span></code> method</li>
+<li><strong>update_nml</strong> (<em>str or dict</em>) &#8211; A python dict or path to a namelist to use for updating the
+namelist of the experiment</li>
+<li><strong>max_stations</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The maximum number of stations to process in one parameterization
+process. Does automatically impact global settings</li>
+<li><strong>datadir</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Path to the data directory to use (impacts the project
+configuration)</li>
+<li><strong>database</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of a postgres data base to write the data to</li>
+<li><strong>user</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The username to use when logging into the database</li>
+<li><strong>host</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the host which runs the database server</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The port to use to log into the the database</li>
+<li><strong>chunksize</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The chunksize to use for the parameterization and evaluation</li>
+<li><strong>compiler</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the fortran compiler to use</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.create_test_sample">
+<code class="descname">create_test_sample</code><span class="sig-paren">(</span><em>test_dir</em>, <em>stations</em>, <em>no_cloud=False</em>, <em>reduce_eecra=0</em>, <em>keep_all=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.create_test_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.create_test_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a test sample for the given GHCN stations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>test_dir</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the directory containing the test files from Github</li>
+<li><strong>stations</strong> (<em>str or list of str</em>) &#8211; either a list of GHCN stations to use or a filename containing a
+1-row table with GHCN stations</li>
+<li><strong>no_cloud</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, no cloud stations are extracted</li>
+<li><strong>reduce_eecra</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The percentage by which to reduce the EECRA data</li>
+<li><strong>keep_all</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True all years of the EECRA data are used. Otherwise, only the
+years with complete temperature and cloud are kept. Note
+that this has only an effect if <cite>reduce_eecra</cite> is not 0</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>stations=None</em>, <em>other_exp=None</em>, <em>setup_from=None</em>, <em>to_db=None</em>, <em>to_csv=None</em>, <em>database=None</em>, <em>norun=False</em>, <em>to_return=None</em>, <em>complete=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the experiment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>stations</strong> (<em>str or list of str</em>) &#8211; either a list of stations to use or a filename containing a
+1-row table with stations</li>
+<li><strong>other_exp</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Use the configuration from another experiment</li>
+<li><strong>setup_from</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Determine where to get the data from. If <cite>scratch</cite>, the
+data will be calculated from the raw data. If <cite>file</cite>,
+the data will be loaded from a file, if <cite>db</cite>, the data
+will be loaded from a postgres database (Note that the
+<cite>database</cite> argument must be provided!).</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Save the data into a postgresql database (Note that the
+<cite>database</cite> argument must be provided!)</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Save the data into a csv file</li>
+<li><strong>database</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of a postgres data base to write the data to</li>
+<li><strong>norun</strong> (bool, list of str or <code class="docutils literal"><span class="pre">'all'</span></code>) &#8211; If True, only the data is set up and the configuration of the
+experiment is not affected. It can be either a list of  tasks or
+True or <code class="docutils literal"><span class="pre">'all'</span></code></li>
+<li><strong>to_return</strong> (list of str or <code class="docutils literal"><span class="pre">'all'</span></code>) &#8211; The names of the tasks to return. If None, only the ones with an
+<a class="reference internal" href="gwgen.utils.html#gwgen.utils.TaskBase.has_run" title="gwgen.utils.TaskBase.has_run"><code class="xref py py-attr docutils literal"><span class="pre">gwgen.utils.TaskBase.has_run</span></code></a> are returned.</li>
+<li><strong>complete</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, setup and run all possible tasks</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.main.GWGENOrganizer.name">
+<code class="descname">name</code><em class="property"> = 'gwgen'</em><a class="headerlink" href="#gwgen.main.GWGENOrganizer.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.param">
+<code class="descname">param</code><span class="sig-paren">(</span><em>complete=False</em>, <em>stations=None</em>, <em>other_exp=None</em>, <em>setup_from=None</em>, <em>to_db=None</em>, <em>to_csv=None</em>, <em>database=None</em>, <em>norun=False</em>, <em>to_return=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameterize the experiment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>stations</strong> (<em>str or list of str</em>) &#8211; either a list of stations to use or a filename containing a
+1-row table with stations</li>
+<li><strong>other_exp</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Use the configuration from another experiment</li>
+<li><strong>setup_from</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Determine where to get the data from. If <cite>scratch</cite>, the
+data will be calculated from the raw data. If <cite>file</cite>,
+the data will be loaded from a file, if <cite>db</cite>, the data
+will be loaded from a postgres database (Note that the
+<cite>database</cite> argument must be provided!).</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Save the data into a postgresql database (Note that the
+<cite>database</cite> argument must be provided!)</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Save the data into a csv file</li>
+<li><strong>database</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of a postgres data base to write the data to</li>
+<li><strong>norun</strong> (bool, list of str or <code class="docutils literal"><span class="pre">'all'</span></code>) &#8211; If True, only the data is set up and the configuration of the
+experiment is not affected. It can be either a list of  tasks or
+True or <code class="docutils literal"><span class="pre">'all'</span></code></li>
+<li><strong>to_return</strong> (list of str or <code class="docutils literal"><span class="pre">'all'</span></code>) &#8211; The names of the tasks to return. If None, only the ones with an
+<a class="reference internal" href="gwgen.utils.html#gwgen.utils.TaskBase.has_run" title="gwgen.utils.TaskBase.has_run"><code class="xref py py-attr docutils literal"><span class="pre">gwgen.utils.TaskBase.has_run</span></code></a> are returned.</li>
+<li><strong>complete</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, setup and run all possible tasks</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.main.GWGENOrganizer.parser_commands">
+<code class="descname">parser_commands</code><em class="property"> = {'bias_correction': 'bias', 'compile_model': 'compile', 'sensitivity_analysis': 'sens'}</em><a class="headerlink" href="#gwgen.main.GWGENOrganizer.parser_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>mapping from the name of the parser command to the method name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.main.GWGENOrganizer.paths">
+<code class="descname">paths</code><em class="property"> = ['expdir', 'src', 'data', 'param_stations', 'eval_stations', 'indir', 'input', 'outdir', 'outdata', 'nc_file', 'project_file', 'plot_file', 'reference', 'evaldir', 'paramdir', 'workdir', 'param_grid', 'grid', 'eval_grid']</em><a class="headerlink" href="#gwgen.main.GWGENOrganizer.paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of str. The keys describing paths for the model</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.poly_bias_correction">
+<code class="descname">poly_bias_correction</code><span class="sig-paren">(</span><em>vname</em>, <em>what</em>, <em>info</em>, <em>new_project=False</em>, <em>plot_output=None</em>, <em>deg=3</em>, <em>close=True</em>, <em>ds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.poly_bias_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.poly_bias_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a bias correction based on percentile and a polynomial fit</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>vname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The variable name to use</li>
+<li><strong>what</strong> (<em>str { 'slope' | 'intercept' }</em>) &#8211; Either slope or intercept. The parameter that should be used for
+the bias correction</li>
+<li><strong>info</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the quantile evaluation</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in
+<cite>project_output</cite> exists already</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the output file. If not specified, it defaults to
+<cite>&lt;exp_dir&gt;/postproc/&lt;vname&gt;_bias_correction.pdf</cite></li>
+<li><strong>deg</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The degree of the fittet polynomial</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, close the project at the end</li>
+<li><strong>ds</strong> (<em>xr.Dataset</em>) &#8211; The xarray dataset to use. Otherwise it will be created from <cite>info</cite></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.preproc">
+<code class="descname">preproc</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.preproc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.preproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess the data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**kwargs</strong> &#8211; Any keyword from the <a class="reference internal" href="#gwgen.main.GWGENOrganizer.preproc" title="gwgen.main.GWGENOrganizer.preproc"><code class="xref py py-attr docutils literal"><span class="pre">preproc</span></code></a> attribute with kws for the
+corresponding function, or any keyword for the <a class="reference internal" href="#gwgen.main.main" title="gwgen.main.main"><code class="xref py py-meth docutils literal"><span class="pre">main()</span></code></a> method</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.main.GWGENOrganizer.preproc_funcs">
+<code class="descname">preproc_funcs</code><a class="headerlink" href="#gwgen.main.GWGENOrganizer.preproc_funcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A mapping from preproc commands to the corresponding function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>ifile=None</em>, <em>ofile=None</em>, <em>odir=None</em>, <em>work_dir=None</em>, <em>remove=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the experiment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifile</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the input file. If None, it is assumed that it is
+stored in the <code class="docutils literal"><span class="pre">'input'</span></code> key in the experiment configuration</li>
+<li><strong>ofile</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the output file.  If None, it is assumed that it is
+stored in the <code class="docutils literal"><span class="pre">'input'</span></code> key in the experiment configuration or
+it will be stored in <code class="docutils literal"><span class="pre">'odir/exp_id.csv'</span></code>. The output directory
+<code class="docutils literal"><span class="pre">'odir'</span></code> is determined by the <cite>odir</cite> parameter</li>
+<li><strong>odir</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the output directory. If None and not already saved
+in the configuration, it will default to
+<code class="docutils literal"><span class="pre">'experiment_dir/outdata'</span></code></li>
+<li><strong>work_dir</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the work directory where the binaries are copied to.</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the <cite>work_dir</cite> will be removed if it already exists</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``**kwargs``</strong> &#8211;
+Will be passed to the <a class="reference internal" href="#gwgen.main.main" title="gwgen.main.main"><code class="xref py py-meth docutils literal"><span class="pre">main()</span></code></a> method</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>grid=None</em>, <em>grid_output=None</em>, <em>stations_output=None</em>, <em>igrid_key=None</em>, <em>grid_key=None</em>, <em>grid_db=None</em>, <em>stations_db=None</em>, <em>no_prcp_check=False</em>, <em>setup_from=None</em>, <em>download=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select stations based upon a regular grid</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a csv-file containing a lat and a lon column with the
+information on the centers of the grid. If None, <cite>igrid_key</cite> must
+not be None and point to a key in the configuration (either the one
+of the experiment, or the project, or the global configuration)
+specifying the path</li>
+<li><strong>grid_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the csv-file where to store the mapping from grid
+lat-lon to station id.</li>
+<li><strong>stations_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the csv-file where to store the mapping from station
+to grid center point</li>
+<li><strong>igrid_key</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The key in the configuration where to store the path of the <cite>grid</cite>
+input file</li>
+<li><strong>grid_key</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The key in the configuration where to store the name of the
+<cite>grid_output</cite> file.</li>
+<li><strong>grid_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of a data table to store the data of <cite>stations_output</cite> in</li>
+<li><strong>stations_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of a data table to store the data for <cite>stations_output</cite> in</li>
+<li><strong>no_prcp_check</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, we will not check for the values between 0.1 and 1.0 for
+precipitation and save the result in the <code class="docutils literal"><span class="pre">'best'</span></code> column</li>
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' }</em>) &#8211; The setup method for the daily data for the prcp check</li>
+<li><strong>download</strong> (<em>{ 'single' | 'all' }</em>) &#8211; Handles how to manage missing files for the prcp check. If None
+(default), an warning is printed and the file is ignored, if
+<code class="docutils literal"><span class="pre">'single'</span></code>, the missing file is downloaded, if <code class="docutils literal"><span class="pre">'all'</span></code>, the
+entire tarball is downloaded (strongly not recommended for this
+function)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``**kwargs``</strong> &#8211;
+are passed to the <a class="reference internal" href="#gwgen.main.main" title="gwgen.main.main"><code class="xref py py-meth docutils literal"><span class="pre">main()</span></code></a> method</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>for <cite>igrid_key</cite> and <cite>ogrid_key</cite> we recommend one of
+<code class="docutils literal"><span class="pre">{'grid',</span> <span class="pre">'param_grid',</span> <span class="pre">'eval_grid'</span></code> because that implies a
+correct path management</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.sensitivity_analysis">
+<code class="descname">sensitivity_analysis</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.sensitivity_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.sensitivity_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a sensitivity analysis on the given parameters</p>
+<p>This function performs a sensitivity analysis on the current
+experiment. It creates a new project and uses the evaluation and
+parameterization of the current experiment to get information on the
+others</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.setup">
+<code class="descname">setup</code><span class="sig-paren">(</span><em>root_dir</em>, <em>projectname=None</em>, <em>link=False</em>, <em>src_project=None</em>, <em>compiler=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the initial setup for the model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>root_dir</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the root directory where the experiments, etc. will
+be stored</li>
+<li><strong>projectname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the project that shall be initialized at <cite>root_dir</cite>. A
+new directory will be created namely
+<code class="docutils literal"><span class="pre">root_dir</span> <span class="pre">+</span> <span class="pre">'/'</span> <span class="pre">+</span> <span class="pre">projectname</span></code></li>
+<li><strong>link</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If set, the source files are linked to the original ones instead
+of copied</li>
+<li><strong>link</strong> &#8211; If set, the source files are linked to the original ones instead
+of copied</li>
+<li><strong>src_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Another model name to use the source model files from</li>
+<li><strong>compiler</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to the compiler to use. If None, the global compiler
+option is used</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.tmin_bias_correction">
+<code class="descname">tmin_bias_correction</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.tmin_bias_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.tmin_bias_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a bias correction for the minimum temperature data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>info</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the quantile evaluation</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in
+<cite>project_output</cite> exists already</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the output file. If not specified, it defaults to
+<cite>&lt;exp_dir&gt;/postproc/&lt;vname&gt;_bias_correction.pdf</cite></li>
+<li><strong>deg</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The degree of the fittet polynomial</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, close the project at the end</li>
+<li><strong>ds</strong> (<em>xr.Dataset</em>) &#8211; The xarray dataset to use. Otherwise it will be created from <cite>info</cite></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.wind_bias_correction">
+<code class="descname">wind_bias_correction</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.wind_bias_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.wind_bias_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a bias correction for the wind speed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>info</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the quantile evaluation</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in
+<cite>project_output</cite> exists already</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the output file. If not specified, it defaults to
+<cite>&lt;exp_dir&gt;/postproc/&lt;vname&gt;_bias_correction.pdf</cite></li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.main.GWGENOrganizer.wind_bias_correction_logistic">
+<code class="descname">wind_bias_correction_logistic</code><span class="sig-paren">(</span><em>info</em>, <em>new_project=False</em>, <em>plot_output=None</em>, <em>close=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer.wind_bias_correction_logistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer.wind_bias_correction_logistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a bias correction for the data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>info</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the quantile evaluation</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in
+<cite>project_output</cite> exists already</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the output file. If not specified, it defaults to
+<cite>&lt;exp_dir&gt;/postproc/&lt;vname&gt;_bias_correction.pdf</cite></li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.main.exponential_function">
+<code class="descclassname">gwgen.main.</code><code class="descname">exponential_function</code><span class="sig-paren">(</span><em>x</em>, <em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#exponential_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.exponential_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponential function used by <a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction" title="gwgen.main.GWGENOrganizer.wind_bias_correction"><code class="xref py py-meth docutils literal"><span class="pre">GWGENOrganizer.wind_bias_correction()</span></code></a></p>
+<p>This function is defined as</p>
+<div class="math">
+\[f(x) = e^{ax + b}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><em>numpy.ndarray</em></a>) &#8211; The x-data</li>
+<li><strong>a</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The <em>a</em> parameter in the above equation</li>
+<li><strong>b</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The <em>b</em> parameter in the above equation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The calculated <span class="math">\(f(x)\)</span></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.main.logistic_function">
+<code class="descclassname">gwgen.main.</code><code class="descname">logistic_function</code><span class="sig-paren">(</span><em>x</em>, <em>L</em>, <em>k</em>, <em>x0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#logistic_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.logistic_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logistic function used in <a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction" title="gwgen.main.GWGENOrganizer.wind_bias_correction"><code class="xref py py-meth docutils literal"><span class="pre">GWGENOrganizer.wind_bias_correction()</span></code></a></p>
+<p>The function is defined as</p>
+<div class="math">
+\[f(x) = \frac{L}{1 + \mathrm e^{-k(x-x_0)}}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.13)"><em>numpy.ndarray</em></a>) &#8211; The x-data</li>
+<li><strong>L</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the curve&#8217;s maximum value</li>
+<li><strong>k</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The steepness of the curve</li>
+<li><strong>x0</strong> (<em>the x-value of the sigmoid's midpoint</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The calculated <span class="math">\(f(x)\)</span></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.main.main">
+<code class="descclassname">gwgen.main.</code><code class="descname">main</code><span class="sig-paren">(</span><em>args=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the <code class="xref py py-meth docutils literal"><span class="pre">main()</span></code> method of the
+<a class="reference internal" href="#gwgen.main.GWGENOrganizer" title="gwgen.main.GWGENOrganizer"><code class="xref py py-class docutils literal"><span class="pre">GWGENOrganizer</span></code></a> class</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Python API Reference</a><ul>
+      <li>Previous: <a href="gwgen.evaluation.html" title="previous chapter">gwgen.evaluation module</a></li>
+      <li>Next: <a href="gwgen.parameterization.html" title="next chapter">gwgen.parameterization module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/gwgen.main.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/api/gwgen.main.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,1213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.evaluation module &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Python API Reference" href="gwgen.html" />
+    <link rel="next" title="gwgen.main module" href="gwgen.main.html" />
+    <link rel="prev" title="Python API Reference" href="gwgen.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gwgen.evaluation">
+<span id="gwgen-evaluation-module"></span><h1>gwgen.evaluation module<a class="headerlink" href="#module-gwgen.evaluation" title="Permalink to this headline">¶</a></h1>
+<p>Evaluation module of the gwgen module</p>
+<p><strong>Classes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation" title="gwgen.evaluation.EvaluationPreparation"><code class="xref py py-obj docutils literal"><span class="pre">EvaluationPreparation</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Evaluation task to prepare the evaluation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.Evaluator" title="gwgen.evaluation.Evaluator"><code class="xref py py-obj docutils literal"><span class="pre">Evaluator</span></code></a>(stations,&nbsp;config,&nbsp;project_config,&nbsp;...)</td>
+<td>Abstract base class for evaluation tasks</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation" title="gwgen.evaluation.KSEvaluation"><code class="xref py py-obj docutils literal"><span class="pre">KSEvaluation</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Evaluation using a Kolmogorov-Smirnoff test</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask" title="gwgen.evaluation.OutputTask"><code class="xref py py-obj docutils literal"><span class="pre">OutputTask</span></code></a>(stations,&nbsp;config,&nbsp;project_config,&nbsp;...)</td>
+<td>Task to provide all the data for input and output</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation" title="gwgen.evaluation.QuantileEvaluation"><code class="xref py py-obj docutils literal"><span class="pre">QuantileEvaluation</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Evaluator to evaluate specific quantiles</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.SimulationQuality" title="gwgen.evaluation.SimulationQuality"><code class="xref py py-obj docutils literal"><span class="pre">SimulationQuality</span></code></a>(stations,&nbsp;config,&nbsp;...[,&nbsp;...])</td>
+<td>Evaluator to provide one value characterizing the quality of the</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Functions</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.default_ks_config" title="gwgen.evaluation.default_ks_config"><code class="xref py py-obj docutils literal"><span class="pre">default_ks_config</span></code></a>([no_rounding,&nbsp;names,&nbsp;...])</td>
+<td>The default configuration for <a class="reference internal" href="#gwgen.evaluation.KSEvaluation" title="gwgen.evaluation.KSEvaluation"><code class="xref py py-class docutils literal"><span class="pre">KSEvaluation</span></code></a> instances.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.default_preparation_config" title="gwgen.evaluation.default_preparation_config"><code class="xref py py-obj docutils literal"><span class="pre">default_preparation_config</span></code></a>([setup_raw,&nbsp;...])</td>
+<td>The default configuration for <a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation" title="gwgen.evaluation.EvaluationPreparation"><code class="xref py py-class docutils literal"><span class="pre">EvaluationPreparation</span></code></a> instances.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.default_quality_config" title="gwgen.evaluation.default_quality_config"><code class="xref py py-obj docutils literal"><span class="pre">default_quality_config</span></code></a>([quantiles])</td>
+<td>The default configuration for <a class="reference internal" href="#gwgen.evaluation.SimulationQuality" title="gwgen.evaluation.SimulationQuality"><code class="xref py py-class docutils literal"><span class="pre">SimulationQuality</span></code></a> instances.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.default_quantile_config" title="gwgen.evaluation.default_quantile_config"><code class="xref py py-obj docutils literal"><span class="pre">default_quantile_config</span></code></a>([quantiles])</td>
+<td>The default configuration for <a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation" title="gwgen.evaluation.QuantileEvaluation"><code class="xref py py-class docutils literal"><span class="pre">QuantileEvaluation</span></code></a> instances.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="gwgen.evaluation.EvaluationPreparation">
+<em class="property">class </em><code class="descclassname">gwgen.evaluation.</code><code class="descname">EvaluationPreparation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.evaluation.Evaluator" title="gwgen.evaluation.Evaluator"><code class="xref py py-class docutils literal"><span class="pre">gwgen.evaluation.Evaluator</span></code></a></p>
+<p>Evaluation task to prepare the evaluation</p>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.__reduce__" title="gwgen.evaluation.EvaluationPreparation.__reduce__"><code class="xref py py-obj docutils literal"><span class="pre">__reduce__</span></code></a>()</td>
+<td>Reimplemented to give provide also the manager</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.download_src" title="gwgen.evaluation.EvaluationPreparation.download_src"><code class="xref py py-obj docutils literal"><span class="pre">download_src</span></code></a>([force])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.init_from_scratch" title="gwgen.evaluation.EvaluationPreparation.init_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">init_from_scratch</span></code></a>()</td>
+<td>Initialize the setup via the parameterization classes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.setup_from_db" title="gwgen.evaluation.EvaluationPreparation.setup_from_db"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_db</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.setup_from_file" title="gwgen.evaluation.EvaluationPreparation.setup_from_file"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_file</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.setup_from_scratch" title="gwgen.evaluation.EvaluationPreparation.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.write2db" title="gwgen.evaluation.EvaluationPreparation.write2db"><code class="xref py py-obj docutils literal"><span class="pre">write2db</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Reimplemented to sort the data according to the index</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.write2file" title="gwgen.evaluation.EvaluationPreparation.write2file"><code class="xref py py-obj docutils literal"><span class="pre">write2file</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Reimplemented to sort the data according to the index</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.datafile" title="gwgen.evaluation.EvaluationPreparation.datafile"><code class="xref py py-obj docutils literal"><span class="pre">datafile</span></code></a></td>
+<td>The paths to reference and input file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.dbname" title="gwgen.evaluation.EvaluationPreparation.dbname"><code class="xref py py-obj docutils literal"><span class="pre">dbname</span></code></a></td>
+<td>list() -&gt; new empty list</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.default_config" title="gwgen.evaluation.EvaluationPreparation.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.ghcnd_inventory_file" title="gwgen.evaluation.EvaluationPreparation.ghcnd_inventory_file"><code class="xref py py-obj docutils literal"><span class="pre">ghcnd_inventory_file</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.has_run" title="gwgen.evaluation.EvaluationPreparation.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.http_inventory" title="gwgen.evaluation.EvaluationPreparation.http_inventory"><code class="xref py py-obj docutils literal"><span class="pre">http_inventory</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.input_data" title="gwgen.evaluation.EvaluationPreparation.input_data"><code class="xref py py-obj docutils literal"><span class="pre">input_data</span></code></a></td>
+<td>The input <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><code class="xref py py-class docutils literal"><span class="pre">DataFrame</span></code></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.name" title="gwgen.evaluation.EvaluationPreparation.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.reference_data" title="gwgen.evaluation.EvaluationPreparation.reference_data"><code class="xref py py-obj docutils literal"><span class="pre">reference_data</span></code></a></td>
+<td>The reference <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><code class="xref py py-class docutils literal"><span class="pre">DataFrame</span></code></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.station_list" title="gwgen.evaluation.EvaluationPreparation.station_list"><code class="xref py py-obj docutils literal"><span class="pre">station_list</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.summary" title="gwgen.evaluation.EvaluationPreparation.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="gwgen.evaluation.EvaluationPreparation.__reduce__">
+<code class="descname">__reduce__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation.__reduce__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reimplemented to give provide also the manager</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.datafile">
+<code class="descname">datafile</code><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.datafile" title="Permalink to this definition">¶</a></dt>
+<dd><p>The paths to reference and input file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.dbname">
+<code class="descname">dbname</code><em class="property"> = ['reference', 'input']</em><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.dbname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.default_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.EvaluationPreparation.download_src">
+<code class="descname">download_src</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation.download_src"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.download_src" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.ghcnd_inventory_file">
+<code class="descname">ghcnd_inventory_file</code><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.ghcnd_inventory_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.has_run">
+<code class="descname">has_run</code><em class="property"> = False</em><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.has_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.http_inventory">
+<code class="descname">http_inventory</code><em class="property"> = 'ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt'</em><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.http_inventory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.EvaluationPreparation.init_from_scratch">
+<code class="descname">init_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation.init_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.init_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the setup via the parameterization classes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.input_data">
+<code class="descname">input_data</code><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.input_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The input <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><code class="xref py py-class docutils literal"><span class="pre">DataFrame</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.name">
+<code class="descname">name</code><em class="property"> = 'prepare'</em><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.reference_data">
+<code class="descname">reference_data</code><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.reference_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The reference <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><code class="xref py py-class docutils literal"><span class="pre">DataFrame</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.EvaluationPreparation.setup_from_db">
+<code class="descname">setup_from_db</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation.setup_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.setup_from_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.EvaluationPreparation.setup_from_file">
+<code class="descname">setup_from_file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation.setup_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.setup_from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.EvaluationPreparation.setup_from_scratch">
+<code class="descname">setup_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation.setup_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.setup_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.station_list">
+<code class="descname">station_list</code><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.station_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.EvaluationPreparation.summary">
+<code class="descname">summary</code><em class="property"> = 'Prepare the for experiment for evaluation'</em><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.EvaluationPreparation.write2db">
+<code class="descname">write2db</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation.write2db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.write2db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reimplemented to sort the data according to the index</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.EvaluationPreparation.write2file">
+<code class="descname">write2file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#EvaluationPreparation.write2file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.EvaluationPreparation.write2file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reimplemented to sort the data according to the index</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.evaluation.Evaluator">
+<em class="property">class </em><code class="descclassname">gwgen.evaluation.</code><code class="descname">Evaluator</code><span class="sig-paren">(</span><em>stations</em>, <em>config</em>, <em>project_config</em>, <em>global_config</em>, <em>data=None</em>, <em>requirements=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#Evaluator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.Evaluator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gwgen.utils.html#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">gwgen.utils.TaskBase</span></code></a></p>
+<p>Abstract base class for evaluation tasks</p>
+<p>Evaluation tasks should incorporate a run method that is called by the
+<a class="reference internal" href="gwgen.main.html#gwgen.main.GWGENOrganizer.evaluate" title="gwgen.main.GWGENOrganizer.evaluate"><code class="xref py py-meth docutils literal"><span class="pre">gwgen.main.GWGENOrganizer.evaluate()</span></code></a> method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code> method</li>
+<li><strong>requirements</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code> instances) &#8211; The required instances. If None, you must call the
+<code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.Evaluator.task_data_dir" title="gwgen.evaluation.Evaluator.task_data_dir"><code class="xref py py-obj docutils literal"><span class="pre">task_data_dir</span></code></a></td>
+<td>The directory where to store data</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.evaluation.Evaluator.task_data_dir">
+<code class="descname">task_data_dir</code><a class="headerlink" href="#gwgen.evaluation.Evaluator.task_data_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The directory where to store data</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.evaluation.KSEvaluation">
+<em class="property">class </em><code class="descclassname">gwgen.evaluation.</code><code class="descname">KSEvaluation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#KSEvaluation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.KSEvaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation" title="gwgen.evaluation.QuantileEvaluation"><code class="xref py py-class docutils literal"><span class="pre">gwgen.evaluation.QuantileEvaluation</span></code></a></p>
+<p>Evaluation using a Kolmogorov-Smirnoff test</p>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.calc" title="gwgen.evaluation.KSEvaluation.calc"><code class="xref py py-obj docutils literal"><span class="pre">calc</span></code></a>(group)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.plot_map" title="gwgen.evaluation.KSEvaluation.plot_map"><code class="xref py py-obj docutils literal"><span class="pre">plot_map</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.run" title="gwgen.evaluation.KSEvaluation.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(info)</td>
+<td>Run the evaluation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.significance_fractions" title="gwgen.evaluation.KSEvaluation.significance_fractions"><code class="xref py py-obj docutils literal"><span class="pre">significance_fractions</span></code></a>(series)</td>
+<td>The percentage of stations with no significant difference</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.dbname" title="gwgen.evaluation.KSEvaluation.dbname"><code class="xref py py-obj docutils literal"><span class="pre">dbname</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.default_config" title="gwgen.evaluation.KSEvaluation.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.name" title="gwgen.evaluation.KSEvaluation.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.output" title="gwgen.evaluation.KSEvaluation.output"><code class="xref py py-obj docutils literal"><span class="pre">output</span></code></a></td>
+<td>output parameterization instance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.prepare" title="gwgen.evaluation.KSEvaluation.prepare"><code class="xref py py-obj docutils literal"><span class="pre">prepare</span></code></a></td>
+<td>prepare parameterization instance</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.requires" title="gwgen.evaluation.KSEvaluation.requires"><code class="xref py py-obj docutils literal"><span class="pre">requires</span></code></a></td>
+<td>list() -&gt; new empty list</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.KSEvaluation.summary" title="gwgen.evaluation.KSEvaluation.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+<dl class="staticmethod">
+<dt id="gwgen.evaluation.KSEvaluation.calc">
+<em class="property">static </em><code class="descname">calc</code><span class="sig-paren">(</span><em>group</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#KSEvaluation.calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.calc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.KSEvaluation.dbname">
+<code class="descname">dbname</code><em class="property"> = 'kolmogorov_evaluation'</em><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.dbname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.KSEvaluation.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.default_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.KSEvaluation.name">
+<code class="descname">name</code><em class="property"> = 'ks'</em><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.KSEvaluation.output">
+<code class="descname">output</code><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>output parameterization instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.KSEvaluation.plot_map">
+<code class="descname">plot_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#KSEvaluation.plot_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.plot_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.KSEvaluation.prepare">
+<code class="descname">prepare</code><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>prepare parameterization instance</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.KSEvaluation.requires">
+<code class="descname">requires</code><em class="property"> = ['prepare', 'output']</em><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.requires" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.KSEvaluation.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#KSEvaluation.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the evaluation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration dictionary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.KSEvaluation.significance_fractions">
+<code class="descname">significance_fractions</code><span class="sig-paren">(</span><em>series</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#KSEvaluation.significance_fractions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.significance_fractions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The percentage of stations with no significant difference</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.KSEvaluation.summary">
+<code class="descname">summary</code><em class="property"> = 'Perform a kolmogorov smirnoff test'</em><a class="headerlink" href="#gwgen.evaluation.KSEvaluation.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.evaluation.OutputTask">
+<em class="property">class </em><code class="descclassname">gwgen.evaluation.</code><code class="descname">OutputTask</code><span class="sig-paren">(</span><em>stations</em>, <em>config</em>, <em>project_config</em>, <em>global_config</em>, <em>data=None</em>, <em>requirements=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#OutputTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.OutputTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.evaluation.Evaluator" title="gwgen.evaluation.Evaluator"><code class="xref py py-class docutils literal"><span class="pre">gwgen.evaluation.Evaluator</span></code></a></p>
+<p>Task to provide all the data for input and output</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code> method</li>
+<li><strong>requirements</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code> instances) &#8211; The required instances. If None, you must call the
+<code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.datafile" title="gwgen.evaluation.OutputTask.datafile"><code class="xref py py-obj docutils literal"><span class="pre">datafile</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.dbname" title="gwgen.evaluation.OutputTask.dbname"><code class="xref py py-obj docutils literal"><span class="pre">dbname</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.has_run" title="gwgen.evaluation.OutputTask.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.name" title="gwgen.evaluation.OutputTask.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.summary" title="gwgen.evaluation.OutputTask.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.setup_from_db" title="gwgen.evaluation.OutputTask.setup_from_db"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_db</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.setup_from_file" title="gwgen.evaluation.OutputTask.setup_from_file"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_file</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.setup_from_scratch" title="gwgen.evaluation.OutputTask.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.OutputTask.write2file" title="gwgen.evaluation.OutputTask.write2file"><code class="xref py py-obj docutils literal"><span class="pre">write2file</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Not implemented since the output file is generated by the model!</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.evaluation.OutputTask.datafile">
+<code class="descname">datafile</code><a class="headerlink" href="#gwgen.evaluation.OutputTask.datafile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.OutputTask.dbname">
+<code class="descname">dbname</code><em class="property"> = 'output'</em><a class="headerlink" href="#gwgen.evaluation.OutputTask.dbname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.OutputTask.has_run">
+<code class="descname">has_run</code><em class="property"> = False</em><a class="headerlink" href="#gwgen.evaluation.OutputTask.has_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.OutputTask.name">
+<code class="descname">name</code><em class="property"> = 'output'</em><a class="headerlink" href="#gwgen.evaluation.OutputTask.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.OutputTask.setup_from_db">
+<code class="descname">setup_from_db</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#OutputTask.setup_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.OutputTask.setup_from_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.OutputTask.setup_from_file">
+<code class="descname">setup_from_file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#OutputTask.setup_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.OutputTask.setup_from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.OutputTask.setup_from_scratch">
+<code class="descname">setup_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#OutputTask.setup_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.OutputTask.setup_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.OutputTask.summary">
+<code class="descname">summary</code><em class="property"> = 'Load the output of the model'</em><a class="headerlink" href="#gwgen.evaluation.OutputTask.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.OutputTask.write2file">
+<code class="descname">write2file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#OutputTask.write2file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.OutputTask.write2file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not implemented since the output file is generated by the model!</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.evaluation.QuantileEvaluation">
+<em class="property">class </em><code class="descclassname">gwgen.evaluation.</code><code class="descname">QuantileEvaluation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#QuantileEvaluation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.evaluation.Evaluator" title="gwgen.evaluation.Evaluator"><code class="xref py py-class docutils literal"><span class="pre">gwgen.evaluation.Evaluator</span></code></a></p>
+<p>Evaluator to evaluate specific quantiles</p>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.all_variables" title="gwgen.evaluation.QuantileEvaluation.all_variables"><code class="xref py py-obj docutils literal"><span class="pre">all_variables</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.dbname" title="gwgen.evaluation.QuantileEvaluation.dbname"><code class="xref py py-obj docutils literal"><span class="pre">dbname</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.default_config" title="gwgen.evaluation.QuantileEvaluation.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.ds" title="gwgen.evaluation.QuantileEvaluation.ds"><code class="xref py py-obj docutils literal"><span class="pre">ds</span></code></a></td>
+<td>The dataset of the quantiles</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.fmt" title="gwgen.evaluation.QuantileEvaluation.fmt"><code class="xref py py-obj docutils literal"><span class="pre">fmt</span></code></a></td>
+<td>default formatoptions for the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.has_run" title="gwgen.evaluation.QuantileEvaluation.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.kwargs" title="gwgen.evaluation.QuantileEvaluation.kwargs"><code class="xref py py-obj docutils literal"><span class="pre">kwargs</span></code></a></td>
+<td>default formatoptions for the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.name" title="gwgen.evaluation.QuantileEvaluation.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.names" title="gwgen.evaluation.QuantileEvaluation.names"><code class="xref py py-obj docutils literal"><span class="pre">names</span></code></a></td>
+<td>Dictionary that remembers insertion order</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.output" title="gwgen.evaluation.QuantileEvaluation.output"><code class="xref py py-obj docutils literal"><span class="pre">output</span></code></a></td>
+<td>output parameterization instance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.prepare" title="gwgen.evaluation.QuantileEvaluation.prepare"><code class="xref py py-obj docutils literal"><span class="pre">prepare</span></code></a></td>
+<td>prepare parameterization instance</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.setup_requires" title="gwgen.evaluation.QuantileEvaluation.setup_requires"><code class="xref py py-obj docutils literal"><span class="pre">setup_requires</span></code></a></td>
+<td>list() -&gt; new empty list</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.summary" title="gwgen.evaluation.QuantileEvaluation.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.calc" title="gwgen.evaluation.QuantileEvaluation.calc"><code class="xref py py-obj docutils literal"><span class="pre">calc</span></code></a>(group)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.create_project" title="gwgen.evaluation.QuantileEvaluation.create_project"><code class="xref py py-obj docutils literal"><span class="pre">create_project</span></code></a>(ds)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.make_run_config" title="gwgen.evaluation.QuantileEvaluation.make_run_config"><code class="xref py py-obj docutils literal"><span class="pre">make_run_config</span></code></a>(sp,&nbsp;info)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.round_to_ref_prec" title="gwgen.evaluation.QuantileEvaluation.round_to_ref_prec"><code class="xref py py-obj docutils literal"><span class="pre">round_to_ref_prec</span></code></a>(ref,&nbsp;sim[,&nbsp;func])</td>
+<td>Round one array to the precision of another</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.setup_from_db" title="gwgen.evaluation.QuantileEvaluation.setup_from_db"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_db</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.setup_from_file" title="gwgen.evaluation.QuantileEvaluation.setup_from_file"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_file</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.setup_from_scratch" title="gwgen.evaluation.QuantileEvaluation.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.all_variables">
+<code class="descname">all_variables</code><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.all_variables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.QuantileEvaluation.calc">
+<code class="descname">calc</code><span class="sig-paren">(</span><em>group</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#QuantileEvaluation.calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.calc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.QuantileEvaluation.create_project">
+<code class="descname">create_project</code><span class="sig-paren">(</span><em>ds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#QuantileEvaluation.create_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.create_project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.dbname">
+<code class="descname">dbname</code><em class="property"> = 'quantile_evaluation'</em><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.dbname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.default_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.ds">
+<code class="descname">ds</code><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.ds" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataset of the quantiles</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.fmt">
+<code class="descname">fmt</code><em class="property"> = {'cbar': '', 'yrange': (['minmax', 1], ['minmax', 99]), 'title': '%(pctl)sth percentile', 'xrange': (['minmax', 1], ['minmax', 99]), 'bounds': ['minmax', 11, 0, 99], 'sym_lims': 'max', 'ideal': [0, 1], 'cmap': 'w_Reds', 'xlabel': '%(type)s {desc}', 'legendlabels': ['$R^2$ = %(rsquared)s'], 'ylabel': '%(type)s {desc}', 'id_color': 'r', 'legend': {'loc': 'upper left'}, 'bins': 10}</em><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.fmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>default formatoptions for the
+<code class="xref py py-class docutils literal"><span class="pre">psyplot.plotter.linreg.DensityRegPlotter</span></code> plotter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.has_run">
+<code class="descname">has_run</code><em class="property"> = True</em><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.has_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.kwargs">
+<code class="descname">kwargs</code><em class="property"> = {'cbar': '', 'yrange': (['minmax', 1], ['minmax', 99]), 'title': '%(pctl)sth percentile', 'xrange': (['minmax', 1], ['minmax', 99]), 'bounds': ['minmax', 11, 0, 99], 'sym_lims': 'max', 'ideal': [0, 1], 'cmap': 'w_Reds', 'xlabel': '%(type)s {desc}', 'legendlabels': ['$R^2$ = %(rsquared)s'], 'ylabel': '%(type)s {desc}', 'id_color': 'r', 'legend': {'loc': 'upper left'}, 'bins': 10}</em><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>default formatoptions for the
+<code class="xref py py-class docutils literal"><span class="pre">psyplot.plotter.linreg.DensityRegPlotter</span></code> plotter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.QuantileEvaluation.make_run_config">
+<code class="descname">make_run_config</code><span class="sig-paren">(</span><em>sp</em>, <em>info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#QuantileEvaluation.make_run_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.make_run_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.name">
+<code class="descname">name</code><em class="property"> = 'quants'</em><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.names">
+<code class="descname">names</code><em class="property"> = OrderedDict([('prcp', {'units': 'mm', 'long_name': 'Precipitation'}), ('tmin', {'units': 'degC', 'long_name': 'Min. Temperature'}), ('tmax', {'units': 'degC', 'long_name': 'Max. Temperature'}), ('mean_cloud', {'units': '-', 'long_name': 'Cloud fraction'}), ('wind', {'units': 'm/s', 'long_name': 'Wind Speed'})])</em><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.output">
+<code class="descname">output</code><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>output parameterization instance</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.prepare">
+<code class="descname">prepare</code><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>prepare parameterization instance</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="gwgen.evaluation.QuantileEvaluation.round_to_ref_prec">
+<em class="property">static </em><code class="descname">round_to_ref_prec</code><span class="sig-paren">(</span><em>ref</em>, <em>sim</em>, <em>func=&lt;ufunc 'ceil'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#QuantileEvaluation.round_to_ref_prec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.round_to_ref_prec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round one array to the precision of another</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ref</strong> (<em>np.ndarray</em>) &#8211; The reference array to get the precision from</li>
+<li><strong>sim</strong> (<em>np.ndarray</em>) &#8211; The simulated array to round</li>
+<li><strong>func</strong> (<em>function</em>) &#8211; The rounding function to use</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Rounded <cite>sim</cite></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.QuantileEvaluation.setup_from_db">
+<code class="descname">setup_from_db</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#QuantileEvaluation.setup_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.setup_from_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.QuantileEvaluation.setup_from_file">
+<code class="descname">setup_from_file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#QuantileEvaluation.setup_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.setup_from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.QuantileEvaluation.setup_from_scratch">
+<code class="descname">setup_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#QuantileEvaluation.setup_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.setup_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.setup_requires">
+<code class="descname">setup_requires</code><em class="property"> = ['prepare', 'output']</em><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.setup_requires" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.QuantileEvaluation.summary">
+<code class="descname">summary</code><em class="property"> = 'Compare the quantiles of simulation and observation'</em><a class="headerlink" href="#gwgen.evaluation.QuantileEvaluation.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.evaluation.SimulationQuality">
+<em class="property">class </em><code class="descclassname">gwgen.evaluation.</code><code class="descname">SimulationQuality</code><span class="sig-paren">(</span><em>stations</em>, <em>config</em>, <em>project_config</em>, <em>global_config</em>, <em>data=None</em>, <em>requirements=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#SimulationQuality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.SimulationQuality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.evaluation.Evaluator" title="gwgen.evaluation.Evaluator"><code class="xref py py-class docutils literal"><span class="pre">gwgen.evaluation.Evaluator</span></code></a></p>
+<p>Evaluator to provide one value characterizing the quality of the
+experiment</p>
+<p>The applied metric is the mean of</p>
+<div class="math">
+\[\begin{split}m = \left&lt;\{\left&lt;\{R^2_q\}_{q\in Q}\right&gt;,
+             \left&lt;\{1 - |1 - a_q|\}_{q\in Q}\right&gt;,
+             \{ks\}\}\right&gt;\end{split}\]</div>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.SimulationQuality.default_config" title="gwgen.evaluation.SimulationQuality.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.SimulationQuality.has_run" title="gwgen.evaluation.SimulationQuality.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.SimulationQuality.name" title="gwgen.evaluation.SimulationQuality.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.SimulationQuality.summary" title="gwgen.evaluation.SimulationQuality.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.evaluation.SimulationQuality.run" title="gwgen.evaluation.SimulationQuality.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(info)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.evaluation.SimulationQuality.setup_from_scratch" title="gwgen.evaluation.SimulationQuality.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
+<td>Only sets an empty dataframe</td>
+</tr>
+</tbody>
+</table>
+<p>where <span class="math">\(\left&lt;\right&gt;\)</span> denotes the mean of the enclosed set,
+<span class="math">\(q\in Q\)</span> are the quantiles from the quantile evaluation,
+<span class="math">\(R^2_q\)</span> the corresponding coefficient of determination and
+<span class="math">\(a_q\)</span> the slope of quantile <span class="math">\(q\)</span>. <span class="math">\(ks\)</span> denotes the
+fraction of stations that do not differ significantly from the observations
+according to the ks test.</p>
+<p>In other words, this quality estimate is the mean of the</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>coefficients of determination</li>
+<li>the deviation from the ideal slope (<span class="math">\(a_q == 1\)</span>) and</li>
+<li>the fraction of stations that do not differ significantly</li>
+</ol>
+</div></blockquote>
+<p>Hence, a value of 1 mean high quality, a value of 0 low quality</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code> method</li>
+<li><strong>requirements</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code> instances) &#8211; The required instances. If None, you must call the
+<code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.evaluation.SimulationQuality.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.evaluation.SimulationQuality.default_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.SimulationQuality.has_run">
+<code class="descname">has_run</code><em class="property"> = True</em><a class="headerlink" href="#gwgen.evaluation.SimulationQuality.has_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.SimulationQuality.name">
+<code class="descname">name</code><em class="property"> = 'quality'</em><a class="headerlink" href="#gwgen.evaluation.SimulationQuality.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.SimulationQuality.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#SimulationQuality.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.SimulationQuality.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.evaluation.SimulationQuality.setup_from_scratch">
+<code class="descname">setup_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#SimulationQuality.setup_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.SimulationQuality.setup_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only sets an empty dataframe</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.evaluation.SimulationQuality.summary">
+<code class="descname">summary</code><em class="property"> = 'Estimate simulation quality using ks and quantile evaluation'</em><a class="headerlink" href="#gwgen.evaluation.SimulationQuality.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.evaluation.default_ks_config">
+<code class="descclassname">gwgen.evaluation.</code><code class="descname">default_ks_config</code><span class="sig-paren">(</span><em>no_rounding=False</em>, <em>names=None</em>, <em>transform_wind=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#default_ks_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.default_ks_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default configuration for <a class="reference internal" href="#gwgen.evaluation.KSEvaluation" title="gwgen.evaluation.KSEvaluation"><code class="xref py py-class docutils literal"><span class="pre">KSEvaluation</span></code></a> instances.
+See also the <a class="reference internal" href="#gwgen.evaluation.KSEvaluation.default_config" title="gwgen.evaluation.KSEvaluation.default_config"><code class="xref py py-attr docutils literal"><span class="pre">KSEvaluation.default_config</span></code></a> attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>no_rounding</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Do not round the simulation to the infered precision of the
+reference. The inferred precision is the minimum difference between
+two values with in the entire data</li>
+<li><strong>names</strong> (<em>list of str</em>) &#8211; The list of variables use for calculation. If None, all variables will be
+used</li>
+<li><strong>transform_wind</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the square root of the wind is evaluated (as this is also
+simulated in the weather generator)</li>
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the instance either from</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.evaluation.default_preparation_config">
+<code class="descclassname">gwgen.evaluation.</code><code class="descname">default_preparation_config</code><span class="sig-paren">(</span><em>setup_raw=None</em>, <em>raw2db=False</em>, <em>raw2csv=False</em>, <em>reference=None</em>, <em>input_path=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#default_preparation_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.default_preparation_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default configuration for <a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation" title="gwgen.evaluation.EvaluationPreparation"><code class="xref py py-class docutils literal"><span class="pre">EvaluationPreparation</span></code></a> instances.
+See also the <a class="reference internal" href="#gwgen.evaluation.EvaluationPreparation.default_config" title="gwgen.evaluation.EvaluationPreparation.default_config"><code class="xref py py-attr docutils literal"><span class="pre">EvaluationPreparation.default_config</span></code></a> attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>setup_raw</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the raw data from GHCN and EECRA</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>raw2db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the raw data from GHCN and EECRA is stored in a postgres database</li>
+<li><strong>raw2csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the raw data from GHCN and EECRA is stored in a csv file</li>
+<li><strong>reference</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path of the file where to store the reference data. If None and not
+already set in the configuration, it will default to
+<code class="docutils literal"><span class="pre">'evaluation/reference.csv'</span></code></li>
+<li><strong>input_path</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path of the file where to store the model input. If None, and not
+already set in the configuration, it will default to
+<code class="docutils literal"><span class="pre">'inputdir/input.csv'</span></code> where <em>inputdir</em> is the path to the input
+directory (by default, <em>input</em> in the experiment directory)</li>
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the instance either from</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.evaluation.default_quality_config">
+<code class="descclassname">gwgen.evaluation.</code><code class="descname">default_quality_config</code><span class="sig-paren">(</span><em>quantiles=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#default_quality_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.default_quality_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default configuration for <a class="reference internal" href="#gwgen.evaluation.SimulationQuality" title="gwgen.evaluation.SimulationQuality"><code class="xref py py-class docutils literal"><span class="pre">SimulationQuality</span></code></a> instances.
+See also the <a class="reference internal" href="#gwgen.evaluation.SimulationQuality.default_config" title="gwgen.evaluation.SimulationQuality.default_config"><code class="xref py py-attr docutils literal"><span class="pre">SimulationQuality.default_config</span></code></a> attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>quantiles</strong> (<em>list of floats</em>) &#8211; The quantiles to use for the quality analysis</li>
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the instance either from</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.evaluation.default_quantile_config">
+<code class="descclassname">gwgen.evaluation.</code><code class="descname">default_quantile_config</code><span class="sig-paren">(</span><em>quantiles=[1, 5, 10, 25, 50, 75, 90, 95, 99, 100], *args, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/evaluation.html#default_quantile_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.evaluation.default_quantile_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default configuration for <a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation" title="gwgen.evaluation.QuantileEvaluation"><code class="xref py py-class docutils literal"><span class="pre">QuantileEvaluation</span></code></a> instances.
+See also the <a class="reference internal" href="#gwgen.evaluation.QuantileEvaluation.default_config" title="gwgen.evaluation.QuantileEvaluation.default_config"><code class="xref py py-attr docutils literal"><span class="pre">QuantileEvaluation.default_config</span></code></a> attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>no_rounding</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Do not round the simulation to the infered precision of the
+reference. The inferred precision is the minimum difference between
+two values with in the entire data</li>
+<li><strong>names</strong> (<em>list of str</em>) &#8211; The list of variables use for calculation. If None, all variables will be
+used</li>
+<li><strong>transform_wind</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the square root of the wind is evaluated (as this is also
+simulated in the weather generator)</li>
+<li><strong>quantiles</strong> (<em>list of floats</em>) &#8211; The quantiles to use for calculating the percentiles</li>
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the instance either from</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Python API Reference</a><ul>
+      <li>Previous: <a href="gwgen.html" title="previous chapter">Python API Reference</a></li>
+      <li>Next: <a href="gwgen.main.html" title="next chapter">gwgen.main module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/gwgen.evaluation.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/api/gwgen.evaluation.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.parse_eecra &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gwgen.parse_eecra</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- codng: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">gwgen.utils</span> <span class="kn">import</span> <span class="n">file_len</span>
+<span class="kn">from</span> <span class="nn">gwgen._parseeecra</span> <span class="kn">import</span> <span class="n">parseeecra</span>
+
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;IB&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;lat&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;lon&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;station_id&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;LO&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ww&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;N&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Nh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;h&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CL&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CM&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CH&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;AM&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;AH&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;UM&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;UH&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;IC&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SA&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;RI&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SLP&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;WS&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;WD&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;AT&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;DD&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;EL&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;IW&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;IP&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="parse_file"><a class="viewcode-back" href="../../api/gwgen.parse_eecra.html#gwgen.parse_eecra.parse_file">[docs]</a><span class="k">def</span> <span class="nf">parse_file</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse a raw data file from EECRA and as a pandas DataFrame</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ifile: str</span>
+<span class="sd">        The raw (uncompressed) data file</span>
+<span class="sd">    year: int</span>
+<span class="sd">        The first year in the data file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        `ifile` parsed into a dataframe&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">year</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\w{3}(\d{2})L&#39;</span><span class="p">,</span> <span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">ifile</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Could not infer year of file </span><span class="si">%s</span><span class="s2">! Use the &#39;year&#39; &quot;</span>
+                <span class="s2">&quot;parameter!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="p">))</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">year</span> <span class="o">+=</span> <span class="mi">1900</span> <span class="k">if</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="mi">60</span> <span class="k">else</span> <span class="mi">2000</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">(</span>
+        <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">parseeecra</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">file_len</span><span class="p">(</span><span class="n">ifile</span><span class="p">)))))</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="extract_data"><a class="viewcode-back" href="../../api/gwgen.parse_eecra.html#gwgen.parse_eecra.extract_data">[docs]</a><span class="k">def</span> <span class="nf">extract_data</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">src_dir</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="n">years</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1971</span><span class="p">,</span> <span class="mi">2010</span><span class="p">),</span>
+                 <span class="n">imonths</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;Extract the data for the given EECRA stations</span>
+
+<span class="sd">    This function extracts the data for the given `ids` from the EECRA data</span>
+<span class="sd">    base stored in  `src_dir` into one file for each *id* in `ids`. The</span>
+<span class="sd">    resulting filename will be like *id.csv*.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ids: np.ndarray of dtype int</span>
+<span class="sd">        The numpy integer array with the station ids to extract</span>
+<span class="sd">    src_dir: str</span>
+<span class="sd">        The path to the source directory containing the raw (uncompressed)</span>
+<span class="sd">        EECRA database</span>
+<span class="sd">    target_dir: str</span>
+<span class="sd">        The path to the output directory</span>
+<span class="sd">    years: np.ndarray of dtype int</span>
+<span class="sd">        The numpy integer array with the years to extract (by default, all</span>
+<span class="sd">        years between 1971 and 2010)</span>
+<span class="sd">    imonths: np.ndarray of dtype int</span>
+<span class="sd">        The numpy integer array with the months to extract (by default, all</span>
+<span class="sd">        from january to december)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The paths of the filenames corresponding to ids&quot;&quot;&quot;</span>
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">years</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">years</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">imonths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">imonths</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">arr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ids</span><span class="p">,</span> <span class="n">years</span><span class="p">,</span> <span class="n">imonths</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,))</span>
+    <span class="n">parseeecra</span><span class="o">.</span><span class="n">extract_data</span><span class="p">(</span>
+        <span class="n">ids</span><span class="p">,</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="n">years</span><span class="p">,</span> <span class="n">imonths</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">station_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+                     <span class="k">for</span> <span class="n">station_id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">])</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

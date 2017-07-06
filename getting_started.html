@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting started &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="index.html" />
+    <link rel="next" title="Command Line API Reference" href="command_line/gwgen.html" />
+    <link rel="prev" title="Installation" href="install.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started">
+<span id="id1"></span><h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="running-the-raw-weathergen">
+<span id="running-raw"></span><h2>Running the raw <code class="docutils literal"><span class="pre">weathergen</span></code><a class="headerlink" href="#running-the-raw-weathergen" title="Permalink to this headline">¶</a></h2>
+<p>After successfully <a class="reference internal" href="install.html#install-fortran"><span>installing</span></a> the FORTRAN files,
+you can run the weather generator by typing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>./weathergen &lt;input-file.csv&gt; &lt;output-file.csv&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">&lt;input-file.csv&gt;</span></code> thereby is a csv-file (with header) containing the columns
+(the order is important!)</p>
+<dl class="docutils">
+<dt>station id (character string of 11 characters)</dt>
+<dd>a unique identifier of the weather station</dd>
+<dt>lon (float)</dt>
+<dd>the longitude of the weather station (only necessary if the
+<code class="docutils literal"><span class="pre">use_geohash</span></code>  namelist parameter in the main namelist of
+<code class="docutils literal"><span class="pre">weathergen.nml</span></code> is True (the default))</dd>
+<dt>lat (float)</dt>
+<dd>the latitude of the weather station (see <code class="docutils literal"><span class="pre">lon</span></code>)</dd>
+<dt>year (int)</dt>
+<dd>the year of the month</dd>
+<dt>month (int)</dt>
+<dd>the month</dd>
+<dt>min. temperature (float)</dt>
+<dd>the minimum temperature degrees Celsius</dd>
+<dt>max. temperature (float)</dt>
+<dd>the maximum temperature in degrees Celsius</dd>
+<dt>cloud fraction (float)</dt>
+<dd>the mean cloud fraction during the month between 0 and 1</dd>
+<dt>wind speed (float)</dt>
+<dd>the mean wind speed during the month in m/s</dd>
+<dt>precipitation (float)</dt>
+<dd>the total precipitation in the month in mm/day</dd>
+<dt>wet (int)</dt>
+<dd>the number of wet days in the month</dd>
+</dl>
+<p>The output file will contain the same columns except lon and lat but with an
+additional day column</p>
+</div>
+<div class="section" id="using-the-python-package">
+<h2>Using the python package<a class="headerlink" href="#using-the-python-package" title="Permalink to this headline">¶</a></h2>
+<p>The GWGEN package uses the <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/">model-organization</a> framework and thus can be used
+from the command line. The corresponding subclass of the
+<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.8)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a> is the
+<a class="reference internal" href="api/gwgen.main.html#gwgen.main.GWGENOrganizer" title="gwgen.main.GWGENOrganizer"><code class="xref py py-class docutils literal"><span class="pre">gwgen.main.GWGENOrganizer</span></code></a> class.</p>
+<p>After <a class="reference internal" href="install.html#install-full"><span>having installed the full python package</span></a> you can
+setup a new project with the <a class="reference internal" href="command_line/gwgen.setup.html#gwgen-setup"><span>gwgen setup</span></a> command via</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="o">!</span>gwgen setup . -p my_first_project
+<span class="go">INFO:gwgen.my_first_project:Initializing project my_first_project</span>
+</pre></div>
+</div>
+<p>This will copy the fortran source files into <cite>my_first_project/src</cite> where you
+can then modify them according to your needs. To compile the model, use the
+<a class="reference internal" href="command_line/gwgen.compile.html#gwgen-compile"><span>gwgen compile</span></a> command:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="o">!</span>gwgen compile -p my_first_project
+<span class="go">INFO:gwgen.my_first_project:Compiling my_first_project</span>
+<span class="go">make: Entering directory `/home/travis/build/ARVE-Research/gwgen/my_first_project/bin&#39;</span>
+<span class="go">gfortran  -c -o parametersmod.o  parametersmod.f90</span>
+<span class="go">gfortran  -c -o geohashmod.o  geohashmod.f90</span>
+<span class="go">gfortran  -c -o randomdistmod.o  randomdistmod.f90</span>
+<span class="go">gfortran  -c -o weathergenmod.o  weathergenmod.f90</span>
+<span class="go">gfortran  -c -o csv_file.o  csv_file.f90</span>
+<span class="go">gfortran  -c -o main.o  main.f90</span>
+<span class="go">gfortran -o weathergen parametersmod.o geohashmod.o randomdistmod.o weathergenmod.o csv_file.o main.o  </span>
+<span class="go">make: Leaving directory `/home/travis/build/ARVE-Research/gwgen/my_first_project/bin&#39;</span>
+</pre></div>
+</div>
+<p>Note that you can also omit the <code class="docutils literal"><span class="pre">-p</span></code> option. If you do so, it uses the last
+created project.</p>
+<p>To create a new experiment inside the project, use the <a class="reference internal" href="command_line/gwgen.init.html#gwgen-init"><span>gwgen init</span></a>
+command:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="o">!</span>gwgen -id my_first_experiment init -p my_first_project
+<span class="go">INFO:gwgen.my_first_experiment:Initializing experiment my_first_experiment of project my_first_project</span>
+</pre></div>
+</div>
+<p>To run the weather generator, use the <a class="reference internal" href="command_line/gwgen.run.html#gwgen-run"><span>gwgen run</span></a> command</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="o">!</span>gwgen -id my_first_experiment run -i &lt;input-file.csv&gt;
+</pre></div>
+</div>
+<p>(see <a class="reference internal" href="#running-raw"><span>Running the raw weathergen</span></a> for the format of <code class="docutils literal"><span class="pre">&lt;input-file.csv&gt;</span></code>). Note that you
+can as well omit the <code class="docutils literal"><span class="pre">-id</span></code> option. By doing so, it uses the last created
+experiment.</p>
+</div>
+<div class="section" id="parameterizing-an-experiment">
+<span id="parameterization"></span><h2>Parameterizing an experiment<a class="headerlink" href="#parameterizing-an-experiment" title="Permalink to this headline">¶</a></h2>
+<p>The default parameterization of the weather generator uses about 8500 stations
+world wide from the <a class="reference internal" href="index.html#ghcn" id="id2">[GHCN]</a> database and 8500 stations from the <a class="reference internal" href="index.html#eecra" id="id3">[EECRA]</a>
+database. I you however want to have your own parameterization, you can use the
+<a class="reference internal" href="command_line/gwgen.param.html#gwgen-param"><span>gwgen param</span></a> command.</p>
+<p>The parameterization is split up into <a class="reference internal" href="api/gwgen.utils.html#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">tasks</span></code></a>,
+where each <a class="reference internal" href="api/gwgen.utils.html#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">task</span></code></a> processed a given set of GHCN
+or EECRA stations. Each task that is used for the parameterization, requires
+some intermediate tasks. For example, the <a class="reference internal" href="command_line/gwgen.param.prcp.html#gwgen-param-prcp"><span>prcp</span></a> task
+that determines the relationship between mean precipitation, number of wet days
+and the precipitation distribution parameters, requires the
+<a class="reference internal" href="command_line/gwgen.param.day.html#gwgen-param-day"><span>reading and downloading of the daily GHCN data</span></a>, the
+<a class="reference internal" href="command_line/gwgen.param.month.html#gwgen-param-month"><span>calculation of the monthly averages</span></a> and the
+<a class="reference internal" href="command_line/gwgen.param.cmonth.html#gwgen-param-cmonth"><span>extraction of the complete months</span></a>. However, these
+dependencies are specified in the corresponding
+<code class="xref py py-class docutils literal"><span class="pre">Parameterizer</span></code> subclass
+(e.g. <a class="reference internal" href="api/gwgen.parameterization.html#gwgen.parameterization.PrcpDistParams" title="gwgen.parameterization.PrcpDistParams"><code class="xref py py-class docutils literal"><span class="pre">gwgen.parameterization.PrcpDistParams</span></code></a>) and the only question you
+have to take care about is: What stations do you want to use for the
+parameterization? You can use the <a class="reference external" href="http://arve.unil.ch/climap/">climap</a> to select the stations you need for
+your region but note that you should have as many weather stations as you can.</p>
+<p>For our demonstration, we only use two weather stations from Hamburg:</p>
+<dl class="docutils">
+<dt>GM000010147</dt>
+<dd>Hamburg-Fuhlsbüttel</dd>
+<dt>GM000003865</dt>
+<dd>Hamburg-Bergedorf</dd>
+</dl>
+<p>and save the corresponding IDs in a file</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;hamburg_stations.dat&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">   ...: </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;GM000010147</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;GM000003865&#39;</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<p>then, we use the <a class="reference internal" href="command_line/gwgen.param.day.html#gwgen-param-day"><span>day</span></a> task to download the necessary
+data files and run our <a class="reference internal" href="command_line/gwgen.param.prcp.html#gwgen-param-prcp"><span>prcp</span></a> parameterization:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="o">!</span>gwgen param -s hamburg_stations.dat day --download single prcp
+<span class="go">INFO:gwgen.my_first_experiment:Parameterizing experiment my_first_experiment of project my_first_project</span>
+<span class="go">INFO:gwgen.utils:Downloading ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/GM000010147.dly to /home/travis/build/ARVE-Research/gwgen/my_first_project/data/ghcn/ghcnd_all/GM000010147.dly</span>
+<span class="go">INFO:gwgen.utils:Downloading ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/GM000003865.dly to /home/travis/build/ARVE-Research/gwgen/my_first_project/data/ghcn/ghcnd_all/GM000003865.dly</span>
+<span class="go">INFO:gwgen.utils.TaskManager.MainProcess:Processing 4 tasks in parallel</span>
+<span class="go">INFO:gwgen.utils.PrcpDistParams.prcp.MainProcess:Calculating prcp task</span>
+</pre></div>
+</div>
+<p>This then also creates a plot that shows the relation ship between the mean
+precipitation on wet days (as it is calculated in the weather generator) and
+the gamma shape parameter</p>
+<img alt="Relation ship of mean precipitation and gamma shape parameter" src="./_static/prcp1.png" />
+<p>This procedure now modified the namelist of our experiment and added two
+namelist parameters</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="o">!</span>gwgen get-value namelist
+<span class="go">weathergen_ctl:</span>
+<span class="go">  g_scale_coeff: 1.377457228995608</span>
+<span class="go">  thresh: 5.0</span>
+<span class="go">  gp_shape: 0.0974</span>
+</pre></div>
+</div>
+<p>Otherwise you can of course always modify the namelist of your experiment using
+the <a class="reference internal" href="command_line/gwgen.set-value.html#gwgen-set-value"><span>set-value</span></a> and <a class="reference internal" href="command_line/gwgen.del-value.html#gwgen-del-value"><span>del-value</span></a>
+commands or by modifying the configuration file (<code class="docutils literal"><span class="pre">gwgen</span> <span class="pre">info</span> <span class="pre">-ep</span></code>) by hand</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Since we use the <a class="reference external" href="http://psyplot.readthedocs.io/en/latest/">psyplot</a> package, you can also easily change the
+above created plot after the parameterization. For example, to change the
+number of bins in the density plot of the above plot, just load the created
+psyplot project and update the plot:</p>
+<div class="last highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="kn">import</span> <span class="nn">psyplot.project</span> <span class="kn">as</span> <span class="nn">psy</span>
+
+<span class="gp">In [9]: </span><span class="n">p</span> <span class="o">=</span> <span class="n">psy</span><span class="o">.</span><span class="n">Project</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span>
+<span class="gp">   ...: </span>    <span class="s1">&#39;my_first_project/experiments/my_first_experiment/&#39;</span>
+<span class="gp">   ...: </span>    <span class="s1">&#39;parameterization/prcp.pkl&#39;</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [10]: </span><span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting started</a><ul>
+<li><a class="reference internal" href="#running-the-raw-weathergen">Running the raw <code class="docutils literal"><span class="pre">weathergen</span></code></a></li>
+<li><a class="reference internal" href="#using-the-python-package">Using the python package</a></li>
+<li><a class="reference internal" href="#parameterizing-an-experiment">Parameterizing an experiment</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="install.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="command_line/gwgen.html" title="next chapter">Command Line API Reference</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/getting_started.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/getting_started.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,980 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.sensitivity_analysis &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gwgen.sensitivity_analysis</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Module for a sensitivity analysis for one experiment&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">Namespace</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">osp</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span><span class="p">,</span> <span class="n">chain</span><span class="p">,</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">starmap</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">gwgen.main</span> <span class="kn">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">GWGENOrganizer</span>
+<span class="kn">import</span> <span class="nn">gwgen.utils</span> <span class="kn">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">gwgen.utils</span> <span class="kn">import</span> <span class="n">isstring</span><span class="p">,</span> <span class="n">docstrings</span>
+
+
+<div class="viewcode-block" id="SensitivityAnalysis"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis">[docs]</a><span class="k">class</span> <span class="nc">SensitivityAnalysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class that performs and manages a sensitivity analysis for the given</span>
+<span class="sd">    organizer&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">logger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">experiment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The base experiment of this sensitivity analysis&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">experiment</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">experiments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">projectname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectname</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experiments</span><span class="o">.</span><span class="n">project_map</span><span class="p">[</span><span class="n">projectname</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exp_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The configuration of the sensitivity analysis&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;sensitivity_analysis&#39;</span><span class="p">,</span>
+                                          <span class="n">OrderedDict</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">projectname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The projectname of the sensitivity analysis&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;project&#39;</span><span class="p">]</span>
+
+    <span class="nd">@projectname.setter</span>
+    <span class="k">def</span> <span class="nf">projectname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;project&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">project_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The project configuration of the sensitivity analysis&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projectname</span><span class="p">,</span>
+                                                         <span class="n">OrderedDict</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sa_organizer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The organizer for this sensitivity analysis&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sa_organizer</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sa_organizer</span> <span class="o">=</span> <span class="n">GWGENOrganizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">projectname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectname</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;No setup of the sensitivity analysis has been done yet! &quot;</span>
+                    <span class="s2">&quot;Please run the setup method!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sa_organizer</span><span class="o">.</span><span class="n">projectname</span> <span class="o">=</span> <span class="n">projectname</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sa_organizer</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">organizer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        organizer: gwgen.main.GWGENOrganizer</span>
+<span class="sd">            The organizer to perform thre sensitivity analysis for</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span> <span class="o">=</span> <span class="n">organizer</span>
+
+    <span class="nd">@docstrings.get_sectionsf</span><span class="p">(</span><span class="s1">&#39;SensitivityAnalysis._parallelize_command&#39;</span><span class="p">)</span>
+    <span class="nd">@docstrings.dedent</span>
+    <span class="k">def</span> <span class="nf">_parallelilze_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kws</span><span class="p">,</span> <span class="n">experiments</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                              <span class="n">loop_exps</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a GWGENOrganizer command in parallel for all the experiments in</span>
+<span class="sd">        this analysis</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kws: dict</span>
+<span class="sd">            Keys must be the name of a command of the :attr:`organizer` of this</span>
+<span class="sd">            analysis, values must be dictionaries for the corresponding command</span>
+<span class="sd">        experiments: list of str</span>
+<span class="sd">            The experiments to use. If None, all experiments are used</span>
+<span class="sd">        loop_exps: bool</span>
+<span class="sd">            If True the experiments of the sensitivity analysis are called</span>
+<span class="sd">            one after each other. Otherwise they are called in parallel, each</span>
+<span class="sd">            on a single core (unless the the serial option in the global</span>
+<span class="sd">            configuration is set)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="kn">as</span> <span class="nn">mp</span>
+        <span class="n">experiments</span> <span class="o">=</span> <span class="n">experiments</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">experiments</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">experiments</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">experiments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">experiments</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">global_config</span>
+        <span class="n">commands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">commands</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">parser_commands</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">loop_exps</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;serial&#39;</span><span class="p">):</span>
+            <span class="n">all_kws</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">chain</span><span class="p">([(</span><span class="s1">&#39;experiment&#39;</span><span class="p">,</span> <span class="n">exp</span><span class="p">)],</span> <span class="n">kws</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+                 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kws</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">}</span>
+                <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">experiments</span><span class="p">)</span>
+            <span class="n">nprocs</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nprocs&#39;</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nprocs</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+                <span class="n">nprocs</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+            <span class="n">config</span><span class="p">[</span><span class="s1">&#39;serial&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Starting </span><span class="si">%i</span><span class="s1"> processes&#39;</span><span class="p">,</span> <span class="n">nprocs</span><span class="p">)</span>
+            <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">nprocs</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">all_kws</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">organizer</span><span class="p">,</span> <span class="n">ns</span><span class="p">),</span> <span class="n">experiment</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">experiments</span><span class="p">):</span>
+                <span class="n">changed</span> <span class="o">=</span> <span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">experiment</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">experiment</span><span class="p">]</span> <span class="o">=</span> <span class="n">changed</span>
+            <span class="n">config</span><span class="p">[</span><span class="s1">&#39;serial&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">experiment</span> <span class="ow">in</span> <span class="n">experiments</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kws</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+                        <span class="n">val</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">experiment</span>
+                <span class="n">kws</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">experiment</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sa_organizer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SensitivityAnalysis.__call__"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kws</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call the :meth:`~model_organization.ModelOrganizer.start` of the</span>
+<span class="sd">        :attr:`organizer` attribute</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kws: dict</span>
+<span class="sd">            Any keywords that are passed to the</span>
+<span class="sd">            :meth:`~model_organization.ModelOrganizer.start` method</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        model_organization.ModelOrganizer</span>
+<span class="sd">            The :attr:`sa_organizer`</span>
+<span class="sd">        argparse.Namespace</span>
+<span class="sd">            The return of the :meth:`~model_organization.ModelOrganizer.start`</span>
+<span class="sd">            method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sa_organizer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sa_organizer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="o">**</span><span class="n">kws</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SensitivityAnalysis.setup"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">projectname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+              <span class="n">no_move</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set up the experiments for the project</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        root_dir: str</span>
+<span class="sd">            The path to the root directory where the experiments, etc. will</span>
+<span class="sd">            be stored. If not given, a new directory will be created at the</span>
+<span class="sd">            same location as the original project</span>
+<span class="sd">        projectname: str</span>
+<span class="sd">            The name of the project that shall be initialized at `root_dir`. A</span>
+<span class="sd">            new directory will be created namely</span>
+<span class="sd">            ``root_dir + &#39;/&#39; + projectname``. If not given, defaults to</span>
+<span class="sd">            ``&#39;sensitivity_&lt;id&gt;&#39;`` where ``&#39;&lt;id&gt;&#39;`` is the experiment id</span>
+<span class="sd">        link: bool</span>
+<span class="sd">            If set, the source files are linked to the original ones instead</span>
+<span class="sd">            of copied</span>
+<span class="sd">        no_move: bool</span>
+<span class="sd">            If True, the project in the configuration files is not moved to the</span>
+<span class="sd">            position right before the configuration of the current project</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span>
+        <span class="k">if</span> <span class="n">projectname</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">projectname</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span>
+                <span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="s1">&#39;sensitivity_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">experiment</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projectname</span> <span class="o">=</span> <span class="n">projectname</span>
+        <span class="k">if</span> <span class="n">root_dir</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">root_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">osp</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">project_config</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project_config</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">root_dir</span>
+        <span class="n">organizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sa_organizer</span>
+        <span class="n">organizer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">setup</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">root_dir</span><span class="o">=</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">projectname</span><span class="o">=</span><span class="n">projectname</span><span class="p">,</span> <span class="n">link</span><span class="o">=</span><span class="n">link</span><span class="p">,</span>
+            <span class="n">src_project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">projectname</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">six</span><span class="o">.</span><span class="n">PY2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">no_move</span><span class="p">:</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">ordered_move</span><span class="p">(</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">projects</span><span class="p">,</span> <span class="n">projectname</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">projectname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SensitivityAnalysis.compile_model"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.compile_model">[docs]</a>    <span class="k">def</span> <span class="nf">compile_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compile the sensitivity analysis model&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sa_organizer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">compile_model</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">projectname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projectname</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SensitivityAnalysis.init"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nml</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">experiment</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">run_prepare</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+             <span class="n">use_param</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">no_move</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the experiments for the sensitivity analysis</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nml: dict</span>
+<span class="sd">            A mapping from namelist parameters to the values to use. Ranges</span>
+<span class="sd">            might be lists of numbers or ``&#39;&lt;i&gt;err&#39;`` to use ``&#39;&lt;i&gt;&#39;``-times</span>
+<span class="sd">            the error from the parameterization. You might also provide up to</span>
+<span class="sd">            three values in case on of them is a string with ``&#39;err&#39;`` in it,</span>
+<span class="sd">            where the first value corresponds to the minimum, the second to</span>
+<span class="sd">            the maximum and the third to the number of steps.</span>
+<span class="sd">        experiment: str</span>
+<span class="sd">            The base experiment name to use. Should somehow contain a number</span>
+<span class="sd">            which will be increased for each experiment. If None, it will</span>
+<span class="sd">            default to ``&#39;&lt;id&gt;_sens0&#39;``</span>
+<span class="sd">        run_prepare: bool</span>
+<span class="sd">            If True or no ``&#39;input&#39;`` key exists for the experiment, the</span>
+<span class="sd">            ``&#39;prepare&#39;`` evaluation task is run to get the reference data.</span>
+<span class="sd">            Otherwise, if False and the ``&#39;input&#39;`` key does not exist, the</span>
+<span class="sd">            specified file is used</span>
+<span class="sd">        use_param: bool</span>
+<span class="sd">            If True/set and the parameterization is required, use the</span>
+<span class="sd">            parameterization of the original experiment</span>
+<span class="sd">        no_move: bool</span>
+<span class="sd">            If True, the experiment in the configurations are not moved to the</span>
+<span class="sd">            position right before the configuration of the current experiment</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">get_err_range</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">nml</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Compute the ranges for the given namelist `key` based upon the</span>
+<span class="sd">            mean&quot;&quot;&quot;</span>
+            <span class="n">converted</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">isstring</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;err&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+                    <span class="n">m</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">float_patt</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="n">multiplier</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">())</span> <span class="k">if</span> <span class="n">m</span> <span class="k">else</span> <span class="mf">1.0</span>
+                    <span class="n">converted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nml</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">multiplier</span> <span class="o">*</span> <span class="n">errors</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">converted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">converted</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">)))</span>
+
+        <span class="k">def</span> <span class="nf">setup_paramdir</span><span class="p">(</span><span class="n">experiment</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Link files from the base experiment param dir to the new one&quot;&quot;&quot;</span>
+            <span class="n">paramdir</span> <span class="o">=</span> <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span>
+                    <span class="s1">&#39;paramdir&#39;</span><span class="p">,</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;expdir&#39;</span><span class="p">],</span>
+                                         <span class="s1">&#39;parameterization&#39;</span><span class="p">))</span>
+            <span class="n">root_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;paramdir&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">root_dir</span> <span class="ow">and</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">root_dir</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">root_dir</span><span class="p">):</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">_link</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span>
+                                    <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">paramdir</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">):</span>
+                <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;database&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span>
+                    <span class="s1">&#39;database&#39;</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">update_nml</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">nml_key</span><span class="p">,</span> <span class="n">settings</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="s1">&#39;namelist&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;namelist&#39;</span><span class="p">][</span><span class="n">nml_key</span><span class="p">]</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span>
+                        <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">transposed_dict</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">,</span> <span class="n">starmap</span><span class="p">(</span><span class="nb">zip</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span>
+                       <span class="n">repeat</span><span class="p">(</span><span class="n">errs</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">iterable</span><span class="p">))))</span>
+
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span>
+
+        <span class="k">if</span> <span class="n">nml</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">nml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;namelist&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s1">&#39;sensitivity_namelist&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">nml</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;No parameter ranges specified! Please use the params &quot;</span>
+                <span class="s2">&quot;parameter!&quot;</span><span class="p">)</span>
+        <span class="n">nml</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">nml</span><span class="p">)</span>
+        <span class="n">errs</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="n">ranges</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">nml</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">isstring</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;err&#39;</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">val</span><span class="p">):</span>
+                <span class="n">errs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ranges</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">val</span><span class="p">))</span>
+        <span class="n">nml</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="n">ranges</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">errs</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;namelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project_config</span><span class="p">[</span><span class="s1">&#39;sensitivity_namelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nml</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">eval_stations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;eval_stations&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No evaluation stations specified for the &quot;</span>
+                             <span class="s2">&quot;experiment </span><span class="si">%s</span><span class="s2">!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">errs</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">gwgen.parameterization</span> <span class="kn">import</span> <span class="n">Parameterizer</span>
+            <span class="n">param_stations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;param_stations&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">param_stations</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No parameterization stations specified for &quot;</span>
+                                 <span class="s2">&quot;the experiment </span><span class="si">%s</span><span class="s2">!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment</span><span class="p">))</span>
+            <span class="n">tasks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Parameterizer</span><span class="o">.</span><span class="n">get_task_for_nml_key</span><span class="p">,</span> <span class="n">errs</span><span class="p">))</span>
+            <span class="n">other_tasks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Parameterizer</span><span class="o">.</span><span class="n">get_task_for_nml_key</span><span class="p">,</span> <span class="n">ranges</span><span class="p">))</span>
+            <span class="n">err_bins</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+            <span class="n">flags_no_mean</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">organizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sa_organizer</span>
+        <span class="k">if</span> <span class="n">experiment</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">experiment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment</span> <span class="o">+</span> <span class="s1">&#39;_sens0&#39;</span>
+
+        <span class="c1">#: base string for the experiment description. The values are inserted</span>
+        <span class="c1">#: later</span>
+        <span class="n">base_description</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Sensitivity analysis of </span><span class="si">%s</span><span class="s1"> with </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experiment</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">={}&#39;</span> <span class="o">%</span> <span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span>
+                <span class="n">ranges</span><span class="p">,</span> <span class="n">errs</span><span class="p">)))</span>
+        <span class="c1"># choose if we have to evaluate the data</span>
+        <span class="n">run_prepare</span> <span class="o">=</span> <span class="n">run_prepare</span> <span class="ow">or</span> <span class="p">{</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;reference&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">run_prepare</span><span class="p">:</span>
+            <span class="n">input_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span>
+            <span class="n">reference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;reference&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">t</span><span class="p">)),</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="n">repeat</span><span class="p">(</span><span class="n">ranges</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">ranges</span><span class="o">.</span><span class="n">values</span><span class="p">())))):</span>
+            <span class="n">experiment</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_next_name</span><span class="p">(</span><span class="n">experiment</span><span class="p">)</span>
+            <span class="n">organizer</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">projectname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projectname</span><span class="p">,</span> <span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">six</span><span class="o">.</span><span class="n">PY2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">no_move</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">ordered_move</span><span class="p">(</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experiments</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">experiment</span><span class="p">)</span>
+            <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;namelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weathergen_ctl&#39;</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">copy</span><span class="p">()}</span>
+            <span class="k">if</span> <span class="n">run_prepare</span><span class="p">:</span>
+                <span class="n">organizer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">evaluate</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">stations</span><span class="o">=</span><span class="n">eval_stations</span><span class="p">,</span> <span class="n">prepare</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;to_csv&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+                    <span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">))</span>
+                <span class="n">input_file</span> <span class="o">=</span> <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span>
+                <span class="n">reference</span> <span class="o">=</span> <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;reference&#39;</span><span class="p">]</span>
+                <span class="n">run_prepare</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_file</span>
+            <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;reference&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reference</span>
+            <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;eval_stations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eval_stations</span>
+            <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;base_exp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">last</span> <span class="o">=</span> <span class="n">organizer</span><span class="o">.</span><span class="n">experiment</span>
+            <span class="k">if</span> <span class="n">use_param</span><span class="p">:</span>
+                <span class="n">setup_paramdir</span><span class="p">(</span><span class="n">experiment</span><span class="p">)</span>
+            <span class="n">update_nml</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tasks</span><span class="p">:</span>
+                <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_description</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="o">*</span><span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># run the parameterization</span>
+                <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;param_stations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">param_stations</span>
+                <span class="n">param_config</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">}</span>
+                <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="n">nml_key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">other_tasks</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                    <span class="n">config_key</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">get_config_key</span><span class="p">(</span><span class="n">nml_key</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">config_key</span><span class="p">:</span>
+                        <span class="n">param_config</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">config_key</span><span class="p">:</span> <span class="n">val</span><span class="p">}</span>
+                <span class="n">organizer</span><span class="o">.</span><span class="n">fix_paths</span><span class="p">(</span><span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">)</span>
+                <span class="n">organizer</span><span class="o">.</span><span class="n">fix_paths</span><span class="p">(</span><span class="n">organizer</span><span class="o">.</span><span class="n">project_config</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Parameterizing experiment </span><span class="si">%i</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">manager</span> <span class="o">=</span> <span class="n">organizer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">param</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span> <span class="o">**</span><span class="n">param_config</span><span class="p">))</span><span class="o">.</span><span class="n">param</span>
+                <span class="n">param_tasks</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">tasks</span><span class="p">}</span>
+                <span class="n">nml</span> <span class="o">=</span> <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;namelist&#39;</span><span class="p">][</span><span class="s1">&#39;weathergen_ctl&#39;</span><span class="p">]</span>
+
+                <span class="c1"># insert description</span>
+                <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_description</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="o">*</span><span class="n">chain</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="nb">map</span><span class="p">(</span><span class="n">nml</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="n">errs</span><span class="p">)))</span>
+
+                <span class="c1"># insert meta information that makes it easier to categorize</span>
+                <span class="c1"># the experiments later</span>
+                <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;flags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([</span>
+                    <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">errs</span><span class="p">])</span>
+
+                <span class="n">errors</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">param_tasks</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">get_error</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                          <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">errs</span><span class="p">,</span> <span class="n">tasks</span><span class="p">)}</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">get_err_range</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">nml</span><span class="p">)</span>
+                <span class="c1"># Convert the error ranges into lists</span>
+                <span class="n">err_ranges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">starmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">errs</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Error ranges:&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">vals</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">errs</span><span class="p">,</span> <span class="n">err_ranges</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># insert mean for configuration</span>
+                        <span class="n">vals</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nml</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">err_bins</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                            <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">ranges</span><span class="o">.</span><span class="n">values</span><span class="p">()))),</span>
+                             <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)))</span>
+                        <span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+                            <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%4.2f</span><span class="s1">err&#39;</span> <span class="o">%</span> <span class="n">f</span><span class="p">,</span> <span class="n">get_err_range</span><span class="p">(</span>
+                                <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="n">key</span><span class="p">,</span> <span class="n">errs</span><span class="p">[</span><span class="n">key</span><span class="p">])))</span>
+                        <span class="n">flags_no_mean</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">][:]</span>
+                        <span class="c1"># insert (or rename) mean for configuration</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">][(</span><span class="nb">len</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span>
+                            <span class="n">flags_no_mean</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">err_bins</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vals</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;    </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
+                    <span class="n">vals</span><span class="o">.</span><span class="n">pop</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># delete the mean again</span>
+
+                <span class="c1"># split them up and use them as namelist input</span>
+                <span class="c1"># note: d2 is the extended namelist for each experiment</span>
+                <span class="k">for</span> <span class="n">d2</span><span class="p">,</span> <span class="n">fl</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">transposed_dict</span><span class="p">(</span><span class="n">err_ranges</span><span class="p">),</span> <span class="n">transposed_dict</span><span class="p">(</span>
+                        <span class="n">flags_no_mean</span><span class="o">.</span><span class="n">values</span><span class="p">())):</span>
+                    <span class="n">experiment</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_next_name</span><span class="p">(</span><span class="n">experiment</span><span class="p">)</span>
+                    <span class="n">combined</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">d2</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">projectname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projectname</span><span class="p">,</span> <span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span>
+                        <span class="n">description</span><span class="o">=</span><span class="n">base_description</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">combined</span><span class="p">)))</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">six</span><span class="o">.</span><span class="n">PY2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">no_move</span><span class="p">:</span>
+                        <span class="n">utils</span><span class="o">.</span><span class="n">ordered_move</span><span class="p">(</span>
+                            <span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experiments</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">experiment</span><span class="p">)</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;namelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;weathergen_ctl&#39;</span><span class="p">:</span> <span class="n">combined</span><span class="p">}</span>
+                    <span class="n">update_nml</span><span class="p">()</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_file</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;reference&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reference</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;eval_stations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eval_stations</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;base_exp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">last</span>
+                    <span class="n">organizer</span><span class="o">.</span><span class="n">exp_config</span><span class="p">[</span><span class="s1">&#39;flags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fl</span>
+        <span class="k">if</span> <span class="n">errs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;unstructured&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uconf</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">err</span><span class="p">,</span> <span class="n">arr</span> <span class="ow">in</span> <span class="n">err_bins</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">minmeanmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+                <span class="n">minmeanmax</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">minmeanmax</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">minmeanmax</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">uconf</span><span class="p">[</span><span class="n">err</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">flags</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">minmeanmax</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;   minima: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">minmeanmax</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;     mean: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">minmeanmax</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;   maxima: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">minmeanmax</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span></div>
+
+    <span class="n">docstrings</span><span class="o">.</span><span class="n">keep_params</span><span class="p">(</span><span class="s1">&#39;GWGENOrganizer.run.parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;remove&#39;</span><span class="p">)</span>
+    <span class="n">docstrings</span><span class="o">.</span><span class="n">keep_params</span><span class="p">(</span>
+        <span class="s1">&#39;SensitivityAnalysis._parallelize_command.parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;experiments&#39;</span><span class="p">)</span>
+
+    <span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="SensitivityAnalysis.run"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiments</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the analysis</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        %(SensitivityAnalysis._parallelize_command.parameters.experiments)s</span>
+<span class="sd">        %(GWGENOrganizer.run.parameters.remove)s&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parallelilze_command</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">remove</span><span class="o">=</span><span class="n">remove</span><span class="p">)),</span>
+                                   <span class="n">experiments</span><span class="o">=</span><span class="n">experiments</span><span class="p">)</span></div>
+
+    <span class="n">docstrings</span><span class="o">.</span><span class="n">keep_params</span><span class="p">(</span>
+        <span class="s1">&#39;SensitivityAnalysis._parallelize_command.parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;loop_exps&#39;</span><span class="p">)</span>
+
+    <span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="SensitivityAnalysis.evaluate"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiments</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">loop_exps</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate the experiments of the sensitivity analysis</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        %(SensitivityAnalysis._parallelize_command.parameters.experiments)s</span>
+<span class="sd">        %(SensitivityAnalysis._parallelize_command.parameters.loop_exps)s</span>
+<span class="sd">        %(GWGENOrganizer.evaluate.parameters)s</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">):</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;experiments&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+                <span class="n">val</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;experiments&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parallelilze_command</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">evaluate</span><span class="o">=</span><span class="n">kwargs</span><span class="p">),</span>
+                                   <span class="n">experiments</span><span class="o">=</span><span class="n">experiments</span><span class="p">,</span>
+                                   <span class="n">loop_exps</span><span class="o">=</span><span class="n">loop_exps</span><span class="p">)</span></div>
+
+    <span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="SensitivityAnalysis.plot"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indicators</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rsquared&#39;</span><span class="p">,</span> <span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;ks&#39;</span><span class="p">,</span> <span class="s1">&#39;quality&#39;</span><span class="p">],</span>
+             <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;prcp&#39;</span><span class="p">,</span> <span class="s1">&#39;tmin&#39;</span><span class="p">,</span> <span class="s1">&#39;tmax&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">],</span>
+             <span class="n">meta</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the result of the sensitivity analysis</span>
+
+<span class="sd">        2 different plots are made for each variable and quality indicator:</span>
+
+<span class="sd">            1. 1d plots with the indicator on the y-axis and the namelist</span>
+<span class="sd">               parameter on the x-axis</span>
+<span class="sd">            2. 2d plots with one indicator on the x-axis and another on the</span>
+<span class="sd">               y-axis for each possible combination</span>
+
+<span class="sd">        You can disable one of the plot types via the `only_1d` and `only_2d`</span>
+<span class="sd">        parameter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indicators: str or list of str</span>
+<span class="sd">            The name of the indicators from the `quality` evaluation task</span>
+<span class="sd">        names: str or list of str</span>
+<span class="sd">            The name(s) of the variable(s) to plot</span>
+<span class="sd">        meta: dict or path to yaml configuration file</span>
+<span class="sd">            Alternative meta information for the data set</span>
+<span class="sd">        ``**kwargs``</span>
+<span class="sd">            Any task of the :class:`SensitivityPlot` framework</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">meta</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;additional_meta&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">meta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;additional_meta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span>
+        <span class="k">for</span> <span class="n">task</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">task</span><span class="p">]</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">)</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;names&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;indicators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">indicators</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_config</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;project_config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">project_config</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;sa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">SensitivityPlot</span><span class="o">.</span><span class="n">get_manager</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">global_config</span><span class="p">)</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">initialize_tasks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">),</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">))</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">manager</span></div>
+
+<div class="viewcode-block" id="SensitivityAnalysis.remove"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove the project and files of the sensitivity analysis&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span>
+            <span class="n">remove</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">projectname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projectname</span><span class="p">,</span> <span class="n">complete</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div></div>
+
+
+<span class="n">_SensitivityPlotConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s1">&#39;_SensitivityPlotConfig&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;sa&#39;</span><span class="p">,</span> <span class="s1">&#39;indicators&#39;</span><span class="p">,</span> <span class="s1">&#39;names&#39;</span><span class="p">,</span> <span class="s1">&#39;meta&#39;</span><span class="p">))</span>
+
+<span class="n">_SensitivityPlotConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">append_doc</span><span class="p">(</span>
+    <span class="n">_SensitivityPlotConfig</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Parameters</span>
+<span class="s2">----------</span>
+<span class="s2">sa: SensitivityAnalysis</span>
+<span class="s2">    The analyser to use</span>
+<span class="s2">indicators: str or list of str</span>
+<span class="s2">    The name of the indicators from the `quality` evaluation task</span>
+<span class="s2">names: str or list of str</span>
+<span class="s2">    The name of the variables to plot</span>
+<span class="s2">meta: dict</span>
+<span class="s2">    Alternative meta information for the data set</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;_SensitivityPlotConfig&#39;</span><span class="p">))</span>
+
+<span class="n">SensitivityPlotConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">enhanced_config</span><span class="p">(</span><span class="n">_SensitivityPlotConfig</span><span class="p">,</span>
+                                              <span class="s1">&#39;SensitivityPlotConfig&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="default_sens_config"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.default_sens_config">[docs]</a><span class="k">def</span> <span class="nf">default_sens_config</span><span class="p">(</span>
+        <span class="n">sa</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">indicators</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rsquared&#39;</span><span class="p">,</span> <span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;ks&#39;</span><span class="p">,</span> <span class="s1">&#39;quality&#39;</span><span class="p">],</span>
+        <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;prcp&#39;</span><span class="p">,</span> <span class="s1">&#39;tmin&#39;</span><span class="p">,</span> <span class="s1">&#39;tmax&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">],</span>
+        <span class="n">meta</span><span class="o">=</span><span class="p">{},</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The default configuration for :class:`SensitivityPlot` instances.</span>
+<span class="sd">    See also the :attr:`SensitivityPlot.default_config` attribute</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    %(SensitivityPlotConfig.parameters)s&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">SensitivityPlotConfig</span><span class="p">(</span>
+            <span class="n">sa</span><span class="p">,</span> <span class="n">indicators</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">utils</span><span class="o">.</span><span class="n">default_config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SensitivityPlot"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot">[docs]</a><span class="k">class</span> <span class="nc">SensitivityPlot</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">TaskBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A base class for the plots of the :class:`SensitivityAnalysis`&quot;&quot;&quot;</span>
+
+    <span class="n">_registry</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;rsquared&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;Mean R$^2$ of all quantiles&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;slope&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;Slope indicator&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;quality&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;Quality indicator&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;ks&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;Fraction of stations without significant difference&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;thresh&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;Crossover point of Gamma-GP distribution&#39;</span><span class="p">,</span>
+                       <span class="n">units</span><span class="o">=</span><span class="s1">&#39;mm&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;gp_shape&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;Generalized Pareto Shape parameter&#39;</span><span class="p">,</span>
+                         <span class="n">units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="p">}</span>
+
+    <span class="n">variables_meta</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;prcp&#39;</span><span class="p">:</span> <span class="s1">&#39;Precipitation&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tmin&#39;</span><span class="p">:</span> <span class="s1">&#39;Min. Temperature&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tmax&#39;</span><span class="p">:</span> <span class="s1">&#39;Max. Temperature&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mean_cloud&#39;</span><span class="p">:</span> <span class="s1">&#39;Cloud fraction&#39;</span><span class="p">}</span>
+
+    <span class="n">_datafile</span> <span class="o">=</span> <span class="s1">&#39;sensitivity_analysis.csv&#39;</span>
+
+    <span class="n">dbname</span> <span class="o">=</span> <span class="s1">&#39;sensitivity_analysis&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">task_data_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The directory where to store data&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sa_dir</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">namelist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The namelist of the sensitivity analysis holding the settings&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">sa</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;namelist&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">err_nml_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">namelist</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">isstring</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;err&#39;</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">l</span><span class="p">)]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ranges_nml_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">errs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">err_nml_keys</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">namelist</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">errs</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">organizer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">sa</span><span class="o">.</span><span class="n">organizer</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">base_experiments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_exps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experiments</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">exp</span> <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span>
+                <span class="k">if</span> <span class="n">all_exps</span><span class="p">[</span><span class="n">exp</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;base_exp&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">exp</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">default_sens_config</span><span class="p">()</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">super</span><span class="p">(</span><span class="n">SensitivityPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_modify_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">setup_args</span><span class="p">(</span><span class="n">default_sens_config</span><span class="p">)</span>
+        <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span>
+            <span class="n">SensitivityPlot</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_modify_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;names&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;indicators&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;sa&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sql_dtypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">sqlalchemy</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SensitivityPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">sql_dtypes</span>
+        <span class="k">for</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;rsquared&#39;</span><span class="p">,</span> <span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;ks&#39;</span><span class="p">,</span> <span class="s1">&#39;quality&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">namelist</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">indicator</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">REAL</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s1">&#39;vname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">TEXT</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
+<div class="viewcode-block" id="SensitivityPlot.setup_from_file"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;index_col&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;vname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">namelist</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SensitivityPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_from_file</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SensitivityPlot.setup_from_db"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_db">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;index_col&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;vname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">namelist</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SensitivityPlot</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_from_db</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SensitivityPlot.add_meta"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot.add_meta">[docs]</a>    <span class="k">def</span> <span class="nf">add_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">meta</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;_flag&#39;</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;_flag&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gives the base dataset for the plot&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">xarray</span> <span class="kn">as</span> <span class="nn">xr</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_meta</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ds</span>
+
+<div class="viewcode-block" id="SensitivityPlot.setup_from_scratch"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot.setup_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+        <span class="n">experiments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span>
+        <span class="n">all_exps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experiments</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[{}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">experiments</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">exp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">experiments</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_exps</span><span class="p">[</span><span class="n">exp</span><span class="p">][</span><span class="s1">&#39;evaluation&#39;</span><span class="p">][</span><span class="s1">&#39;quality&#39;</span><span class="p">][</span><span class="n">variable</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">experiments</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">))</span>
+            <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">all_exps</span><span class="p">[</span><span class="n">exp</span><span class="p">][</span><span class="s1">&#39;namelist&#39;</span><span class="p">][</span><span class="s1">&#39;weathergen_ctl&#39;</span><span class="p">]</span>
+                 <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">experiments</span><span class="p">],</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">experiments</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">))</span>
+            <span class="n">merged</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">err_nml_keys</span><span class="p">:</span>
+                <span class="n">flags_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">all_exps</span><span class="p">[</span><span class="n">exp</span><span class="p">][</span><span class="s1">&#39;flags&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">experiments</span><span class="p">],</span>
+                    <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">experiments</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">))</span>
+                <span class="n">merged</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                    <span class="n">flags_df</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                    <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;_flag&#39;</span><span class="p">))</span>
+            <span class="n">merged</span><span class="p">[</span><span class="s1">&#39;vname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span>
+            <span class="n">errs_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;_flag&#39;</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">err_nml_keys</span><span class="p">]</span>
+            <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span>
+                <span class="p">[</span><span class="s1">&#39;vname&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranges_nml_keys</span> <span class="o">+</span> <span class="n">errs_keys</span><span class="p">,</span>
+                <span class="n">append</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SensitivityPlot1D"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot1D">[docs]</a><span class="k">class</span> <span class="nc">SensitivityPlot1D</span><span class="p">(</span><span class="n">SensitivityPlot</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;1d plots with the indicator on the y-axis and the namelist parameter on</span>
+<span class="sd">    the x-axis&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;plot1d&#39;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;1d plots with the indicator on the y-axis and the namelist &#39;</span>
+               <span class="s1">&#39;parameter on the x-axis&#39;</span><span class="p">)</span>
+
+    <span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="n">fmt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;{desc}&#39;</span><span class="p">,</span>
+        <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(long_name)s</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(vname_long)s</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">plot</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
+        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SensitivityPlot1D.create_project"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot1D.create_project">[docs]</a>    <span class="k">def</span> <span class="nf">create_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">psyplot.project</span> <span class="kn">as</span> <span class="nn">psy</span>
+
+        <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="n">nml_key</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">nml_key</span> <span class="k">if</span> <span class="n">nml_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">errs</span> <span class="k">else</span> <span class="n">nml_key</span> <span class="o">+</span> <span class="s1">&#39;_flag&#39;</span>
+        <span class="n">vmeta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables_meta</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">vname</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">indicators</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">indicators</span>
+        <span class="n">nml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namelist</span>
+        <span class="n">errs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">err_nml_keys</span>
+        <span class="n">vmeta</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="n">key</span><span class="p">,</span> <span class="n">vmeta</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">vname</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">nml_key</span> <span class="ow">in</span> <span class="n">nml</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">variable</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">variables</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">indicators</span><span class="p">:</span>
+                    <span class="n">other_keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+                                  <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">get_key</span><span class="p">,</span>
+                                                 <span class="nb">set</span><span class="p">(</span><span class="n">nml</span><span class="p">)</span> <span class="o">-</span> <span class="p">{</span><span class="n">nml_key</span><span class="p">})}</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="nb">map</span><span class="p">(</span><span class="s1">&#39;{0}=%({0})s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">other_keys</span><span class="p">))</span>
+                    <span class="n">other_keys</span><span class="p">[</span><span class="s1">&#39;vname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="n">fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">psy</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span>
+                        <span class="n">ds</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">ind</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">other_keys</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span>
+                        <span class="n">coord</span><span class="o">=</span><span class="n">nml_key</span><span class="p">,</span> <span class="n">legendlabels</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+                        <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;vname_long&#39;</span><span class="p">:</span> <span class="n">vmeta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">variable</span><span class="p">)})</span>
+        <span class="k">return</span> <span class="n">psy</span><span class="o">.</span><span class="n">gcp</span><span class="p">(</span><span class="bp">True</span><span class="p">)[:]</span></div></div>
+
+
+<div class="viewcode-block" id="SensitivityPlot2D"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot2D">[docs]</a><span class="k">class</span> <span class="nc">SensitivityPlot2D</span><span class="p">(</span><span class="n">SensitivityPlot</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;2d plots with one namelist parameter on the y-axis and one on the</span>
+<span class="sd">    x-axis and a color coding the the indicator&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;plot2d&#39;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;2d plots with one namelist parameter on the y-axis and one on &#39;</span>
+               <span class="s1">&#39;the x-axis and a color coding the the indicator&#39;</span><span class="p">)</span>
+
+    <span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+
+<div class="viewcode-block" id="SensitivityPlot2D.run"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot2D.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">psyplot.data</span> <span class="kn">as</span> <span class="nn">psyd</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+        <span class="kn">import</span> <span class="nn">psy_simple.plotters</span> <span class="kn">as</span> <span class="nn">psyps</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="kn">as</span> <span class="nn">mcol</span>
+        <span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+        <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_pdf</span> <span class="kn">import</span> <span class="n">PdfPages</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">patches</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="n">full_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">plot_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">plot_output</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="n">PdfPages</span><span class="p">(</span><span class="n">plot_output</span><span class="p">)</span>
+        <span class="n">all_exps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">organizer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experiments</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">indicators</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">full_df</span><span class="p">[</span><span class="n">full_df</span><span class="o">.</span><span class="n">vname</span> <span class="o">==</span> <span class="n">variable</span><span class="p">]</span>
+                <span class="n">vals</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">key</span><span class="p">:</span> <span class="n">group</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;gp_shape&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()[</span><span class="n">ind</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;thresh&#39;</span><span class="p">)}</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">psyd</span><span class="o">.</span><span class="n">_infer_interval_breaks</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+                <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">axisbg</span><span class="o">=</span><span class="s1">&#39;0.9&#39;</span><span class="p">)</span>
+                <span class="n">all_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+                <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">psyps</span><span class="o">.</span><span class="n">DataTicksCalculator</span><span class="o">.</span><span class="n">_round_min_max</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">all_vals</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">all_vals</span><span class="p">))</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">mcol</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
+                <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+                <span class="c1"># set missing values to (dark) red</span>
+                <span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">((</span><span class="mf">0.7686274509803922</span><span class="p">,</span> <span class="mf">0.3058823529411765</span><span class="p">,</span>
+                              <span class="mf">0.3215686274509804</span><span class="p">))</span>
+                <span class="n">plots</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">x_vals</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">thresh</span><span class="o">.</span><span class="n">unique</span><span class="p">())):</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">mask</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+                    <span class="n">x_vals</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">=</span> <span class="n">psyd</span><span class="o">.</span><span class="n">_infer_interval_breaks</span><span class="p">(</span>
+                        <span class="n">vals</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+                    <span class="n">plots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
+                        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">))</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Generalized Pareto shape parameter&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Gamma-GP crossover point [mm]&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables_meta</span><span class="p">[</span><span class="n">variable</span><span class="p">])</span>
+                <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">plots</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">)</span>
+                <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s1">&#39;long_name&#39;</span><span class="p">])</span>
+                <span class="c1"># draw box around colorbar</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">],</span> <span class="n">axisbg</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">err_nml_keys</span><span class="p">:</span>
+                    <span class="n">pdf</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">mean_boxes</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">means</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">medians</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># XXX currently not used</span>
+                <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_experiments</span><span class="p">:</span>
+                    <span class="n">nml</span> <span class="o">=</span> <span class="n">all_exps</span><span class="p">[</span><span class="n">exp</span><span class="p">][</span><span class="s1">&#39;namelist&#39;</span><span class="p">][</span><span class="s1">&#39;weathergen_ctl&#39;</span><span class="p">]</span>
+                    <span class="n">param_config</span> <span class="o">=</span> <span class="n">all_exps</span><span class="p">[</span><span class="n">exp</span><span class="p">][</span><span class="s1">&#39;parameterization&#39;</span><span class="p">][</span><span class="s1">&#39;prcp&#39;</span><span class="p">]</span>
+                    <span class="n">means</span><span class="p">[</span><span class="n">nml</span><span class="p">[</span><span class="s1">&#39;thresh&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">param_config</span><span class="p">[</span><span class="s1">&#39;gpshape_mean&#39;</span><span class="p">]</span>
+                    <span class="n">medians</span><span class="p">[</span><span class="n">nml</span><span class="p">[</span><span class="s1">&#39;thresh&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">param_config</span><span class="p">[</span><span class="s1">&#39;gpshape_median&#39;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">thresh</span><span class="o">.</span><span class="n">unique</span><span class="p">())):</span>
+                    <span class="n">mean_index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">gp_shape</span><span class="p">[</span>
+                        <span class="n">df</span><span class="o">.</span><span class="n">thresh</span> <span class="o">==</span> <span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                    <span class="n">mean_boxes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">patches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">x_vals</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">mean_index</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>
+                        <span class="n">x_vals</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">mean_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_vals</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">mean_index</span><span class="p">],</span>
+                        <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
+                        <span class="n">lw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">))</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">mean_boxes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="n">mean_boxes</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                           <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;GP shape parameter&#39;</span><span class="p">)</span>
+                <span class="n">pdf</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;plot_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_output</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

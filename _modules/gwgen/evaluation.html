@@ -1,0 +1,1045 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.evaluation &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gwgen.evaluation</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Evaluation module of the gwgen module&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">psyplot.compat.pycompat</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">starmap</span><span class="p">,</span> <span class="n">repeat</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">gwgen.utils</span> <span class="kn">import</span> <span class="n">docstrings</span>
+<span class="kn">import</span> <span class="nn">gwgen.utils</span> <span class="kn">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+
+<div class="viewcode-block" id="Evaluator"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.Evaluator">[docs]</a><span class="k">class</span> <span class="nc">Evaluator</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">TaskBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract base class for evaluation tasks</span>
+
+<span class="sd">    Evaluation tasks should incorporate a run method that is called by the</span>
+<span class="sd">    :meth:`gwgen.main.GWGENOrganizer.evaluate` method&quot;&quot;&quot;</span>
+
+    <span class="n">_registry</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">task_data_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The directory where to store data&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_dir</span></div>
+
+<span class="n">_PreparationConfigBase</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;_PreparationConfigBase&#39;</span><span class="p">,</span>
+                                    <span class="p">[</span><span class="s1">&#39;setup_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;raw2db&#39;</span><span class="p">,</span> <span class="s1">&#39;raw2csv&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;reference&#39;</span><span class="p">,</span> <span class="s1">&#39;input_path&#39;</span><span class="p">])</span>
+
+<span class="n">_PreparationConfigBase</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">append_doc</span><span class="p">(</span>
+    <span class="n">_PreparationConfigBase</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Parameters</span>
+<span class="s2">----------</span>
+<span class="s2">setup_raw: { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }</span>
+<span class="s2">    The method how to setup the raw data from GHCN and EECRA</span>
+
+<span class="s2">    ``&#39;scratch&#39;``</span>
+<span class="s2">        To set up the task from the raw data</span>
+<span class="s2">    ``&#39;file&#39;``</span>
+<span class="s2">        Set up the task from an existing file</span>
+<span class="s2">    ``&#39;db&#39;``</span>
+<span class="s2">        Set up the task from a database</span>
+<span class="s2">    ``None``</span>
+<span class="s2">        If the file name of this this task exists, use this one,</span>
+<span class="s2">        otherwise a database is provided, use this one, otherwise go</span>
+<span class="s2">        from scratch</span>
+<span class="s2">raw2db: bool</span>
+<span class="s2">    If True, the raw data from GHCN and EECRA is stored in a postgres database</span>
+<span class="s2">raw2csv: bool</span>
+<span class="s2">    If True, the raw data from GHCN and EECRA is stored in a csv file</span>
+<span class="s2">reference: str</span>
+<span class="s2">    The path of the file where to store the reference data. If None and not</span>
+<span class="s2">    already set in the configuration, it will default to</span>
+<span class="s2">    ``&#39;evaluation/reference.csv&#39;``</span>
+<span class="s2">input_path: str</span>
+<span class="s2">    The path of the file where to store the model input. If None, and not</span>
+<span class="s2">    already set in the configuration, it will default to</span>
+<span class="s2">    ``&#39;inputdir/input.csv&#39;`` where *inputdir* is the path to the input</span>
+<span class="s2">    directory (by default, *input* in the experiment directory)</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;_PreparationConfigBase&#39;</span><span class="p">))</span>
+
+
+<span class="n">PreparationConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">enhanced_config</span><span class="p">(</span><span class="n">_PreparationConfigBase</span><span class="p">,</span>
+                                          <span class="s1">&#39;PreparationConfig&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="default_preparation_config"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.default_preparation_config">[docs]</a><span class="k">def</span> <span class="nf">default_preparation_config</span><span class="p">(</span>
+        <span class="n">setup_raw</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">raw2db</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">raw2csv</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">input_path</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The default configuration for :class:`EvaluationPreparation` instances.</span>
+<span class="sd">    See also the :attr:`EvaluationPreparation.default_config` attribute</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    %(PreparationConfig.parameters)s&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">PreparationConfig</span><span class="p">(</span><span class="n">setup_raw</span><span class="p">,</span> <span class="n">raw2db</span><span class="p">,</span> <span class="n">raw2csv</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span>
+                             <span class="o">*</span><span class="n">utils</span><span class="o">.</span><span class="n">default_config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="EvaluationPreparation"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation">[docs]</a><span class="k">class</span> <span class="nc">EvaluationPreparation</span><span class="p">(</span><span class="n">Evaluator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Evaluation task to prepare the evaluation&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;prepare&#39;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Prepare the for experiment for evaluation&#39;</span>
+
+    <span class="n">http_inventory</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt&#39;</span><span class="p">)</span>
+
+    <span class="n">_datafile</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;reference.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;input.csv&#39;</span><span class="p">]</span>
+
+    <span class="n">dbname</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;reference&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">]</span>
+
+    <span class="n">has_run</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">default_preparation_config</span><span class="p">()</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">super</span><span class="p">(</span><span class="n">EvaluationPreparation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_path</span><span class="p">,</span>
+                                   <span class="n">input_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_path</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">datafile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The paths to reference and input file&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_path</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ghcnd_inventory_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;ghcn&#39;</span><span class="p">,</span> <span class="s1">&#39;ghcnd-inventory.txt&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">station_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ghcnd_inventory_file</span>
+        <span class="n">station_ids</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span>
+            <span class="n">fname</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S11&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">station_ids</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="n">lat</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+                             <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="n">lon</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span> <span class="s1">&#39;vname&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="p">,</span>
+                             <span class="s1">&#39;firstyr&#39;</span><span class="p">:</span> <span class="n">first</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+                             <span class="s1">&#39;lastyr&#39;</span><span class="p">:</span> <span class="n">last</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)},</span>
+                            <span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">station_ids</span><span class="p">)))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">reference_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The reference :class:`~pandas.DataFrame`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@reference_data.setter</span>
+    <span class="k">def</span> <span class="nf">reference_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">input_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The input :class:`~pandas.DataFrame`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@input_data.setter</span>
+    <span class="k">def</span> <span class="nf">input_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_modify_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">setup_args</span><span class="p">(</span><span class="n">default_preparation_config</span><span class="p">)</span>
+        <span class="c1"># disable plot_output, etc.</span>
+        <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span>
+            <span class="n">EvaluationPreparation</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_modify_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;setup_raw&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;fr&#39;</span><span class="p">,</span> <span class="nb">long</span><span class="o">=</span><span class="s1">&#39;raw-from&#39;</span><span class="p">,</span>
+                          <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;input_path&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="nb">long</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">,</span>
+                          <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;reference&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;raw2db&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;raw2csv&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span>
+
+<div class="viewcode-block" id="EvaluationPreparation.write2file"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation.write2file">[docs]</a>    <span class="k">def</span> <span class="nf">write2file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reimplemented to sort the data according to the index&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">EvaluationPreparation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write2file</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvaluationPreparation.write2db"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation.write2db">[docs]</a>    <span class="k">def</span> <span class="nf">write2db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reimplemented to sort the data according to the index&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">EvaluationPreparation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write2db</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvaluationPreparation.setup_from_db"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation.setup_from_db">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;index_col&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">],</span>  <span class="c1"># reference</span>
+                               <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">]]</span>  <span class="c1"># input</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EvaluationPreparation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_from_db</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvaluationPreparation.setup_from_file"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation.setup_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;index_col&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">],</span>  <span class="c1"># reference</span>
+                               <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">]]</span>  <span class="c1"># input</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EvaluationPreparation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_from_file</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;manager&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EvaluationPreparation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">to_csv</span><span class="p">:</span>  <span class="c1"># update the configuration</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_path</span>
+
+<div class="viewcode-block" id="EvaluationPreparation.__reduce__"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation.__reduce__">[docs]</a>    <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reimplemented to give provide also the manager&quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">super</span><span class="p">(</span><span class="n">EvaluationPreparation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__reduce__</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">({})</span>
+        <span class="n">ret</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;_manager&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvaluationPreparation.init_from_scratch"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation.init_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">init_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the setup via the parameterization classes&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">gwgen.parameterization</span> <span class="kn">import</span> <span class="p">(</span>
+            <span class="n">Parameterizer</span><span class="p">,</span> <span class="n">YearlyCompleteDailyCloud</span><span class="p">,</span>
+            <span class="n">YearlyCompleteDailyGHCNData</span><span class="p">,</span> <span class="n">YearlyCompleteMonthlyCloud</span><span class="p">,</span>
+            <span class="n">YearlyCompleteMonthlyGHCNData</span><span class="p">)</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">YearlyCompleteDailyCloud</span><span class="p">,</span> <span class="n">YearlyCompleteDailyGHCNData</span><span class="p">,</span>
+            <span class="n">YearlyCompleteMonthlyCloud</span><span class="p">,</span> <span class="n">YearlyCompleteMonthlyGHCNData</span><span class="p">]</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;paramdir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_dir</span>
+        <span class="n">kws</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">project_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">project_config</span><span class="p">,</span>
+                   <span class="n">to_csv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">raw2csv</span><span class="p">,</span>
+                   <span class="n">to_db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">raw2db</span><span class="p">,</span>
+                   <span class="n">setup_from</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">setup_raw</span><span class="p">)</span>
+        <span class="n">base_kws</span> <span class="o">=</span> <span class="p">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">kws</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">Parameterizer</span><span class="o">.</span><span class="n">get_manager</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">global_config</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">initialize_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">,</span> <span class="n">task_kws</span><span class="o">=</span><span class="n">base_kws</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;serial&#39;</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="kn">as</span> <span class="nn">mp</span>
+            <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">_db_locks</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">dbname</span><span class="p">]</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">_file_locks</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">datafile</span><span class="p">]</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="c1"># make sure the lat-lon information is available</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">download_src</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EvaluationPreparation.download_src"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation.download_src">[docs]</a>    <span class="k">def</span> <span class="nf">download_src</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ghcnd_inventory_file</span>
+        <span class="k">if</span> <span class="n">force</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloading station file from </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">http_inventory</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http_inventory</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvaluationPreparation.setup_from_scratch"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.EvaluationPreparation.setup_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">gwgen.parameterization</span> <span class="kn">import</span> <span class="p">(</span>
+            <span class="n">YearlyCompleteDailyCloud</span><span class="p">,</span> <span class="n">YearlyCompleteDailyGHCNData</span><span class="p">,</span>
+            <span class="n">YearlyCompleteMonthlyCloud</span><span class="p">,</span> <span class="n">YearlyCompleteMonthlyGHCNData</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tasks</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># force serial setup because we might already be in a parallel setup</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;serial&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">,</span> <span class="n">to_return</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">tasks</span>
+        <span class="c1"># save in the right order for the FORTRAN code</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tmin&#39;</span><span class="p">,</span> <span class="s1">&#39;tmax&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">,</span> <span class="s1">&#39;prcp&#39;</span><span class="p">,</span> <span class="s1">&#39;wet_day&#39;</span><span class="p">]</span>
+
+        <span class="c1"># daily reference</span>
+        <span class="n">cday</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">YearlyCompleteDailyGHCNData</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">ccday</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">YearlyCompleteDailyCloud</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reference</span> <span class="o">=</span> <span class="n">cday</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                <span class="n">ccday</span><span class="p">[[</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">]],</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>  <span class="c1"># indices to not match</span>
+            <span class="n">reference</span> <span class="o">=</span> <span class="n">cday</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># create empty data frame</span>
+            <span class="n">reference</span><span class="p">[</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span>
+                                               <span class="n">dtype</span><span class="o">=</span><span class="n">ccday</span><span class="o">.</span><span class="n">mean_cloud</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">reference</span><span class="p">[</span><span class="s1">&#39;wind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span>
+                                         <span class="n">dtype</span><span class="o">=</span><span class="n">ccday</span><span class="o">.</span><span class="n">wind</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">reference</span><span class="p">[</span><span class="s1">&#39;wet_day&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">reference</span><span class="o">.</span><span class="n">prcp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference_data</span> <span class="o">=</span> <span class="n">reference</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+
+        <span class="c1"># monthly input</span>
+        <span class="n">cmonth</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">YearlyCompleteMonthlyGHCNData</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">ccmonth</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">YearlyCompleteMonthlyCloud</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">exp_input</span> <span class="o">=</span> <span class="n">cmonth</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                <span class="n">ccmonth</span><span class="p">[[</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">]],</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+            <span class="c1"># set cloud and wind to 0 where we have no reference</span>
+            <span class="n">exp_input</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">exp_input</span><span class="o">.</span><span class="n">mean_cloud</span><span class="o">.</span><span class="n">isnull</span><span class="p">(),</span>
+                         <span class="p">[</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>  <span class="c1"># indices do not match</span>
+            <span class="n">exp_input</span> <span class="o">=</span> <span class="n">cmonth</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># create empty data frame</span>
+            <span class="n">exp_input</span><span class="p">[</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span>
+                                               <span class="n">dtype</span><span class="o">=</span><span class="n">ccmonth</span><span class="o">.</span><span class="n">mean_cloud</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">exp_input</span><span class="p">[</span><span class="s1">&#39;wind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span>
+                                         <span class="n">dtype</span><span class="o">=</span><span class="n">ccmonth</span><span class="o">.</span><span class="n">wind</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">inventory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">station_list</span>
+        <span class="n">exp_input</span> <span class="o">=</span> <span class="n">exp_input</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">inventory</span><span class="p">[</span><span class="n">inventory</span><span class="o">.</span><span class="n">vname</span> <span class="o">==</span> <span class="s1">&#39;PRCP&#39;</span><span class="p">][[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">]],</span>
+            <span class="n">on</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+        <span class="n">exp_input</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">],</span>
+                            <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span> <span class="o">=</span> <span class="n">exp_input</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="OutputTask"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.OutputTask">[docs]</a><span class="k">class</span> <span class="nc">OutputTask</span><span class="p">(</span><span class="n">Evaluator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Task to provide all the data for input and output&quot;&quot;&quot;</span>
+
+    <span class="c1"># the last will be ignored!</span>
+    <span class="n">_datafile</span> <span class="o">=</span> <span class="s1">&#39;output.csv&#39;</span>
+
+    <span class="n">dbname</span> <span class="o">=</span> <span class="s1">&#39;output&#39;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;output&#39;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Load the output of the model&#39;</span>
+
+    <span class="n">has_run</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">datafile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="p">]</span>
+
+<div class="viewcode-block" id="OutputTask.write2file"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.OutputTask.write2file">[docs]</a>    <span class="k">def</span> <span class="nf">write2file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Not implemented since the output file is generated by the model!&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Writing to file of </span><span class="si">%s</span><span class="s2"> task is disabled because this is done &quot;</span>
+            <span class="s2">&quot;by the model!&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OutputTask.setup_from_db"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.OutputTask.setup_from_db">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;index_col&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OutputTask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_from_db</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OutputTask.setup_from_file"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.OutputTask.setup_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;index_col&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OutputTask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_from_file</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OutputTask.setup_from_scratch"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.OutputTask.setup_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot set up the </span><span class="si">%s</span><span class="s2"> task from scratch because it requires the &quot;</span>
+            <span class="s2">&quot;output of the model!&quot;</span><span class="p">)</span></div></div>
+
+
+<span class="n">_KSConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;_KSConfig&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;no_rounding&#39;</span><span class="p">,</span> <span class="s1">&#39;names&#39;</span><span class="p">,</span> <span class="s1">&#39;transform_wind&#39;</span><span class="p">])</span>
+
+
+<span class="n">_KSConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">append_doc</span><span class="p">(</span><span class="n">_KSConfig</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Parameters</span>
+<span class="s2">----------</span>
+<span class="s2">no_rounding: bool</span>
+<span class="s2">    Do not round the simulation to the infered precision of the</span>
+<span class="s2">    reference. The inferred precision is the minimum difference between</span>
+<span class="s2">    two values with in the entire data</span>
+<span class="s2">names: list of str</span>
+<span class="s2">    The list of variables use for calculation. If None, all variables will be</span>
+<span class="s2">    used</span>
+<span class="s2">transform_wind: bool</span>
+<span class="s2">    If True, the square root of the wind is evaluated (as this is also</span>
+<span class="s2">    simulated in the weather generator)&quot;&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;_KSConfig&#39;</span><span class="p">))</span>
+
+
+<span class="n">KSConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">enhanced_config</span><span class="p">(</span><span class="n">_KSConfig</span><span class="p">,</span> <span class="s1">&#39;KSConfig&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="default_ks_config"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.default_ks_config">[docs]</a><span class="k">def</span> <span class="nf">default_ks_config</span><span class="p">(</span>
+        <span class="n">no_rounding</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">transform_wind</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The default configuration for :class:`KSEvaluation` instances.</span>
+<span class="sd">    See also the :attr:`KSEvaluation.default_config` attribute</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    %(KSConfig.parameters)s&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">KSConfig</span><span class="p">(</span><span class="n">no_rounding</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">transform_wind</span><span class="p">,</span>
+                    <span class="o">*</span><span class="n">utils</span><span class="o">.</span><span class="n">default_config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<span class="n">_QuantileConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s1">&#39;_QuantileConfig&#39;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;quantiles&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">_KSConfig</span><span class="o">.</span><span class="n">_fields</span><span class="p">))</span>
+
+
+<span class="n">_QuantileConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">append_doc</span><span class="p">(</span><span class="n">_QuantileConfig</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span>
+    <span class="n">docstrings</span><span class="o">.</span><span class="n">dedents</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Parameters</span>
+<span class="s2">----------</span>
+<span class="s2">%(_KSConfig.parameters)s</span>
+<span class="s2">quantiles: list of floats</span>
+<span class="s2">    The quantiles to use for calculating the percentiles</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">),</span> <span class="s1">&#39;_QuantileConfig&#39;</span><span class="p">))</span>
+
+
+<span class="n">QuantileConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">enhanced_config</span><span class="p">(</span><span class="n">_QuantileConfig</span><span class="p">,</span> <span class="s1">&#39;QuantileConfig&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="default_quantile_config"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.default_quantile_config">[docs]</a><span class="k">def</span> <span class="nf">default_quantile_config</span><span class="p">(</span>
+        <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The default configuration for :class:`QuantileEvaluation` instances.</span>
+<span class="sd">    See also the :attr:`QuantileEvaluation.default_config` attribute</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    %(QuantileConfig.parameters)s&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">QuantileConfig</span><span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="o">*</span><span class="n">default_ks_config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="QuantileEvaluation"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.QuantileEvaluation">[docs]</a><span class="k">class</span> <span class="nc">QuantileEvaluation</span><span class="p">(</span><span class="n">Evaluator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Evaluator to evaluate specific quantiles&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;quants&#39;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Compare the quantiles of simulation and observation&#39;</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;prcp&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Precipitation&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;mm&#39;</span><span class="p">}),</span>
+        <span class="p">(</span><span class="s1">&#39;tmin&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Min. Temperature&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;degC&#39;</span><span class="p">}),</span>
+        <span class="p">(</span><span class="s1">&#39;tmax&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Max. Temperature&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;degC&#39;</span><span class="p">}),</span>
+        <span class="p">(</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Cloud fraction&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">}),</span>
+        <span class="p">(</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Wind Speed&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;m/s&#39;</span><span class="p">})</span>
+        <span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">all_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[[</span><span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;_ref&#39;</span><span class="p">,</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;_sim&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">]</span>
+
+    <span class="n">setup_requires</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;prepare&#39;</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">]</span>
+
+    <span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="n">_datafile</span> <span class="o">=</span> <span class="s1">&#39;quantile_evaluation.csv&#39;</span>
+
+    <span class="n">dbname</span> <span class="o">=</span> <span class="s1">&#39;quantile_evaluation&#39;</span>
+
+    <span class="c1">#: default formatoptions for the</span>
+    <span class="c1">#: :class:`psyplot.plotter.linreg.DensityRegPlotter` plotter</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">legend</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">},</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;w_Reds&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(pctl)s</span><span class="s1">th percentile&#39;</span><span class="p">,</span>
+        <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(type)s</span><span class="s1"> {desc}&#39;</span><span class="p">,</span>
+        <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(type)s</span><span class="s1"> {desc}&#39;</span><span class="p">,</span>
+        <span class="nb">xrange</span><span class="o">=</span><span class="p">([</span><span class="s1">&#39;minmax&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;minmax&#39;</span><span class="p">,</span> <span class="mi">99</span><span class="p">]),</span>
+        <span class="n">yrange</span><span class="o">=</span><span class="p">([</span><span class="s1">&#39;minmax&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;minmax&#39;</span><span class="p">,</span> <span class="mi">99</span><span class="p">]),</span>
+        <span class="n">legendlabels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;$R^2$ = </span><span class="si">%(rsquared)s</span><span class="s1">&#39;</span><span class="p">],</span>
+        <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;minmax&#39;</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">99</span><span class="p">],</span>
+        <span class="n">cbar</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">ideal</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">id_color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span>
+        <span class="n">sym_lims</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">default_quantile_config</span><span class="p">()</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">super</span><span class="p">(</span><span class="n">QuantileEvaluation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The dataset of the quantiles&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">xarray</span> <span class="kn">as</span> <span class="nn">xr</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;pctl&#39;</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">swaplevel</span><span class="p">())</span>
+        <span class="n">full</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;pctl&#39;</span><span class="p">])))</span>
+        <span class="n">idx_name</span> <span class="o">=</span> <span class="n">full</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_sim&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">full</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="n">idx_name</span><span class="p">:</span> <span class="s1">&#39;full_index&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">vref</span><span class="p">,</span> <span class="n">vsim</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_variables</span><span class="p">:</span>
+            <span class="n">full</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="n">vref</span><span class="p">:</span> <span class="s1">&#39;all_&#39;</span> <span class="o">+</span> <span class="n">vref</span><span class="p">,</span> <span class="n">vsim</span><span class="p">:</span> <span class="s1">&#39;all_&#39;</span> <span class="o">+</span> <span class="n">vsim</span><span class="p">},</span>
+                        <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">full</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">orig</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="p">(</span><span class="n">vref</span><span class="p">,</span> <span class="n">vsim</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_variables</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;all_&#39;</span><span class="p">]:</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">vsim</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">vref</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">vsim</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;standard_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">vref</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;standard_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">vref</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;observed&#39;</span>
+                <span class="n">ds</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">vsim</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;simulated&#39;</span>
+            <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;all_&#39;</span> <span class="o">+</span> <span class="n">vsim</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;pctl&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;All&#39;</span>
+            <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;all_&#39;</span> <span class="o">+</span> <span class="n">vsim</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;pctl&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;All&#39;</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">pctl</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Percentile&#39;</span>
+        <span class="k">return</span> <span class="n">ds</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">QuantileEvaluation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">names</span>
+        <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+                <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">names</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QuantileEvaluation.setup_from_file"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.QuantileEvaluation.setup_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;index_col&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">QuantileEvaluation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_from_file</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QuantileEvaluation.setup_from_db"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.QuantileEvaluation.setup_from_db">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;index_col&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">QuantileEvaluation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_from_db</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QuantileEvaluation.setup_from_scratch"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.QuantileEvaluation.setup_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">df_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare</span><span class="o">.</span><span class="n">reference_data</span>
+        <span class="n">dfi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">([</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">])</span>
+        <span class="c1"># create simulation dataframe</span>
+        <span class="n">df_sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_ref</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_sim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;Skipping </span><span class="si">%s</span><span class="s1"> because reference data contains no information!&#39;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span>
+        <span class="c1"># load observed precision</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">no_rounding</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">df_sim</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">round_to_ref_prec</span><span class="p">(</span>
+                    <span class="n">df_ref</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df_sim</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="c1"># merge reference and simulation into one single dataframe</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df_ref</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_sim</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                          <span class="n">suffixes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_ref&#39;</span><span class="p">,</span> <span class="s1">&#39;_sim&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="p">{</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">names</span><span class="p">):</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">dfi</span><span class="p">[[</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">]],</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                          <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="c1"># mask out non-complete months for cloud validation and months with</span>
+            <span class="c1"># 0 or 1 cloud fraction</span>
+            <span class="k">if</span> <span class="s1">&#39;mean_cloud&#39;</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;mean_cloud_ref&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span> <span class="o">|</span>
+                      <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">|</span>
+                      <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">),</span>
+                      <span class="p">[</span><span class="s1">&#39;mean_cloud_sim&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_cloud_ref&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="c1"># mask out non-complete wind for wind validation and months with</span>
+            <span class="c1"># a mean wind speed of 0</span>
+            <span class="k">if</span> <span class="s1">&#39;wind&#39;</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;wind_ref&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;wind&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">),</span>
+                      <span class="p">[</span><span class="s1">&#39;wind_sim&#39;</span><span class="p">,</span> <span class="s1">&#39;wind_ref&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="c1"># transform wind</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">transform_wind</span> <span class="ow">and</span> <span class="s1">&#39;wind&#39;</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;wind_ref&#39;</span><span class="p">]</span> <span class="o">**=</span> <span class="mf">0.5</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;wind_sim&#39;</span><span class="p">]</span> <span class="o">**=</span> <span class="mf">0.5</span>
+        <span class="c1"># calculate the percentiles for each station and month</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_modify_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">setup_args</span><span class="p">(</span><span class="n">default_ks_config</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">setup_args</span><span class="p">(</span><span class="n">default_quantile_config</span><span class="p">)</span>
+        <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span>
+            <span class="n">QuantileEvaluation</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_modify_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span>
+            <span class="s1">&#39;quantiles&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">run_grp</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">str_ranges</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;f1[;f21[,f22[,f23]]]&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">docstrings</span><span class="o">.</span><span class="n">dedents</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                The quantiles to use for calculating the percentiles.</span>
+<span class="s2">                %(str_ranges.s_help)s.&quot;&quot;&quot;</span><span class="p">))</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;no_rounding&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;nr&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">run_grp</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;names&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">,</span>
+                          <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;variable&#39;</span><span class="p">,</span>
+                          <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">names</span><span class="p">))</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;transform_wind&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;tw&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span>
+
+<div class="viewcode-block" id="QuantileEvaluation.create_project"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.QuantileEvaluation.create_project">[docs]</a>    <span class="k">def</span> <span class="nf">create_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">psyplot.project</span> <span class="kn">as</span> <span class="nn">psy</span>
+        <span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">vref</span><span class="p">,</span> <span class="n">vsim</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_variables</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Creating plots of </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">vsim</span><span class="p">)</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span> <span class="k">if</span> <span class="n">vref</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;prcp&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+            <span class="n">psy</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">densityreg</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;all_&#39;</span> <span class="o">+</span> <span class="n">vsim</span><span class="p">,</span> <span class="n">coord</span><span class="o">=</span><span class="s1">&#39;all_&#39;</span> <span class="o">+</span> <span class="n">vref</span><span class="p">,</span>
+                                <span class="n">fmt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;All percentiles&#39;</span><span class="p">,</span>
+                                <span class="n">arr_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_all&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">],</span>
+                                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">arr_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_</span><span class="si">%1.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">pctl</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+            <span class="n">psy</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">densityreg</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">vsim</span><span class="p">,</span> <span class="n">coord</span><span class="o">=</span><span class="n">vref</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="p">,</span>
+                                <span class="n">arr_names</span><span class="o">=</span><span class="n">arr_names</span><span class="p">,</span> <span class="n">pctl</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">pctl</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
+                                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psy</span><span class="o">.</span><span class="n">gcp</span><span class="p">(</span><span class="bp">True</span><span class="p">)[:]</span></div>
+
+<div class="viewcode-block" id="QuantileEvaluation.make_run_config"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.QuantileEvaluation.make_run_config">[docs]</a>    <span class="k">def</span> <span class="nf">make_run_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">orig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="n">orig</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">plotter</span> <span class="ow">in</span> <span class="n">sp</span><span class="p">(</span><span class="n">standard_name</span><span class="o">=</span><span class="n">orig</span><span class="p">)</span><span class="o">.</span><span class="n">plotters</span><span class="p">:</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">plotter</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pctl</span> <span class="k">if</span> <span class="n">plotter</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span> <span class="k">else</span>
+                  <span class="nb">int</span><span class="p">(</span><span class="n">plotter</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pctl</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pctl_d</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;rsquared&#39;</span><span class="p">,</span> <span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;intercept&#39;</span><span class="p">]:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                            <span class="n">pctl_d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span></div>
+
+<div class="viewcode-block" id="QuantileEvaluation.calc"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.QuantileEvaluation.calc">[docs]</a>    <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">calc_percentiles</span><span class="p">(</span><span class="n">vname</span><span class="p">):</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="n">vname</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">arr</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">vname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;prcp&#39;</span><span class="p">):</span>
+                <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">arr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">quantiles</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">)</span>
+        <span class="n">quantiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">quantiles</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span>
+            <span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">all_variables</span><span class="p">),</span> <span class="nb">map</span><span class="p">(</span><span class="n">calc_percentiles</span><span class="p">,</span>
+                                            <span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">all_variables</span><span class="p">)))))</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pctl&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">quantiles</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;pctl&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="QuantileEvaluation.round_to_ref_prec"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.QuantileEvaluation.round_to_ref_prec">[docs]</a>    <span class="k">def</span> <span class="nf">round_to_ref_prec</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Round one array to the precision of another</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ref: np.ndarray</span>
+<span class="sd">            The reference array to get the precision from</span>
+<span class="sd">        sim: np.ndarray</span>
+<span class="sd">            The simulated array to round</span>
+<span class="sd">        func: function</span>
+<span class="sd">            The rounding function to use</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Rounded `sim`&quot;&quot;&quot;</span>
+        <span class="n">ref_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_sorted</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sim</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="p">(</span><span class="n">ref_sorted</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">ref_sorted</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">((</span><span class="n">sim</span> <span class="o">/</span> <span class="n">precision</span><span class="p">)</span> <span class="o">*</span> <span class="n">precision</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="KSEvaluation"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.KSEvaluation">[docs]</a><span class="k">class</span> <span class="nc">KSEvaluation</span><span class="p">(</span><span class="n">QuantileEvaluation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Evaluation using a Kolmogorov-Smirnoff test&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ks&#39;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Perform a kolmogorov smirnoff test&#39;</span>
+
+    <span class="n">requires</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;prepare&#39;</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">]</span>
+
+    <span class="n">_datafile</span> <span class="o">=</span> <span class="s1">&#39;kolmogorov_evaluation.csv&#39;</span>
+
+    <span class="n">dbname</span> <span class="o">=</span> <span class="s1">&#39;kolmogorov_evaluation&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">default_ks_config</span><span class="p">()</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">super</span><span class="p">(</span><span class="n">QuantileEvaluation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="KSEvaluation.calc"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.KSEvaluation.calc">[docs]</a>    <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span>
+                    <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_stat&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span>
+                    <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_p&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span>
+                    <span class="n">name</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">],</span>
+                    <span class="s1">&#39;n&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_sim&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span>
+                    <span class="s1">&#39;n&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_ref&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]}</span>
+            <span class="n">statistic</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ks_2samp</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+            <span class="n">n2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n1</span> <span class="o">*</span> <span class="n">n2</span><span class="p">))</span>
+            <span class="c1"># if statistic &gt; 1.36 * n, we reject the null hypothesis</span>
+            <span class="c1"># (alpha = 0.05)</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_stat&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">statistic</span><span class="p">],</span>
+                <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_p&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">p_value</span><span class="p">],</span>
+                <span class="n">name</span><span class="p">:</span> <span class="p">[</span><span class="n">statistic</span> <span class="o">&gt;</span> <span class="mf">1.36</span> <span class="o">*</span> <span class="n">n</span><span class="p">],</span>
+                <span class="s1">&#39;n&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_sim&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">n1</span><span class="p">],</span>
+                <span class="s1">&#39;n&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_ref&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">n2</span><span class="p">]}</span>
+        <span class="n">prcp_sim</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">prcp_sim</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">group</span><span class="o">.</span><span class="n">prcp_sim</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">prcp_ref</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">prcp_ref</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">group</span><span class="o">.</span><span class="n">prcp_ref</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">tmin_sim</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">tmin_sim</span><span class="o">.</span><span class="n">values</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmin_sim</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmin_sim</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmin_sim</span><span class="o">.</span><span class="n">values</span><span class="p">))]</span>
+        <span class="n">tmin_ref</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">tmin_ref</span><span class="o">.</span><span class="n">values</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmin_ref</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmin_ref</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmin_ref</span><span class="o">.</span><span class="n">values</span><span class="p">))]</span>
+        <span class="n">tmax_sim</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">tmax_sim</span><span class="o">.</span><span class="n">values</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmax_sim</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmax_sim</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmax_sim</span><span class="o">.</span><span class="n">values</span><span class="p">))]</span>
+        <span class="n">tmax_ref</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">tmax_ref</span><span class="o">.</span><span class="n">values</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmax_ref</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmax_ref</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tmax_ref</span><span class="o">.</span><span class="n">values</span><span class="p">))]</span>
+        <span class="n">cloud_sl</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean_cloud_ref</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">cloud_sim</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean_cloud_sim</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">cloud_sl</span><span class="p">]</span>
+        <span class="n">cloud_ref</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean_cloud_ref</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">cloud_sl</span><span class="p">]</span>
+        <span class="n">wind_sl</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">wind_ref</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">wind_sim</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">wind_sim</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">wind_sl</span><span class="p">]</span>
+        <span class="n">wind_ref</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">wind_ref</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">wind_sl</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">,</span> <span class="n">starmap</span><span class="p">(</span>
+            <span class="n">calc</span><span class="p">,</span> <span class="p">[(</span><span class="n">prcp_sim</span><span class="p">,</span> <span class="n">prcp_ref</span><span class="p">,</span> <span class="s1">&#39;prcp&#39;</span><span class="p">),</span>
+                   <span class="p">(</span><span class="n">tmin_sim</span><span class="p">,</span> <span class="n">tmin_ref</span><span class="p">,</span> <span class="s1">&#39;tmin&#39;</span><span class="p">),</span>
+                   <span class="p">(</span><span class="n">tmax_sim</span><span class="p">,</span> <span class="n">tmax_ref</span><span class="p">,</span> <span class="s1">&#39;tmax&#39;</span><span class="p">),</span>
+                   <span class="p">(</span><span class="n">cloud_sim</span><span class="p">,</span> <span class="n">cloud_ref</span><span class="p">,</span> <span class="s1">&#39;mean_cloud&#39;</span><span class="p">),</span>
+                   <span class="p">(</span><span class="n">wind_sim</span><span class="p">,</span> <span class="n">wind_ref</span><span class="p">,</span> <span class="s1">&#39;wind&#39;</span><span class="p">)])))))</span></div>
+
+<div class="viewcode-block" id="KSEvaluation.significance_fractions"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.KSEvaluation.significance_fractions">[docs]</a>    <span class="k">def</span> <span class="nf">significance_fractions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">):</span>
+        <span class="s2">&quot;The percentage of stations with no significant difference&quot;</span>
+        <span class="k">return</span> <span class="mf">100.</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">series</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">series</span><span class="p">)])</span> <span class="o">/</span>
+                       <span class="n">series</span><span class="o">.</span><span class="n">count</span><span class="p">())</span><span class="o">*</span><span class="mf">100.</span></div>
+
+<div class="viewcode-block" id="KSEvaluation.run"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.KSEvaluation.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run the evaluation</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        info: dict</span>
+<span class="sd">            The configuration dictionary&quot;&quot;&quot;</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calculating </span><span class="si">%s</span><span class="s1"> evaluation&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">significance_fractions</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Done. Stations without significant difference:&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;    </span><span class="si">%s</span><span class="s1">: </span><span class="si">%6.3f</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Cartopy is not installed, skipping plot of </span><span class="si">%s</span><span class="s2"> task&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_map</span><span class="p">()</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;plot_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdf_file</span></div>
+
+<div class="viewcode-block" id="KSEvaluation.plot_map"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.KSEvaluation.plot_map">[docs]</a>    <span class="k">def</span> <span class="nf">plot_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_pdf</span> <span class="kn">import</span> <span class="n">PdfPages</span>
+        <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">names</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+        <span class="n">df_fract</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span>
+            <span class="n">names</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">significance_fractions</span><span class="p">))))</span>
+        <span class="n">df_fract</span> <span class="o">=</span> <span class="n">df_fract</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">)))),</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;_sum&#39;</span><span class="p">])</span>
+        <span class="n">df_lola</span> <span class="o">=</span> <span class="n">EvaluationPreparation</span><span class="o">.</span><span class="n">from_task</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">station_list</span>
+        <span class="n">df_lola</span> <span class="o">=</span> <span class="n">df_lola</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="o">~</span><span class="n">df_lola</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+        <span class="n">df_lola</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">df_plot</span> <span class="o">=</span> <span class="n">df_lola</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_fract</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="n">PdfPages</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pdf_file</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;long_name&#39;</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">background_patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;0.95&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+            <span class="n">df_plot</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+                <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds_r&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+
+            <span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">)</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span>
+                <span class="s1">&#39;Percentage of years not differing significantly[%]&#39;</span><span class="p">)</span>
+
+            <span class="n">pdf</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;long_name&#39;</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">background_patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;0.95&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+            <span class="n">df_plot</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+                <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_sum&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+
+            <span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">)</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Significantly differing years&#39;</span><span class="p">)</span>
+
+            <span class="n">pdf</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">close</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_modify_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">setup_args</span><span class="p">(</span><span class="n">default_ks_config</span><span class="p">)</span>
+        <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span>
+            <span class="n">QuantileEvaluation</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_modify_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;no_rounding&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;nr&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">run_grp</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;names&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">,</span>
+                          <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;variable&#39;</span><span class="p">,</span>
+                          <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">names</span><span class="p">))</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;transform_wind&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;tw&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;nc_output&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;project_output&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;new_project&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span></div>
+
+
+<span class="n">_QualityConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;_QualityConfig&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;quantiles&#39;</span><span class="p">])</span>
+
+
+<span class="n">_QualityConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">append_doc</span><span class="p">(</span><span class="n">_QualityConfig</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Parameters</span>
+<span class="s2">----------</span>
+<span class="s2">quantiles: list of floats</span>
+<span class="s2">    The quantiles to use for the quality analysis&quot;&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;_QualityConfig&#39;</span><span class="p">))</span>
+
+
+<span class="n">QualityConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">enhanced_config</span><span class="p">(</span><span class="n">_QualityConfig</span><span class="p">,</span> <span class="s1">&#39;QualityConfig&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="default_quality_config"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.default_quality_config">[docs]</a><span class="k">def</span> <span class="nf">default_quality_config</span><span class="p">(</span>
+        <span class="n">quantiles</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The default configuration for :class:`SimulationQuality` instances.</span>
+<span class="sd">    See also the :attr:`SimulationQuality.default_config` attribute</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    %(QualityConfig.parameters)s&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">QualityConfig</span><span class="p">(</span><span class="n">quantiles</span><span class="p">,</span> <span class="o">*</span><span class="n">utils</span><span class="o">.</span><span class="n">default_config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SimulationQuality"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.SimulationQuality">[docs]</a><span class="k">class</span> <span class="nc">SimulationQuality</span><span class="p">(</span><span class="n">Evaluator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Evaluator to provide one value characterizing the quality of the</span>
+<span class="sd">    experiment</span>
+
+<span class="sd">    The applied metric is the mean of</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        m = \\left&lt;\{\\left&lt;\{R^2_q\}_{q\in Q}\\right&gt;,</span>
+<span class="sd">                     \\left&lt;\{1 - |1 - a_q|\}_{q\in Q}\\right&gt;,</span>
+<span class="sd">                     \{ks\}\}\\right&gt;</span>
+
+<span class="sd">    where :math:`\\left&lt;\\right&gt;` denotes the mean of the enclosed set,</span>
+<span class="sd">    :math:`q\in Q` are the quantiles from the quantile evaluation,</span>
+<span class="sd">    :math:`R^2_q` the corresponding coefficient of determination and</span>
+<span class="sd">    :math:`a_q` the slope of quantile :math:`q`. :math:`ks` denotes the</span>
+<span class="sd">    fraction of stations that do not differ significantly from the observations</span>
+<span class="sd">    according to the ks test.</span>
+
+<span class="sd">    In other words, this quality estimate is the mean of the</span>
+
+<span class="sd">        1. coefficients of determination</span>
+<span class="sd">        2. the deviation from the ideal slope (:math:`a_q == 1`) and</span>
+<span class="sd">        3. the fraction of stations that do not differ significantly</span>
+
+<span class="sd">    Hence, a value of 1 mean high quality, a value of 0 low quality&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;quality&#39;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Estimate simulation quality using ks and quantile evaluation&#39;</span>
+
+    <span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_modify_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s1">&#39;-q&#39;</span><span class="p">,</span> <span class="s1">&#39;--quantiles&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;q1[,q1[,q2[,...]]]&#39;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The quantiles to use for the quality analysis&quot;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))))</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">default_quality_config</span><span class="p">()</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">super</span><span class="p">(</span><span class="n">SimulationQuality</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+
+<div class="viewcode-block" id="SimulationQuality.setup_from_scratch"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.SimulationQuality.setup_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Only sets an empty dataframe&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([])</span></div>
+
+<div class="viewcode-block" id="SimulationQuality.run"><a class="viewcode-back" href="../../api/gwgen.evaluation.html#gwgen.evaluation.SimulationQuality.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calculating </span><span class="si">%s</span><span class="s1"> evaluation&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">quants_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;evaluation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quants&#39;</span><span class="p">)</span>
+        <span class="n">ks_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;evaluation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ks&#39;</span><span class="p">)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">quants_info</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;quants task&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ks_info</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;ks task&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> requires that </span><span class="si">%s</span><span class="s2"> has been run before!&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39; and &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)))</span>
+        <span class="n">quantiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">quantiles</span>
+        <span class="k">if</span> <span class="n">quantiles</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">quantiles</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="n">possible_names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;wind&#39;</span><span class="p">,</span> <span class="s1">&#39;prcp&#39;</span><span class="p">,</span> <span class="s1">&#39;tmin&#39;</span><span class="p">,</span> <span class="s1">&#39;tmax&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_cloud&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;cloud&#39;</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">v_ks</span> <span class="ow">in</span> <span class="n">ks_info</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">quants_info</span> <span class="ow">or</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">possible_names</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1">#: Dataframe with intercept, rsquared and slope on index and</span>
+            <span class="c1">#: quantiles as columns</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">quants_info</span><span class="p">[</span><span class="n">v</span><span class="p">])</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">quantiles</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;All&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="n">slope</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;slope&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+            <span class="n">rsquared</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;rsquared&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+            <span class="n">info</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([</span>
+                <span class="p">(</span><span class="s1">&#39;rsquared&#39;</span><span class="p">,</span> <span class="n">rsquared</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="n">slope</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;ks&#39;</span><span class="p">,</span> <span class="n">v_ks</span> <span class="o">/</span> <span class="mf">100.</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;quality&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">rsquared</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">v_ks</span> <span class="o">/</span> <span class="mf">100.</span><span class="p">])))])</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Simulation quality:&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;    </span><span class="si">%s</span><span class="s1">: </span><span class="si">%6.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;quality&#39;</span><span class="p">]))</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

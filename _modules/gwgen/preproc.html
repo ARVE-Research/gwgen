@@ -1,0 +1,465 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.preproc &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gwgen.preproc</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Additional routines for preprocessing&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">osp</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">psyplot.compat.pycompat</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">gwgen.utils</span> <span class="kn">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">gwgen.utils</span> <span class="kn">import</span> <span class="n">docstrings</span>
+
+
+<div class="viewcode-block" id="CloudPreproc"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudPreproc">[docs]</a><span class="k">class</span> <span class="nc">CloudPreproc</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">TaskBase</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">task_data_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;eecra&#39;</span><span class="p">)</span>
+
+    <span class="n">_registry</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="CloudInventory"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory">[docs]</a><span class="k">class</span> <span class="nc">CloudInventory</span><span class="p">(</span><span class="n">CloudPreproc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A task for computing the EECRA inventory for each station&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;eecra_inventory&#39;</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Compute the inventory of the EECRA stations&#39;</span>
+
+    <span class="n">http_xstall</span> <span class="o">=</span> <span class="s1">&#39;http://cdiac.ornl.gov/ftp/ndp026c/XSTALL&#39;</span>
+
+    <span class="n">_datafile</span> <span class="o">=</span> <span class="s1">&#39;eecra_inventory.csv&#39;</span>
+
+    <span class="n">dbname</span> <span class="o">=</span> <span class="s1">&#39;eecra_inventory&#39;</span>
+
+    <span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">setup_parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup_from</span> <span class="o">==</span> <span class="s1">&#39;scratch&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">default_cloud_inventory_config</span><span class="p">()</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">super</span><span class="p">(</span><span class="n">CloudInventory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">xstall_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The dataframe corresponding to the XSTALL stations&quot;&quot;&quot;</span>
+        <span class="n">use_xstall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">xstall</span>
+        <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">isstring</span><span class="p">(</span><span class="n">use_xstall</span><span class="p">):</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">no_xstall</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http_xstall</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;station_id&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;station_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">station_id</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;station_id&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_modify_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">setup_args</span><span class="p">(</span><span class="n">default_cloud_inventory_config</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">has_run</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">CloudInventory</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_modify_parser</span><span class="p">(</span>
+            <span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;xstall&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CloudInventory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span> <span class="o">=</span> <span class="bp">False</span>
+
+<div class="viewcode-block" id="CloudInventory.setup"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CloudInventory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CloudInventory.init_from_scratch"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory.init_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">init_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">gwgen.parameterization</span> <span class="kn">import</span> <span class="n">HourlyCloud</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">HourlyCloud</span><span class="o">.</span><span class="n">from_task</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">download_src</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">raw_dir</span><span class="p">)</span>  <span class="c1"># make sure the source files exist</span></div>
+
+<div class="viewcode-block" id="CloudInventory.setup_from_file"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory.setup_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set up the task from already stored files (and avoid locating the</span>
+<span class="sd">        stations of this task)&quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">datafile</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">safe_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CloudInventory.setup_from_db"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory.setup_from_db">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set up the task from datatables already created (and avoid locating</span>
+<span class="sd">        the stations of this task)&quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dbname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">safe_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbname</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span>
+                <span class="s2">&quot;SELECT * FROM </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbname</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CloudInventory.setup_from_scratch"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory.setup_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">gwgen.parse_eecra</span> <span class="kn">import</span> <span class="n">parse_file</span>
+
+        <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">parse_file</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;station_id&#39;</span><span class="p">)[</span>
+                <span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">]]</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;counts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;lon_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">lon</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;lat_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">lat</span>
+            <span class="k">return</span> <span class="n">df</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">compute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="CloudInventory.write2db"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory.write2db">[docs]</a>    <span class="k">def</span> <span class="nf">write2db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;if_exists&#39;</span><span class="p">,</span> <span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CloudInventory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write2db</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CloudInventory.write2file"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory.write2file">[docs]</a>    <span class="k">def</span> <span class="nf">write2file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CloudInventory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write2file</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CloudInventory.run"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudInventory.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup_from</span> <span class="o">==</span> <span class="s1">&#39;scratch&#39;</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+            <span class="c1"># we may use a parallel setup which requires a weighted average</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;station_id&#39;</span><span class="p">)</span>
+            <span class="n">total_counts</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">counts</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">counts</span> <span class="o">/</span> <span class="n">total_counts</span> <span class="o">*</span> <span class="n">df</span><span class="o">.</span><span class="n">lat</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">counts</span> <span class="o">/</span> <span class="n">total_counts</span> <span class="o">*</span> <span class="n">df</span><span class="o">.</span><span class="n">lon</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;lat_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">counts</span> <span class="o">/</span> <span class="n">total_counts</span><span class="p">)</span> <span class="o">*</span> <span class="n">df</span><span class="o">.</span><span class="n">lat_std</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;lon_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">counts</span> <span class="o">/</span> <span class="n">total_counts</span><span class="p">)</span> <span class="o">*</span> <span class="n">df</span><span class="o">.</span><span class="n">lon_std</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">eecra</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">([</span>
+                    <span class="p">(</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;sum&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;sum&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;lat_std&#39;</span><span class="p">,</span> <span class="s1">&#39;sum&#39;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;lon_std&#39;</span><span class="p">,</span> <span class="s1">&#39;sum&#39;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">,</span> <span class="s1">&#39;sum&#39;</span><span class="p">)]))</span>
+            <span class="n">eecra</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">,</span> <span class="s1">&#39;lat_std&#39;</span><span class="p">,</span> <span class="s1">&#39;lon_std&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;firstyear&#39;</span><span class="p">,</span> <span class="s1">&#39;lastyear&#39;</span><span class="p">,</span> <span class="s1">&#39;counts&#39;</span><span class="p">]</span>
+            <span class="n">eecra</span><span class="p">[[</span><span class="s1">&#39;lat_std&#39;</span><span class="p">,</span> <span class="s1">&#39;lon_std&#39;</span><span class="p">]]</span> <span class="o">**=</span> <span class="mf">0.5</span>
+
+            <span class="n">use_xstall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">xstall</span>
+
+            <span class="k">if</span> <span class="n">use_xstall</span><span class="p">:</span>
+                <span class="n">to_replace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xstall_df</span>
+                <span class="c1"># keep only matching stations</span>
+                <span class="n">to_replace</span> <span class="o">=</span> <span class="n">to_replace</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">eecra</span><span class="p">[[]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+                <span class="n">eecra</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">to_replace</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">to_replace</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">eecra</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">to_csv</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write2file</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">to_db</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write2db</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="CloudGHCNMap"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudGHCNMap">[docs]</a><span class="k">class</span> <span class="nc">CloudGHCNMap</span><span class="p">(</span><span class="n">CloudPreproc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A task for computing the EECRA inventory for each station&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;eecra_ghcn_map&#39;</span>
+
+    <span class="n">setup_requires</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;eecra_inventory&#39;</span><span class="p">]</span>
+
+    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Compute the inventory of the EECRA stations&#39;</span>
+
+    <span class="n">_datafile</span> <span class="o">=</span> <span class="s1">&#39;eecra_ghcn_map.csv&#39;</span>
+
+    <span class="n">dbname</span> <span class="o">=</span> <span class="s1">&#39;eecra_ghcn_map&#39;</span>
+
+    <span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">default_cloud_ghcn_map_config</span><span class="p">()</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">super</span><span class="p">(</span><span class="n">CloudGHCNMap</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_modify_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">setup_args</span><span class="p">(</span><span class="n">default_cloud_ghcn_map_config</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">has_run</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">CloudGHCNMap</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_modify_parser</span><span class="p">(</span>
+            <span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;max_distance&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">setup_grp</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;md&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;to_db&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;setup_from&#39;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CloudGHCNMap</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="n">setup_from</span><span class="o">=</span><span class="s1">&#39;scratch&#39;</span><span class="p">,</span> <span class="n">to_db</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span> <span class="o">=</span> <span class="bp">False</span>
+
+<div class="viewcode-block" id="CloudGHCNMap.setup"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudGHCNMap.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CloudGHCNMap</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CloudGHCNMap.init_from_scratch"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudGHCNMap.init_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">init_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">gwgen.parameterization</span> <span class="kn">import</span> <span class="n">HourlyCloud</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">HourlyCloud</span><span class="o">.</span><span class="n">from_task</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">download_src</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">raw_dir</span><span class="p">)</span>  <span class="c1"># make sure the source files exist</span></div>
+
+<div class="viewcode-block" id="CloudGHCNMap.setup_from_scratch"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudGHCNMap.setup_from_scratch">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Does nothing but initializing an empty data frame. The real work is</span>
+<span class="sd">        done in the :meth:`run` method&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;station_id&#39;</span><span class="p">,</span> <span class="s1">&#39;dist&#39;</span><span class="p">],</span>
+                                 <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CloudGHCNMap.write2db"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudGHCNMap.write2db">[docs]</a>    <span class="k">def</span> <span class="nf">write2db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s1">&#39;The data is always written to the database!&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CloudGHCNMap.write2file"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudGHCNMap.write2file">[docs]</a>    <span class="k">def</span> <span class="nf">write2file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CloudGHCNMap</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write2file</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CloudGHCNMap.run"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.CloudGHCNMap.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">create_geog</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s1">&#39;ALTER TABLE </span><span class="si">%s</span><span class="s1"> ADD COLUMN geog geography(POINT,4326) ;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">table</span><span class="p">))</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                UPDATE </span><span class="si">%s</span><span class="s2"></span>
+<span class="s2">                    SET geog = ST_SetSRID(ST_MakePoint(lon,lat),4326);&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">table</span><span class="p">))</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s1">&#39;CREATE INDEX {0}_geog ON {0} USING GIST (geog);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">gwgen.evaluation</span> <span class="kn">import</span> <span class="n">EvaluationPreparation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setup</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="n">inv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eecra_inventory</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">inv</span><span class="o">.</span><span class="n">dbname</span><span class="p">):</span>
+            <span class="n">inv</span><span class="o">.</span><span class="n">write2db</span><span class="p">()</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;geog&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM </span><span class="si">%s</span><span class="s1"> LIMIT 0&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">inv</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">conn</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">create_geog</span><span class="p">(</span><span class="n">inv</span><span class="o">.</span><span class="n">dbname</span><span class="p">)</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">EvaluationPreparation</span><span class="o">.</span><span class="n">from_task</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># download inventory</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">download_src</span><span class="p">()</span>
+        <span class="n">ghcn</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">station_list</span>
+        <span class="n">ghcn</span> <span class="o">=</span> <span class="n">ghcn</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">ghcn</span><span class="o">.</span><span class="n">vname</span> <span class="o">==</span> <span class="s1">&#39;PRCP&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+        <span class="n">ghcn</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">&#39;ghcn_inventory&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+        <span class="n">create_geog</span><span class="p">(</span><span class="s1">&#39;ghcn_inventory&#39;</span><span class="p">)</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS eecra_ghcn_map;&quot;</span><span class="p">)</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            CREATE TABLE eecra_ghcn_map AS (</span>
+<span class="s2">                SELECT DISTINCT ON (id) id, station_id, dist FROM (</span>
+<span class="s2">                    SELECT DISTINCT ON (a.station_id)</span>
+<span class="s2">                        b.id, a.station_id, ST_Distance(a.geog, b.geog) AS dist</span>
+<span class="s2">                    FROM eecra_inventory a</span>
+<span class="s2">                        INNER JOIN ghcn_inventory b ON ST_DWithin(</span>
+<span class="s2">                            a.geog, b.geog, 1000)</span>
+<span class="s2">                    ORDER BY a.station_id, ST_Distance(a.geog, b.geog)) foo</span>
+<span class="s2">                ORDER BY id, dist);&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s1">&#39;eecra_ghcn_map&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">to_csv</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write2file</span><span class="p">()</span></div></div>
+
+
+<span class="n">CloudInventoryConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s1">&#39;CloudInventoryConfig&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;xstall&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">TaskConfig</span><span class="o">.</span><span class="n">_fields</span><span class="p">))</span>
+
+
+<span class="c1"># to_db is set to True by default because it is required</span>
+<span class="n">docstrings</span><span class="o">.</span><span class="n">delete_params</span><span class="p">(</span><span class="s1">&#39;TaskConfig.parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;to_db&#39;</span><span class="p">,</span> <span class="s1">&#39;setup_from&#39;</span><span class="p">)</span>
+
+
+<span class="n">CloudInventoryConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">append_doc</span><span class="p">(</span>
+    <span class="n">CloudInventoryConfig</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="n">docstrings</span><span class="o">.</span><span class="n">dedents</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    Parameters</span>
+<span class="s2">    ----------</span>
+<span class="s2">    xstall: bool or str</span>
+<span class="s2">        If True (default), download the XSTALL file from </span><span class="si">%s</span><span class="s2">.</span>
+<span class="s2">        This file contains some estimates of station longitude and latitude.</span>
+<span class="s2">        If ``False`` or empty string, the file is not used, otherwise, if set</span>
+<span class="s2">        with a string, it is interpreted as the path to the local file</span>
+<span class="s2">    </span><span class="si">%%</span><span class="s2">(TaskConfig.parameters.no_to_db|setup_from)s</span>
+<span class="s2">    &quot;&quot;&quot;</span> <span class="o">%</span> <span class="n">CloudInventory</span><span class="o">.</span><span class="n">http_xstall</span><span class="p">),</span> <span class="s1">&#39;CloudInventoryConfig&#39;</span><span class="p">))</span>
+
+
+<span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="default_cloud_inventory_config"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.default_cloud_inventory_config">[docs]</a><span class="k">def</span> <span class="nf">default_cloud_inventory_config</span><span class="p">(</span><span class="n">xstall</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default config for :class:`CloudInventory`</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    %(CloudInventoryConfig.parameters)s&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">CloudInventoryConfig</span><span class="p">(</span>
+        <span class="n">xstall</span><span class="p">,</span> <span class="o">*</span><span class="n">utils</span><span class="o">.</span><span class="n">default_config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+<span class="n">CloudGHCNMapConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s1">&#39;CloudGHCNMapConfig&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;max_distance&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">TaskConfig</span><span class="o">.</span><span class="n">_fields</span><span class="p">))</span>
+
+
+<span class="c1"># to_db is set to True by default because it is required</span>
+<span class="n">docstrings</span><span class="o">.</span><span class="n">delete_params</span><span class="p">(</span><span class="s1">&#39;TaskConfig.parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;to_db&#39;</span><span class="p">,</span> <span class="s1">&#39;setup_from&#39;</span><span class="p">)</span>
+
+
+<span class="n">CloudGHCNMapConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">append_doc</span><span class="p">(</span>
+    <span class="n">CloudGHCNMapConfig</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="n">docstrings</span><span class="o">.</span><span class="n">dedents</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    Parameters</span>
+<span class="s2">    ----------</span>
+<span class="s2">    max_distance: float</span>
+<span class="s2">        The maximum distance in meters for which we consider two stations as</span>
+<span class="s2">        equal (Default: 1000m)</span>
+<span class="s2">    %(TaskConfig.parameters.no_to_db|setup_from)s</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">),</span> <span class="s1">&#39;CloudGHCNMapConfig&#39;</span><span class="p">))</span>
+
+
+<span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="default_cloud_ghcn_map_config"><a class="viewcode-back" href="../../api/gwgen.preproc.html#gwgen.preproc.default_cloud_ghcn_map_config">[docs]</a><span class="k">def</span> <span class="nf">default_cloud_ghcn_map_config</span><span class="p">(</span><span class="n">max_distance</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default config for :class:`CloudGHCNMap`</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    %(CloudGHCNMapConfig.parameters)s&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">CloudGHCNMapConfig</span><span class="p">(</span>
+        <span class="n">max_distance</span><span class="p">,</span> <span class="o">*</span><span class="n">utils</span><span class="o">.</span><span class="n">default_config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,1421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.utils module &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Python API Reference" href="gwgen.html" />
+    <link rel="next" title="Fortran API Reference" href="../fortran_api/index.html" />
+    <link rel="prev" title="gwgen.sensitivity_analysis module" href="gwgen.sensitivity_analysis.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gwgen.utils">
+<span id="gwgen-utils-module"></span><h1>gwgen.utils module<a class="headerlink" href="#module-gwgen.utils" title="Permalink to this headline">¶</a></h1>
+<p><strong>Classes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-obj docutils literal"><span class="pre">TaskBase</span></code></a>(stations,&nbsp;config,&nbsp;project_config,&nbsp;...)</td>
+<td>Abstract base class for parameterization and evaluation tasks</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskConfig" title="gwgen.utils.TaskConfig"><code class="xref py py-obj docutils literal"><span class="pre">TaskConfig</span></code></a>(setup_from,&nbsp;to_csv,&nbsp;to_db,&nbsp;...)</td>
+<td>Configuration of tasks for their <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> and <a class="reference internal" href="#gwgen.utils.TaskBase.run" title="gwgen.utils.TaskBase.run"><code class="xref py py-meth docutils literal"><span class="pre">run()</span></code></a> methods.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskManager" title="gwgen.utils.TaskManager"><code class="xref py py-obj docutils literal"><span class="pre">TaskManager</span></code></a>([base_task,&nbsp;tasks,&nbsp;config])</td>
+<td>A manager to run the tasks within a task framework</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskMeta" title="gwgen.utils.TaskMeta"><code class="xref py py-obj docutils literal"><span class="pre">TaskMeta</span></code></a></td>
+<td>Meta class for the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Functions</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.append_doc" title="gwgen.utils.append_doc"><code class="xref py py-obj docutils literal"><span class="pre">append_doc</span></code></a>(namedtuple_cls,&nbsp;doc)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.default_config" title="gwgen.utils.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a>([setup_from,&nbsp;to_csv,&nbsp;to_db,&nbsp;...])</td>
+<td>The default configuration for TaskBase instances.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.dir_contains" title="gwgen.utils.dir_contains"><code class="xref py py-obj docutils literal"><span class="pre">dir_contains</span></code></a>(dirname,&nbsp;path[,&nbsp;exists])</td>
+<td>Check if a file of directory is contained in another.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.download_file" title="gwgen.utils.download_file"><code class="xref py py-obj docutils literal"><span class="pre">download_file</span></code></a>(url[,&nbsp;target])</td>
+<td>Download a file from the internet</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.enhanced_config" title="gwgen.utils.enhanced_config"><code class="xref py py-obj docutils literal"><span class="pre">enhanced_config</span></code></a>(config_cls,&nbsp;name)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.file_len" title="gwgen.utils.file_len"><code class="xref py py-obj docutils literal"><span class="pre">file_len</span></code></a>(fname)</td>
+<td>Get the number of lines in <cite>fname</cite></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.get_module_path" title="gwgen.utils.get_module_path"><code class="xref py py-obj docutils literal"><span class="pre">get_module_path</span></code></a>(mod)</td>
+<td>Convenience method to get the directory of a given python module</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.get_next_name" title="gwgen.utils.get_next_name"><code class="xref py py-obj docutils literal"><span class="pre">get_next_name</span></code></a>(old[,&nbsp;fmt])</td>
+<td>Return the next name that numerically follows <cite>old</cite></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.get_postgres_engine" title="gwgen.utils.get_postgres_engine"><code class="xref py py-obj docutils literal"><span class="pre">get_postgres_engine</span></code></a>(database[,&nbsp;user,&nbsp;host,&nbsp;...])</td>
+<td>Get the engine to access the given <cite>database</cite></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.get_toplevel_module" title="gwgen.utils.get_toplevel_module"><code class="xref py py-obj docutils literal"><span class="pre">get_toplevel_module</span></code></a>(mod)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.go_through_dict" title="gwgen.utils.go_through_dict"><code class="xref py py-obj docutils literal"><span class="pre">go_through_dict</span></code></a>(key,&nbsp;d[,&nbsp;setdefault])</td>
+<td>Split up the <cite>key</cite> by .</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.init_interprocess_locks" title="gwgen.utils.init_interprocess_locks"><code class="xref py py-obj docutils literal"><span class="pre">init_interprocess_locks</span></code></a>(db_locks,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.init_locks" title="gwgen.utils.init_locks"><code class="xref py py-obj docutils literal"><span class="pre">init_locks</span></code></a>(db_locks,&nbsp;file_locks)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.isstring" title="gwgen.utils.isstring"><code class="xref py py-obj docutils literal"><span class="pre">isstring</span></code></a>(s)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.ordered_move" title="gwgen.utils.ordered_move"><code class="xref py py-obj docutils literal"><span class="pre">ordered_move</span></code></a>(d,&nbsp;to_move,&nbsp;pos)</td>
+<td>Move a key in an ordered dictionary to another position</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.safe_csv_append" title="gwgen.utils.safe_csv_append"><code class="xref py py-obj docutils literal"><span class="pre">safe_csv_append</span></code></a>(df,&nbsp;path,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Convenience method to dump a data frame to csv without removing the old</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.str_ranges" title="gwgen.utils.str_ranges"><code class="xref py py-obj docutils literal"><span class="pre">str_ranges</span></code></a>(s)</td>
+<td>Convert a string of comma separated values to an iterable</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.unique_everseen" title="gwgen.utils.unique_everseen"><code class="xref py py-obj docutils literal"><span class="pre">unique_everseen</span></code></a>(iterable[,&nbsp;key])</td>
+<td>List unique elements, preserving order.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="gwgen.utils.TaskBase">
+<em class="property">class </em><code class="descclassname">gwgen.utils.</code><code class="descname">TaskBase</code><span class="sig-paren">(</span><em>stations</em>, <em>config</em>, <em>project_config</em>, <em>global_config</em>, <em>data=None</em>, <em>requirements=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Abstract base class for parameterization and evaluation tasks</p>
+<p>Abstract base class that introduces the methods for the parameterization
+and evaluation framework. The name of the task is specified in the
+<a class="reference internal" href="#gwgen.utils.TaskBase.name" title="gwgen.utils.TaskBase.name"><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></a> attribute. You can implement the connection to other
+tasks (within the same framework) in the <a class="reference internal" href="#gwgen.utils.TaskBase.setup_requires" title="gwgen.utils.TaskBase.setup_requires"><code class="xref py py-attr docutils literal"><span class="pre">setup_requires</span></code></a> attribute.
+The corresponding instances to the identifiers in the
+<a class="reference internal" href="#gwgen.utils.TaskBase.setup_requires" title="gwgen.utils.TaskBase.setup_requires"><code class="xref py py-attr docutils literal"><span class="pre">setup_requires</span></code></a> attribute can later be accessed through the given
+attribute.</p>
+<div class="admonition-examples admonition">
+<p class="first admonition-title">Examples</p>
+<p>Let&#8217;s define a parameterizer that does nothing but setup_requires another
+parameterization task named <em>cloud</em> as connection:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">CloudParameterizer</span><span class="p">(</span><span class="n">Parameterizer</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;cloud&#39;</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">DummyParameterizer</span><span class="p">(</span><span class="n">Parameterizer</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">setup_requires</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cloud&#39;</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;dummy&#39;</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">setup_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cloud</span> <span class="o">=</span> <span class="n">CloudParameterizer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dummy</span> <span class="o">=</span> <span class="n">DummyParameterizer</span><span class="p">(</span><span class="n">cloud</span><span class="o">=</span><span class="n">cloud</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dummy</span><span class="o">.</span><span class="n">cloud</span> <span class="ow">is</span> <span class="n">cloud</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.cloud_dir" title="gwgen.utils.TaskBase.cloud_dir"><code class="xref py py-obj docutils literal"><span class="pre">cloud_dir</span></code></a></td>
+<td>str. Path to the directory were the processed parameterization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.data" title="gwgen.utils.TaskBase.data"><code class="xref py py-obj docutils literal"><span class="pre">data</span></code></a></td>
+<td>pandas.DataFrame. The dataframe holding the daily data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.data_dir" title="gwgen.utils.TaskBase.data_dir"><code class="xref py py-obj docutils literal"><span class="pre">data_dir</span></code></a></td>
+<td>str. Path to the directory where the source data of the project</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.datafile" title="gwgen.utils.TaskBase.datafile"><code class="xref py py-obj docutils literal"><span class="pre">datafile</span></code></a></td>
+<td>str. The path to the csv file where the data is stored by the</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.dbname" title="gwgen.utils.TaskBase.dbname"><code class="xref py py-obj docutils literal"><span class="pre">dbname</span></code></a></td>
+<td>The database name to use</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.default_config" title="gwgen.utils.TaskBase.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td>The default configuration of this task inserted with the</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.df_ref" title="gwgen.utils.TaskBase.df_ref"><code class="xref py py-obj docutils literal"><span class="pre">df_ref</span></code></a></td>
+<td>The reference data frame</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.engine" title="gwgen.utils.TaskBase.engine"><code class="xref py py-obj docutils literal"><span class="pre">engine</span></code></a></td>
+<td>The sqlalchemy engine to access the database</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.eval_dir" title="gwgen.utils.TaskBase.eval_dir"><code class="xref py py-obj docutils literal"><span class="pre">eval_dir</span></code></a></td>
+<td>str. Path to the directory were the processed evaluation data is</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.fmt" title="gwgen.utils.TaskBase.fmt"><code class="xref py py-obj docutils literal"><span class="pre">fmt</span></code></a></td>
+<td>dict. Formatoptions to use when making plots with this task</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.has_run" title="gwgen.utils.TaskBase.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool. Boolean that is True if there is a run method for this task</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.input_dir" title="gwgen.utils.TaskBase.input_dir"><code class="xref py py-obj docutils literal"><span class="pre">input_dir</span></code></a></td>
+<td>str. Path to the directory were the input data is stored</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.input_path" title="gwgen.utils.TaskBase.input_path"><code class="xref py py-obj docutils literal"><span class="pre">input_path</span></code></a></td>
+<td>The path to the project input file in the configuration</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.logger" title="gwgen.utils.TaskBase.logger"><code class="xref py py-obj docutils literal"><span class="pre">logger</span></code></a></td>
+<td>The logger of this task</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.name" title="gwgen.utils.TaskBase.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str. name of the task</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.nc_file" title="gwgen.utils.TaskBase.nc_file"><code class="xref py py-obj docutils literal"><span class="pre">nc_file</span></code></a></td>
+<td>NetCDF file for the project</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.output_dir" title="gwgen.utils.TaskBase.output_dir"><code class="xref py py-obj docutils literal"><span class="pre">output_dir</span></code></a></td>
+<td>str. Path to the directory were the input data is stored</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.output_path" title="gwgen.utils.TaskBase.output_path"><code class="xref py py-obj docutils literal"><span class="pre">output_path</span></code></a></td>
+<td>The path to the project output file in the configuration</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.param_dir" title="gwgen.utils.TaskBase.param_dir"><code class="xref py py-obj docutils literal"><span class="pre">param_dir</span></code></a></td>
+<td>str. Path to the directory were the processed parameterization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.pdf_file" title="gwgen.utils.TaskBase.pdf_file"><code class="xref py py-obj docutils literal"><span class="pre">pdf_file</span></code></a></td>
+<td>pdf file with figures the project</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.project_file" title="gwgen.utils.TaskBase.project_file"><code class="xref py py-obj docutils literal"><span class="pre">project_file</span></code></a></td>
+<td>Pickle file for the project</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.reference_path" title="gwgen.utils.TaskBase.reference_path"><code class="xref py py-obj docutils literal"><span class="pre">reference_path</span></code></a></td>
+<td>The path to the reference file in the configuration</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.sa_dir" title="gwgen.utils.TaskBase.sa_dir"><code class="xref py py-obj docutils literal"><span class="pre">sa_dir</span></code></a></td>
+<td>str. Path to the directory were the processed sensitivity analysis</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from" title="gwgen.utils.TaskBase.setup_from"><code class="xref py py-obj docutils literal"><span class="pre">setup_from</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_parallel" title="gwgen.utils.TaskBase.setup_parallel"><code class="xref py py-obj docutils literal"><span class="pre">setup_parallel</span></code></a></td>
+<td>bool. Boolean that is True if the task can be setup in parallel</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_requires" title="gwgen.utils.TaskBase.setup_requires"><code class="xref py py-obj docutils literal"><span class="pre">setup_requires</span></code></a></td>
+<td>list of str. identifiers of required classes for this task</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.sql_dtypes" title="gwgen.utils.TaskBase.sql_dtypes"><code class="xref py py-obj docutils literal"><span class="pre">sql_dtypes</span></code></a></td>
+<td>The data types to write the data into a postgres database</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.summary" title="gwgen.utils.TaskBase.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str. summary of what this task does</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.task_data_dir" title="gwgen.utils.TaskBase.task_data_dir"><code class="xref py py-obj docutils literal"><span class="pre">task_data_dir</span></code></a></td>
+<td>The directory where to store data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.threads" title="gwgen.utils.TaskBase.threads"><code class="xref py py-obj docutils literal"><span class="pre">threads</span></code></a></td>
+<td><a class="reference external" href="https://docs.python.org/2.7/library/threading.html#threading.Thread" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a> objects that are started during the setup.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.create_project" title="gwgen.utils.TaskBase.create_project"><code class="xref py py-obj docutils literal"><span class="pre">create_project</span></code></a>(ds)</td>
+<td>To be reimplemented for each task with <code class="xref py py-attr docutils literal"><span class="pre">has_run</span></code></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.from_organizer" title="gwgen.utils.TaskBase.from_organizer"><code class="xref py py-obj docutils literal"><span class="pre">from_organizer</span></code></a>(organizer,&nbsp;stations,&nbsp;*args,&nbsp;...)</td>
+<td>Create a new instance from a <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.8)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.from_task" title="gwgen.utils.TaskBase.from_task"><code class="xref py py-obj docutils literal"><span class="pre">from_task</span></code></a>(task,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Create a new instance from another task</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.get_manager" title="gwgen.utils.TaskBase.get_manager"><code class="xref py py-obj docutils literal"><span class="pre">get_manager</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Return a manager of this class that can be used to setup and organize</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.get_run_kws" title="gwgen.utils.TaskBase.get_run_kws"><code class="xref py py-obj docutils literal"><span class="pre">get_run_kws</span></code></a>(kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.init_from_db" title="gwgen.utils.TaskBase.init_from_db"><code class="xref py py-obj docutils literal"><span class="pre">init_from_db</span></code></a>()</td>
+<td>Initialize the task from datatables already created</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.init_from_file" title="gwgen.utils.TaskBase.init_from_file"><code class="xref py py-obj docutils literal"><span class="pre">init_from_file</span></code></a>()</td>
+<td>Initialize the task from already stored files</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.init_from_scratch" title="gwgen.utils.TaskBase.init_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">init_from_scratch</span></code></a>()</td>
+<td>Initialize the task from the configuration settings</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.init_task" title="gwgen.utils.TaskBase.init_task"><code class="xref py py-obj docutils literal"><span class="pre">init_task</span></code></a>()</td>
+<td>Method that is called on the I/O-Processor to initialize the setup</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.make_run_config" title="gwgen.utils.TaskBase.make_run_config"><code class="xref py py-obj docutils literal"><span class="pre">make_run_config</span></code></a>(sp,&nbsp;info)</td>
+<td>Method to be reimplemented for each task with <code class="xref py py-attr docutils literal"><span class="pre">has_run</span></code></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.plot_additionals" title="gwgen.utils.TaskBase.plot_additionals"><code class="xref py py-obj docutils literal"><span class="pre">plot_additionals</span></code></a>(pdf)</td>
+<td>Method to be reimplemented to make additional plots (if necessary)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.run" title="gwgen.utils.TaskBase.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(info,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Run the task</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.set_requirements" title="gwgen.utils.TaskBase.set_requirements"><code class="xref py py-obj docutils literal"><span class="pre">set_requirements</span></code></a>(requirements)</td>
+<td>Set the requirements for this task</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>()</td>
+<td>Set up the database for this task</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_db" title="gwgen.utils.TaskBase.setup_from_db"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_db</span></code></a>(**kwargs)</td>
+<td>Set up the task from datatables already created</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_file" title="gwgen.utils.TaskBase.setup_from_file"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_file</span></code></a>(**kwargs)</td>
+<td>Set up the task from already stored files</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_instances" title="gwgen.utils.TaskBase.setup_from_instances"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_instances</span></code></a>(base,&nbsp;instances[,&nbsp;copy])</td>
+<td>Combine multiple task instances into one instance</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_scratch" title="gwgen.utils.TaskBase.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
+<td>Setup the data from the configuration settings</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.write2db" title="gwgen.utils.TaskBase.write2db"><code class="xref py py-obj docutils literal"><span class="pre">write2db</span></code></a>(**kwargs)</td>
+<td>Write the data from this task to the database given by the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.write2file" title="gwgen.utils.TaskBase.write2file"><code class="xref py py-obj docutils literal"><span class="pre">write2file</span></code></a>(**kwargs)</td>
+<td>Write the database to the <code class="xref py py-attr docutils literal"><span class="pre">datafile</span></code> file</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
+<li><strong>requirements</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> instances) &#8211; The required instances. If None, you must call the
+<a class="reference internal" href="#gwgen.utils.TaskBase.set_requirements" title="gwgen.utils.TaskBase.set_requirements"><code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code></a> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <a class="reference internal" href="#gwgen.utils.TaskConfig" title="gwgen.utils.TaskConfig"><code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code></a> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.cloud_dir">
+<code class="descname">cloud_dir</code><a class="headerlink" href="#gwgen.utils.TaskBase.cloud_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. Path to the directory were the processed parameterization
+data is stored</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.create_project">
+<code class="descname">create_project</code><span class="sig-paren">(</span><em>ds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.create_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.create_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>To be reimplemented for each task with <a class="reference internal" href="#gwgen.utils.TaskBase.has_run" title="gwgen.utils.TaskBase.has_run"><code class="xref py py-attr docutils literal"><span class="pre">has_run</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ds</strong> (<a class="reference external" href="http://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="(in xarray v0.9.6)"><em>xarray.Dataset</em></a>) &#8211; The dataset to plot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.data">
+<code class="descname">data</code><em class="property"> = None</em><a class="headerlink" href="#gwgen.utils.TaskBase.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>pandas.DataFrame. The dataframe holding the daily data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.data_dir">
+<code class="descname">data_dir</code><a class="headerlink" href="#gwgen.utils.TaskBase.data_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. Path to the directory where the source data of the project
+is located</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.datafile">
+<code class="descname">datafile</code><a class="headerlink" href="#gwgen.utils.TaskBase.datafile" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. The path to the csv file where the data is stored by the
+<code class="xref py py-meth docutils literal"><span class="pre">Parameterizer.write2file()</span></code> method and read by the
+<code class="xref py py-meth docutils literal"><span class="pre">Parameterizer.setup_from_file()</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.dbname">
+<code class="descname">dbname</code><em class="property"> = ''</em><a class="headerlink" href="#gwgen.utils.TaskBase.dbname" title="Permalink to this definition">¶</a></dt>
+<dd><p>The database name to use</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.utils.TaskBase.default_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default configuration of this task inserted with the
+<a class="reference internal" href="#gwgen.utils.TaskBase.pdf_file" title="gwgen.utils.TaskBase.pdf_file"><code class="xref py py-attr docutils literal"><span class="pre">pdf_file</span></code></a>, <a class="reference internal" href="#gwgen.utils.TaskBase.nc_file" title="gwgen.utils.TaskBase.nc_file"><code class="xref py py-attr docutils literal"><span class="pre">nc_file</span></code></a> and <a class="reference internal" href="#gwgen.utils.TaskBase.project_file" title="gwgen.utils.TaskBase.project_file"><code class="xref py py-attr docutils literal"><span class="pre">project_file</span></code></a> attributes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.df_ref">
+<code class="descname">df_ref</code><a class="headerlink" href="#gwgen.utils.TaskBase.df_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>The reference data frame</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.engine">
+<code class="descname">engine</code><a class="headerlink" href="#gwgen.utils.TaskBase.engine" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sqlalchemy engine to access the database</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.eval_dir">
+<code class="descname">eval_dir</code><a class="headerlink" href="#gwgen.utils.TaskBase.eval_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. Path to the directory were the processed evaluation data is
+stored</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.fmt">
+<code class="descname">fmt</code><em class="property"> = {}</em><a class="headerlink" href="#gwgen.utils.TaskBase.fmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict. Formatoptions to use when making plots with this task</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="gwgen.utils.TaskBase.from_organizer">
+<em class="property">classmethod </em><code class="descname">from_organizer</code><span class="sig-paren">(</span><em>organizer</em>, <em>stations</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.from_organizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.from_organizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance from a <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.8)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>organizer</strong> (<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.8)"><em>model_organization.ModelOrganizer</em></a>) &#8211; The organizer to use the configuration from</li>
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
+<li><strong>requirements</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> instances) &#8211; The required instances. If None, you must call the
+<a class="reference internal" href="#gwgen.utils.TaskBase.set_requirements" title="gwgen.utils.TaskBase.set_requirements"><code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code></a> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <a class="reference internal" href="#gwgen.utils.TaskConfig" title="gwgen.utils.TaskConfig"><code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code></a> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An instance of the calling class</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase">TaskBase</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="gwgen.utils.TaskBase.from_task">
+<em class="property">classmethod </em><code class="descname">from_task</code><span class="sig-paren">(</span><em>task</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.from_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.from_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance from another task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>task</strong> (<a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><em>TaskBase</em></a>) &#8211; The organizer to use the configuration from. Note that it can also
+be of a different type than this class</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
+<li><strong>requirements</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> instances) &#8211; The required instances. If None, you must call the
+<a class="reference internal" href="#gwgen.utils.TaskBase.set_requirements" title="gwgen.utils.TaskBase.set_requirements"><code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code></a> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <a class="reference internal" href="#gwgen.utils.TaskConfig" title="gwgen.utils.TaskConfig"><code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code></a> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_instances" title="gwgen.utils.TaskBase.setup_from_instances"><code class="xref py py-meth docutils literal"><span class="pre">setup_from_instances()</span></code></a></dt>
+<dd>To combine multiple instances of the class</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="gwgen.utils.TaskBase.get_manager">
+<em class="property">classmethod </em><code class="descname">get_manager</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.get_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.get_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a manager of this class that can be used to setup and organize
+tasks</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.get_run_kws">
+<code class="descname">get_run_kws</code><span class="sig-paren">(</span><em>kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.get_run_kws"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.get_run_kws" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.has_run">
+<code class="descname">has_run</code><em class="property"> = False</em><a class="headerlink" href="#gwgen.utils.TaskBase.has_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool. Boolean that is True if there is a run method for this task</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.init_from_db">
+<code class="descname">init_from_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.init_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.init_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the task from datatables already created</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.init_from_file">
+<code class="descname">init_from_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.init_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.init_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the task from already stored files</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.init_from_scratch">
+<code class="descname">init_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.init_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.init_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the task from the configuration settings</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.init_task">
+<code class="descname">init_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.init_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.init_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that is called on the I/O-Processor to initialize the setup</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.input_dir">
+<code class="descname">input_dir</code><a class="headerlink" href="#gwgen.utils.TaskBase.input_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. Path to the directory were the input data is stored</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.input_path">
+<code class="descname">input_path</code><a class="headerlink" href="#gwgen.utils.TaskBase.input_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path to the project input file in the configuration</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.logger">
+<code class="descname">logger</code><a class="headerlink" href="#gwgen.utils.TaskBase.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>The logger of this task</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.make_run_config">
+<code class="descname">make_run_config</code><span class="sig-paren">(</span><em>sp</em>, <em>info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.make_run_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.make_run_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to be reimplemented for each task with <a class="reference internal" href="#gwgen.utils.TaskBase.has_run" title="gwgen.utils.TaskBase.has_run"><code class="xref py py-attr docutils literal"><span class="pre">has_run</span></code></a>
+to manipulate the configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sp</strong> (<a class="reference external" href="http://psyplot.readthedocs.io/en/latest/api/psyplot.project.html#psyplot.project.Project" title="(in psyplot v1.0.0)"><em>psyplot.project.Project</em></a>) &#8211; The project of the data</li>
+<li><strong>info</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The dictionary for saving additional information of the task</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#gwgen.utils.TaskBase.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. name of the task</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.nc_file">
+<code class="descname">nc_file</code><a class="headerlink" href="#gwgen.utils.TaskBase.nc_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>NetCDF file for the project</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.output_dir">
+<code class="descname">output_dir</code><a class="headerlink" href="#gwgen.utils.TaskBase.output_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. Path to the directory were the input data is stored</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.output_path">
+<code class="descname">output_path</code><a class="headerlink" href="#gwgen.utils.TaskBase.output_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path to the project output file in the configuration</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.param_dir">
+<code class="descname">param_dir</code><a class="headerlink" href="#gwgen.utils.TaskBase.param_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. Path to the directory were the processed parameterization
+data is stored</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.pdf_file">
+<code class="descname">pdf_file</code><a class="headerlink" href="#gwgen.utils.TaskBase.pdf_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>pdf file with figures the project</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.plot_additionals">
+<code class="descname">plot_additionals</code><span class="sig-paren">(</span><em>pdf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.plot_additionals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.plot_additionals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to be reimplemented to make additional plots (if necessary)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdf</strong> (<a class="reference external" href="http://matplotlib.org/api/backend_pdf_api.html#matplotlib.backends.backend_pdf.PdfPages" title="(in Matplotlib v2.0.2)"><em>matplotlib.backends.backend_pdf.PdfPages</em></a>) &#8211; The PdfPages instance which can be used to save the figure</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.project_file">
+<code class="descname">project_file</code><a class="headerlink" href="#gwgen.utils.TaskBase.project_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle file for the project</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.reference_path">
+<code class="descname">reference_path</code><a class="headerlink" href="#gwgen.utils.TaskBase.reference_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path to the reference file in the configuration</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>info</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the task</p>
+<p>This method uses the data that has been setup through the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a>
+method to process some configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dict</strong> &#8211; The dictionary with the configuration settings for the namelist</li>
+<li><strong>dict</strong> &#8211; The dictionary holding additional meta information</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.sa_dir">
+<code class="descname">sa_dir</code><a class="headerlink" href="#gwgen.utils.TaskBase.sa_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. Path to the directory were the processed sensitivity analysis
+data is stored</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.set_requirements">
+<code class="descname">set_requirements</code><span class="sig-paren">(</span><em>requirements</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.set_requirements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.set_requirements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the requirements for this task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>requirements</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> instances) &#8211; The tasks as specified in the <a class="reference internal" href="#gwgen.utils.TaskBase.setup_requires" title="gwgen.utils.TaskBase.setup_requires"><code class="xref py py-attr docutils literal"><span class="pre">setup_requires</span></code></a> attribute</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.setup">
+<code class="descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the database for this task</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.setup_from">
+<code class="descname">setup_from</code><a class="headerlink" href="#gwgen.utils.TaskBase.setup_from" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.setup_from_db">
+<code class="descname">setup_from_db</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.setup_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.setup_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the task from datatables already created</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.setup_from_file">
+<code class="descname">setup_from_file</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.setup_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.setup_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the task from already stored files</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="gwgen.utils.TaskBase.setup_from_instances">
+<em class="property">classmethod </em><code class="descname">setup_from_instances</code><span class="sig-paren">(</span><em>base</em>, <em>instances</em>, <em>copy=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.setup_from_instances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.setup_from_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine multiple task instances into one instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base</strong> (<a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><em>TaskBase</em></a>) &#8211; The base task to use the configuration from</li>
+<li><strong>instances</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a>) &#8211; The tasks containing the data</li>
+<li><strong>copy</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a copy of <cite>base</cite> is returned, otherwise <cite>base</cite> is
+modified inplace</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.setup_from_scratch">
+<code class="descname">setup_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.setup_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.setup_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup the data from the configuration settings</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.setup_parallel">
+<code class="descname">setup_parallel</code><em class="property"> = True</em><a class="headerlink" href="#gwgen.utils.TaskBase.setup_parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool. Boolean that is True if the task can be setup in parallel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.setup_requires">
+<code class="descname">setup_requires</code><em class="property"> = []</em><a class="headerlink" href="#gwgen.utils.TaskBase.setup_requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of str. identifiers of required classes for this task</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.sql_dtypes">
+<code class="descname">sql_dtypes</code><a class="headerlink" href="#gwgen.utils.TaskBase.sql_dtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The data types to write the data into a postgres database</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.summary">
+<code class="descname">summary</code><em class="property"> = ''</em><a class="headerlink" href="#gwgen.utils.TaskBase.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>str. summary of what this task does</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.task_data_dir">
+<code class="descname">task_data_dir</code><a class="headerlink" href="#gwgen.utils.TaskBase.task_data_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The directory where to store data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskBase.threads">
+<code class="descname">threads</code><em class="property"> = []</em><a class="headerlink" href="#gwgen.utils.TaskBase.threads" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/2.7/library/threading.html#threading.Thread" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a> objects that are started during the setup.
+It will be waited for them to finish before continuing with another
+process</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.write2db">
+<code class="descname">write2db</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.write2db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.write2db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the data from this task to the database given by the
+<a class="reference internal" href="#gwgen.utils.TaskBase.engine" title="gwgen.utils.TaskBase.engine"><code class="xref py py-attr docutils literal"><span class="pre">engine</span></code></a> attribute</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskBase.write2file">
+<code class="descname">write2file</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.write2file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.write2file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the database to the <a class="reference internal" href="#gwgen.utils.TaskBase.datafile" title="gwgen.utils.TaskBase.datafile"><code class="xref py py-attr docutils literal"><span class="pre">datafile</span></code></a> file</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.utils.TaskConfig">
+<em class="property">class </em><code class="descclassname">gwgen.utils.</code><code class="descname">TaskConfig</code><span class="sig-paren">(</span><em>setup_from</em>, <em>to_csv</em>, <em>to_db</em>, <em>remove</em>, <em>plot_output</em>, <em>nc_output</em>, <em>project_output</em>, <em>new_project</em>, <em>project</em>, <em>close</em><span class="sig-paren">)</span><a class="headerlink" href="#gwgen.utils.TaskConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.utils.TaskConfig" title="gwgen.utils.TaskConfig"><code class="xref py py-class docutils literal"><span class="pre">gwgen.utils.TaskConfig</span></code></a></p>
+<p>Configuration of tasks for their <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> and
+<a class="reference internal" href="#gwgen.utils.TaskBase.run" title="gwgen.utils.TaskBase.run"><code class="xref py py-meth docutils literal"><span class="pre">run()</span></code></a> methods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the instance either from</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.utils.TaskManager">
+<em class="property">class </em><code class="descclassname">gwgen.utils.</code><code class="descname">TaskManager</code><span class="sig-paren">(</span><em>base_task=&lt;class 'gwgen.utils.TaskBase'&gt;</em>, <em>tasks=None</em>, <em>config={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A manager to run the tasks within a task framework</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_task</strong> (<a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><em>TaskBase</em></a>) &#8211; A subclass of the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> class whose tasks shall be
+used within this manager.</li>
+<li><strong>tasks</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> instances) &#8211; The initialized tasks to use. If None, you need to call the
+<a class="reference internal" href="#gwgen.utils.TaskManager.initialize_tasks" title="gwgen.utils.TaskManager.initialize_tasks"><code class="xref py py-meth docutils literal"><span class="pre">initialize_tasks()</span></code></a> method</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of this manager containing information about the
+multiprocessing</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskManager.base_task" title="gwgen.utils.TaskManager.base_task"><code class="xref py py-obj docutils literal"><span class="pre">base_task</span></code></a></td>
+<td>A subclass of the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> class whose</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskManager.logger" title="gwgen.utils.TaskManager.logger"><code class="xref py py-obj docutils literal"><span class="pre">logger</span></code></a></td>
+<td>The logger of this task</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskManager.get_requirements" title="gwgen.utils.TaskManager.get_requirements"><code class="xref py py-obj docutils literal"><span class="pre">get_requirements</span></code></a>(identifier[,&nbsp;all_requirements])</td>
+<td>Return the required task classes for this task</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskManager.get_task" title="gwgen.utils.TaskManager.get_task"><code class="xref py py-obj docutils literal"><span class="pre">get_task</span></code></a>(identifier)</td>
+<td>Return the task corresponding in this manager of <cite>identifier</cite></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskManager.get_task_cls" title="gwgen.utils.TaskManager.get_task_cls"><code class="xref py py-obj docutils literal"><span class="pre">get_task_cls</span></code></a>(identifier)</td>
+<td>Return the task class corresponding to the given <cite>identifier</cite></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskManager.initialize_tasks" title="gwgen.utils.TaskManager.initialize_tasks"><code class="xref py py-obj docutils literal"><span class="pre">initialize_tasks</span></code></a>(stations[,&nbsp;task_kws])</td>
+<td>Initialize the setup of the tasks</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskManager.run" title="gwgen.utils.TaskManager.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(full_info,&nbsp;*args)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskManager.setup" title="gwgen.utils.TaskManager.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>(stations[,&nbsp;to_return])</td>
+<td>Setup the data for the tasks in parallel or serial</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskManager.sort_by_requirement" title="gwgen.utils.TaskManager.sort_by_requirement"><code class="xref py py-obj docutils literal"><span class="pre">sort_by_requirement</span></code></a>(objects)</td>
+<td>Sort the given tasks by their logical order</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.utils.TaskManager.base_task">
+<code class="descname">base_task</code><em class="property"> = None</em><a class="headerlink" href="#gwgen.utils.TaskManager.base_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> class whose
+<code class="xref py py-attr docutils literal"><span class="pre">TaskBase._registry</span></code> attribute shall be used</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskManager.get_requirements">
+<code class="descname">get_requirements</code><span class="sig-paren">(</span><em>identifier</em>, <em>all_requirements=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskManager.get_requirements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskManager.get_requirements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the required task classes for this task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The <code class="xref py py-attr docutils literal"><span class="pre">name</span></code> attribute of the <code class="xref py py-class docutils literal"><span class="pre">Parameterizer</span></code> subclass</li>
+<li><strong>all_requirements</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, all requirements are searched recursively. Otherwise only
+the direct requirements are returned</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of Parameterizer subclasses that are required for the task
+of the given <cite>identifier</cite></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of <code class="xref py py-class docutils literal"><span class="pre">Parameterizer</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskManager.get_task">
+<code class="descname">get_task</code><span class="sig-paren">(</span><em>identifier</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskManager.get_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskManager.get_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the task corresponding in this manager of <cite>identifier</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The <code class="xref py py-attr docutils literal"><span class="pre">name</span></code> attribute of the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> subclass</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The requested task</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase">TaskBase</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskManager.get_task_cls">
+<code class="descname">get_task_cls</code><span class="sig-paren">(</span><em>identifier</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskManager.get_task_cls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskManager.get_task_cls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the task class corresponding to the given <cite>identifier</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The <code class="xref py py-attr docutils literal"><span class="pre">name</span></code> attribute of the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> subclass</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The class of the requested task</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase">TaskBase</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskManager.initialize_tasks">
+<code class="descname">initialize_tasks</code><span class="sig-paren">(</span><em>stations</em>, <em>task_kws={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskManager.initialize_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskManager.initialize_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the setup of the tasks</p>
+<p>This classmethod uses the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> framework to
+initialize the setup on the I/O-processor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>task_kws</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; Keywords can be valid identifiers of the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a>
+instances, dictionaries may be mappings for their
+<a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.utils.TaskManager.logger">
+<code class="descname">logger</code><a class="headerlink" href="#gwgen.utils.TaskManager.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>The logger of this task</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskManager.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>full_info</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskManager.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.utils.TaskManager.setup">
+<code class="descname">setup</code><span class="sig-paren">(</span><em>stations</em>, <em>to_return=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskManager.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskManager.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup the data for the tasks in parallel or serial</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>stations</strong> (<em>list of str</em>) &#8211; The stations to process</li>
+<li><strong>to_return</strong> (<em>list of str</em>) &#8211; The names of the tasks to return. If None, all tasks that have a
+run method will be returned</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="gwgen.utils.TaskManager.sort_by_requirement">
+<em class="property">static </em><code class="descname">sort_by_requirement</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskManager.sort_by_requirement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskManager.sort_by_requirement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort the given tasks by their logical order</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>objects</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> subclasses or instances) &#8211; The objects to sort</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The same as <cite>objects</cite> but sorted</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> subclasses or instances</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.utils.TaskMeta">
+<em class="property">class </em><code class="descclassname">gwgen.utils.</code><code class="descname">TaskMeta</code><a class="reference internal" href="../_modules/gwgen/utils.html#TaskMeta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskMeta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/abc.html#abc.ABCMeta" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">abc.ABCMeta</span></code></a></p>
+<p>Meta class for the <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.append_doc">
+<code class="descclassname">gwgen.utils.</code><code class="descname">append_doc</code><span class="sig-paren">(</span><em>namedtuple_cls</em>, <em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#append_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.append_doc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.default_config">
+<code class="descclassname">gwgen.utils.</code><code class="descname">default_config</code><span class="sig-paren">(</span><em>setup_from=None</em>, <em>to_csv=False</em>, <em>to_db=False</em>, <em>remove=False</em>, <em>plot_output=None</em>, <em>nc_output=None</em>, <em>project_output=None</em>, <em>new_project=False</em>, <em>project=None</em>, <em>close=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#default_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.default_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default configuration for TaskBase instances. See also the
+<a class="reference internal" href="#gwgen.utils.TaskBase.default_config" title="gwgen.utils.TaskBase.default_config"><code class="xref py py-attr docutils literal"><span class="pre">TaskBase.default_config</span></code></a> attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the instance either from</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.dir_contains">
+<code class="descclassname">gwgen.utils.</code><code class="descname">dir_contains</code><span class="sig-paren">(</span><em>dirname</em>, <em>path</em>, <em>exists=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#dir_contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.dir_contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a file of directory is contained in another.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dirname</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The base directory that should contain <cite>path</cite></li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of a directory or file that should be in <cite>dirname</cite></li>
+<li><strong>exists</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the <cite>path</cite> and <cite>dirname</cite> must exist</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p><cite>path</cite> and <cite>dirname</cite> must be either both absolute or both relative
+paths</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.download_file">
+<code class="descclassname">gwgen.utils.</code><code class="descname">download_file</code><span class="sig-paren">(</span><em>url</em>, <em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#download_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.download_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download a file from the internet</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The url of the file</li>
+<li><strong>target</strong> (<em>str or None</em>) &#8211; The path where the downloaded file shall be saved. If None, it will be
+saved to a temporary directory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>file_name</strong> &#8211;
+the downloaded filename</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.enhanced_config">
+<code class="descclassname">gwgen.utils.</code><code class="descname">enhanced_config</code><span class="sig-paren">(</span><em>config_cls</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#enhanced_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.enhanced_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.file_len">
+<code class="descclassname">gwgen.utils.</code><code class="descname">file_len</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#file_len"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.file_len" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of lines in <cite>fname</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.get_module_path">
+<code class="descclassname">gwgen.utils.</code><code class="descname">get_module_path</code><span class="sig-paren">(</span><em>mod</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#get_module_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.get_module_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience method to get the directory of a given python module</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.get_next_name">
+<code class="descclassname">gwgen.utils.</code><code class="descname">get_next_name</code><span class="sig-paren">(</span><em>old</em>, <em>fmt='%i'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#get_next_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.get_next_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next name that numerically follows <cite>old</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.get_postgres_engine">
+<code class="descclassname">gwgen.utils.</code><code class="descname">get_postgres_engine</code><span class="sig-paren">(</span><em>database</em>, <em>user=None</em>, <em>host='127.0.0.1'</em>, <em>port=None</em>, <em>create=False</em>, <em>test=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#get_postgres_engine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.get_postgres_engine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the engine to access the given <cite>database</cite></p>
+<p>This method creates an engine using sqlalchemy&#8217;s create_engine function
+to access the given <cite>database</cite> via postgresql. If the database is not
+existent, it will be created</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>database</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of a psql database. If provided, the processed data will
+be stored</li>
+<li><strong>user</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The username to use when logging into the database</li>
+<li><strong>host</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the host which runs the database server</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The port to use to log into the the database</li>
+<li><strong>create</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, it is tried to create the database if not existent as postgres
+user</li>
+<li><strong>test</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, test the connection before returning the engine</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Tha engine to access the database</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">sqlalchemy.engine.base.Engine</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The engine is for single usage!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.get_toplevel_module">
+<code class="descclassname">gwgen.utils.</code><code class="descname">get_toplevel_module</code><span class="sig-paren">(</span><em>mod</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#get_toplevel_module"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.get_toplevel_module" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.go_through_dict">
+<code class="descclassname">gwgen.utils.</code><code class="descname">go_through_dict</code><span class="sig-paren">(</span><em>key</em>, <em>d</em>, <em>setdefault=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#go_through_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.go_through_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split up the <cite>key</cite> by . and get the value from the base dictionary <cite>d</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The key in the <cite>config</cite> configuration.
+If the key goes some
+levels deeper, keys may be separated by a <code class="docutils literal"><span class="pre">'.'</span></code> (e.g.
+<code class="docutils literal"><span class="pre">'namelists.weathergen'</span></code>). Hence, to insert a <code class="docutils literal"><span class="pre">','</span></code>, it must
+be escaped by a preceeding <code class="docutils literal"><span class="pre">''</span></code>.</li>
+<li><strong>d</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration dictionary containing the key</li>
+<li><strong>setdefault</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a>) &#8211; If not None and an item is not existent in <cite>d</cite>, it is created by
+calling the given function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><em>str</em> &#8211;
+The last level of the key</li>
+<li><em>dict</em> &#8211;
+The dictionary in <cite>d</cite> that contains the last level of the key</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.init_interprocess_locks">
+<code class="descclassname">gwgen.utils.</code><code class="descname">init_interprocess_locks</code><span class="sig-paren">(</span><em>db_locks</em>, <em>file_locks</em>, <em>lock_dir</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#init_interprocess_locks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.init_interprocess_locks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.init_locks">
+<code class="descclassname">gwgen.utils.</code><code class="descname">init_locks</code><span class="sig-paren">(</span><em>db_locks</em>, <em>file_locks</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#init_locks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.init_locks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.isstring">
+<code class="descclassname">gwgen.utils.</code><code class="descname">isstring</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#isstring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.isstring" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.ordered_move">
+<code class="descclassname">gwgen.utils.</code><code class="descname">ordered_move</code><span class="sig-paren">(</span><em>d</em>, <em>to_move</em>, <em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#ordered_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.ordered_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move a key in an ordered dictionary to another position</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>d</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/collections.html#collections.OrderedDict" title="(in Python v2.7)"><em>collections.OrderedDict</em></a>) &#8211; The dictionary containing the keys</li>
+<li><strong>to_move</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The key to move</li>
+<li><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the key that should be followed by <cite>to_move</cite></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.safe_csv_append">
+<code class="descclassname">gwgen.utils.</code><code class="descname">safe_csv_append</code><span class="sig-paren">(</span><em>df</em>, <em>path</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#safe_csv_append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.safe_csv_append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience method to dump a data frame to csv without removing the old</p>
+<p>This function dumps the given <cite>df</cite> to the file specified by <cite>path</cite>. If
+<cite>path</cite> already exists, we read the header of the file and sort <cite>df</cite>
+according to this header</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>df</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data frame to store</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path where to store the data</li>
+<li><strong>**kwargs</strong> &#8211; Any other keyword for the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_csv.html#pandas.DataFrame.to_csv" title="(in pandas v0.20.2)"><code class="xref py py-meth docutils literal"><span class="pre">pandas.DataFrame.to_csv()</span></code></a> method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.str_ranges">
+<code class="descclassname">gwgen.utils.</code><code class="descname">str_ranges</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#str_ranges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.str_ranges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a string of comma separated values to an iterable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; A comma (<code class="docutils literal"><span class="pre">','</span></code>) separated string. A single value in this string
+represents one number, ranges can also be used via a separation by
+comma (<code class="docutils literal"><span class="pre">'-'</span></code>). Hence, <code class="docutils literal"><span class="pre">'2009,2012-2015'</span></code> will be
+converted to <code class="docutils literal"><span class="pre">[2009,2012,</span> <span class="pre">2013,</span> <span class="pre">2014]</span></code> and <code class="docutils literal"><span class="pre">2009,2012-2015-2</span></code> to
+<code class="docutils literal"><span class="pre">[2009,</span> <span class="pre">2012,</span> <span class="pre">2015]</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The values in s converted to a list</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.utils.unique_everseen">
+<code class="descclassname">gwgen.utils.</code><code class="descname">unique_everseen</code><span class="sig-paren">(</span><em>iterable</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#unique_everseen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.unique_everseen" title="Permalink to this definition">¶</a></dt>
+<dd><p>List unique elements, preserving order. Remember all elements ever seen.</p>
+<p>Function taken from <a class="reference external" href="https://docs.python.org/2/library/itertools.html">https://docs.python.org/2/library/itertools.html</a></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Python API Reference</a><ul>
+      <li>Previous: <a href="gwgen.sensitivity_analysis.html" title="previous chapter">gwgen.sensitivity_analysis module</a></li>
+      <li>Next: <a href="../fortran_api/index.html" title="next chapter">Fortran API Reference</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/gwgen.utils.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/api/gwgen.utils.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

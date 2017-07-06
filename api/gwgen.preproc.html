@@ -1,0 +1,581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gwgen.preproc module &mdash; gwgen 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gwgen 1.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Python API Reference" href="gwgen.html" />
+    <link rel="next" title="gwgen.sensitivity_analysis module" href="gwgen.sensitivity_analysis.html" />
+    <link rel="prev" title="gwgen.parseghcnrow module" href="gwgen.parseghcnrow.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gwgen.preproc">
+<span id="gwgen-preproc-module"></span><h1>gwgen.preproc module<a class="headerlink" href="#module-gwgen.preproc" title="Permalink to this headline">¶</a></h1>
+<p>Additional routines for preprocessing</p>
+<p><strong>Classes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap" title="gwgen.preproc.CloudGHCNMap"><code class="xref py py-obj docutils literal"><span class="pre">CloudGHCNMap</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>A task for computing the EECRA inventory for each station</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory" title="gwgen.preproc.CloudInventory"><code class="xref py py-obj docutils literal"><span class="pre">CloudInventory</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>A task for computing the EECRA inventory for each station</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudPreproc" title="gwgen.preproc.CloudPreproc"><code class="xref py py-obj docutils literal"><span class="pre">CloudPreproc</span></code></a>(stations,&nbsp;config,&nbsp;...[,&nbsp;data,&nbsp;...])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param stations:</th><td class="field-body">The list of stations to process</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Functions</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.default_cloud_ghcn_map_config" title="gwgen.preproc.default_cloud_ghcn_map_config"><code class="xref py py-obj docutils literal"><span class="pre">default_cloud_ghcn_map_config</span></code></a>([max_distance])</td>
+<td>Default config for <a class="reference internal" href="#gwgen.preproc.CloudGHCNMap" title="gwgen.preproc.CloudGHCNMap"><code class="xref py py-class docutils literal"><span class="pre">CloudGHCNMap</span></code></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.default_cloud_inventory_config" title="gwgen.preproc.default_cloud_inventory_config"><code class="xref py py-obj docutils literal"><span class="pre">default_cloud_inventory_config</span></code></a>([xstall])</td>
+<td>Default config for <a class="reference internal" href="#gwgen.preproc.CloudInventory" title="gwgen.preproc.CloudInventory"><code class="xref py py-class docutils literal"><span class="pre">CloudInventory</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="gwgen.preproc.CloudGHCNMap">
+<em class="property">class </em><code class="descclassname">gwgen.preproc.</code><code class="descname">CloudGHCNMap</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudGHCNMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.preproc.CloudPreproc" title="gwgen.preproc.CloudPreproc"><code class="xref py py-class docutils literal"><span class="pre">gwgen.preproc.CloudPreproc</span></code></a></p>
+<p>A task for computing the EECRA inventory for each station</p>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.dbname" title="gwgen.preproc.CloudGHCNMap.dbname"><code class="xref py py-obj docutils literal"><span class="pre">dbname</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.default_config" title="gwgen.preproc.CloudGHCNMap.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.eecra_inventory" title="gwgen.preproc.CloudGHCNMap.eecra_inventory"><code class="xref py py-obj docutils literal"><span class="pre">eecra_inventory</span></code></a></td>
+<td>eecra_inventory parameterization instance</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.has_run" title="gwgen.preproc.CloudGHCNMap.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.name" title="gwgen.preproc.CloudGHCNMap.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.setup_requires" title="gwgen.preproc.CloudGHCNMap.setup_requires"><code class="xref py py-obj docutils literal"><span class="pre">setup_requires</span></code></a></td>
+<td>list() -&gt; new empty list</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.summary" title="gwgen.preproc.CloudGHCNMap.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.init_from_scratch" title="gwgen.preproc.CloudGHCNMap.init_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">init_from_scratch</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.run" title="gwgen.preproc.CloudGHCNMap.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(info)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.setup" title="gwgen.preproc.CloudGHCNMap.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.setup_from_scratch" title="gwgen.preproc.CloudGHCNMap.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
+<td>Does nothing but initializing an empty data frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.write2db" title="gwgen.preproc.CloudGHCNMap.write2db"><code class="xref py py-obj docutils literal"><span class="pre">write2db</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.write2file" title="gwgen.preproc.CloudGHCNMap.write2file"><code class="xref py py-obj docutils literal"><span class="pre">write2file</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudGHCNMap.dbname">
+<code class="descname">dbname</code><em class="property"> = 'eecra_ghcn_map'</em><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.dbname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudGHCNMap.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.default_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudGHCNMap.eecra_inventory">
+<code class="descname">eecra_inventory</code><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.eecra_inventory" title="Permalink to this definition">¶</a></dt>
+<dd><p>eecra_inventory parameterization instance</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudGHCNMap.has_run">
+<code class="descname">has_run</code><em class="property"> = True</em><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.has_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudGHCNMap.init_from_scratch">
+<code class="descname">init_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudGHCNMap.init_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.init_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudGHCNMap.name">
+<code class="descname">name</code><em class="property"> = 'eecra_ghcn_map'</em><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudGHCNMap.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudGHCNMap.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudGHCNMap.setup">
+<code class="descname">setup</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudGHCNMap.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudGHCNMap.setup_from_scratch">
+<code class="descname">setup_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudGHCNMap.setup_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.setup_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does nothing but initializing an empty data frame. The real work is
+done in the <a class="reference internal" href="#gwgen.preproc.CloudGHCNMap.run" title="gwgen.preproc.CloudGHCNMap.run"><code class="xref py py-meth docutils literal"><span class="pre">run()</span></code></a> method</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudGHCNMap.setup_requires">
+<code class="descname">setup_requires</code><em class="property"> = ['eecra_inventory']</em><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.setup_requires" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudGHCNMap.summary">
+<code class="descname">summary</code><em class="property"> = 'Compute the inventory of the EECRA stations'</em><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudGHCNMap.write2db">
+<code class="descname">write2db</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudGHCNMap.write2db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.write2db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudGHCNMap.write2file">
+<code class="descname">write2file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudGHCNMap.write2file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudGHCNMap.write2file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.preproc.CloudInventory">
+<em class="property">class </em><code class="descclassname">gwgen.preproc.</code><code class="descname">CloudInventory</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gwgen.preproc.CloudPreproc" title="gwgen.preproc.CloudPreproc"><code class="xref py py-class docutils literal"><span class="pre">gwgen.preproc.CloudPreproc</span></code></a></p>
+<p>A task for computing the EECRA inventory for each station</p>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.dbname" title="gwgen.preproc.CloudInventory.dbname"><code class="xref py py-obj docutils literal"><span class="pre">dbname</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.default_config" title="gwgen.preproc.CloudInventory.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.has_run" title="gwgen.preproc.CloudInventory.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.http_xstall" title="gwgen.preproc.CloudInventory.http_xstall"><code class="xref py py-obj docutils literal"><span class="pre">http_xstall</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.name" title="gwgen.preproc.CloudInventory.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.setup_parallel" title="gwgen.preproc.CloudInventory.setup_parallel"><code class="xref py py-obj docutils literal"><span class="pre">setup_parallel</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.summary" title="gwgen.preproc.CloudInventory.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.xstall_df" title="gwgen.preproc.CloudInventory.xstall_df"><code class="xref py py-obj docutils literal"><span class="pre">xstall_df</span></code></a></td>
+<td>The dataframe corresponding to the XSTALL stations</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.init_from_scratch" title="gwgen.preproc.CloudInventory.init_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">init_from_scratch</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.run" title="gwgen.preproc.CloudInventory.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(info)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.setup" title="gwgen.preproc.CloudInventory.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.setup_from_db" title="gwgen.preproc.CloudInventory.setup_from_db"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_db</span></code></a>(**kwargs)</td>
+<td>Set up the task from datatables already created (and avoid locating</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.setup_from_file" title="gwgen.preproc.CloudInventory.setup_from_file"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_file</span></code></a>(**kwargs)</td>
+<td>Set up the task from already stored files (and avoid locating the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.setup_from_scratch" title="gwgen.preproc.CloudInventory.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.write2db" title="gwgen.preproc.CloudInventory.write2db"><code class="xref py py-obj docutils literal"><span class="pre">write2db</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.preproc.CloudInventory.write2file" title="gwgen.preproc.CloudInventory.write2file"><code class="xref py py-obj docutils literal"><span class="pre">write2file</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudInventory.dbname">
+<code class="descname">dbname</code><em class="property"> = 'eecra_inventory'</em><a class="headerlink" href="#gwgen.preproc.CloudInventory.dbname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudInventory.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.preproc.CloudInventory.default_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudInventory.has_run">
+<code class="descname">has_run</code><em class="property"> = True</em><a class="headerlink" href="#gwgen.preproc.CloudInventory.has_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudInventory.http_xstall">
+<code class="descname">http_xstall</code><em class="property"> = 'http://cdiac.ornl.gov/ftp/ndp026c/XSTALL'</em><a class="headerlink" href="#gwgen.preproc.CloudInventory.http_xstall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudInventory.init_from_scratch">
+<code class="descname">init_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory.init_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory.init_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudInventory.name">
+<code class="descname">name</code><em class="property"> = 'eecra_inventory'</em><a class="headerlink" href="#gwgen.preproc.CloudInventory.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudInventory.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudInventory.setup">
+<code class="descname">setup</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudInventory.setup_from_db">
+<code class="descname">setup_from_db</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory.setup_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory.setup_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the task from datatables already created (and avoid locating
+the stations of this task)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudInventory.setup_from_file">
+<code class="descname">setup_from_file</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory.setup_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory.setup_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the task from already stored files (and avoid locating the
+stations of this task)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudInventory.setup_from_scratch">
+<code class="descname">setup_from_scratch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory.setup_from_scratch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory.setup_from_scratch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudInventory.setup_parallel">
+<code class="descname">setup_parallel</code><a class="headerlink" href="#gwgen.preproc.CloudInventory.setup_parallel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudInventory.summary">
+<code class="descname">summary</code><em class="property"> = 'Compute the inventory of the EECRA stations'</em><a class="headerlink" href="#gwgen.preproc.CloudInventory.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudInventory.write2db">
+<code class="descname">write2db</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory.write2db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory.write2db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gwgen.preproc.CloudInventory.write2file">
+<code class="descname">write2file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudInventory.write2file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudInventory.write2file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudInventory.xstall_df">
+<code class="descname">xstall_df</code><a class="headerlink" href="#gwgen.preproc.CloudInventory.xstall_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataframe corresponding to the XSTALL stations</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gwgen.preproc.CloudPreproc">
+<em class="property">class </em><code class="descclassname">gwgen.preproc.</code><code class="descname">CloudPreproc</code><span class="sig-paren">(</span><em>stations</em>, <em>config</em>, <em>project_config</em>, <em>global_config</em>, <em>data=None</em>, <em>requirements=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#CloudPreproc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.CloudPreproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gwgen.utils.html#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">gwgen.utils.TaskBase</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
+<li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
+<li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.20.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code> method</li>
+<li><strong>requirements</strong> (list of <code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code> instances) &#8211; The required instances. If None, you must call the
+<code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code> method later</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last"><strong>``*args, **kwargs``</strong> &#8211;
+The configuration of the task. See the <code class="xref py py-class docutils literal"><span class="pre">TaskConfig</span></code> for
+arguments. Note that if you provide <code class="docutils literal"><span class="pre">*args</span></code>, you have to provide
+all possible arguments</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.preproc.CloudPreproc.task_data_dir" title="gwgen.preproc.CloudPreproc.task_data_dir"><code class="xref py py-obj docutils literal"><span class="pre">task_data_dir</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="gwgen.preproc.CloudPreproc.task_data_dir">
+<code class="descname">task_data_dir</code><a class="headerlink" href="#gwgen.preproc.CloudPreproc.task_data_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.preproc.default_cloud_ghcn_map_config">
+<code class="descclassname">gwgen.preproc.</code><code class="descname">default_cloud_ghcn_map_config</code><span class="sig-paren">(</span><em>max_distance=1000.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#default_cloud_ghcn_map_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.default_cloud_ghcn_map_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default config for <a class="reference internal" href="#gwgen.preproc.CloudGHCNMap" title="gwgen.preproc.CloudGHCNMap"><code class="xref py py-class docutils literal"><span class="pre">CloudGHCNMap</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The maximum distance in meters for which we consider two stations as
+equal (Default: 1000m)</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.preproc.default_cloud_inventory_config">
+<code class="descclassname">gwgen.preproc.</code><code class="descname">default_cloud_inventory_config</code><span class="sig-paren">(</span><em>xstall=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/preproc.html#default_cloud_inventory_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.preproc.default_cloud_inventory_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default config for <a class="reference internal" href="#gwgen.preproc.CloudInventory" title="gwgen.preproc.CloudInventory"><code class="xref py py-class docutils literal"><span class="pre">CloudInventory</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xstall</strong> (<em>bool or str</em>) &#8211; If True (default), download the XSTALL file from <a class="reference external" href="http://cdiac.ornl.gov/ftp/ndp026c/XSTALL">http://cdiac.ornl.gov/ftp/ndp026c/XSTALL</a>.
+This file contains some estimates of station longitude and latitude.
+If <code class="docutils literal"><span class="pre">False</span></code> or empty string, the file is not used, otherwise, if set
+with a string, it is interpreted as the path to the local file</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">gwgen</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ARVE-Research&repo=gwgen&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+    
+
+<p>
+<a href="https://travis-ci.org/ARVE-Research/gwgen">
+    <img
+        alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+        src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
+    />
+</a>
+</p>
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line/gwgen.html">Command Line API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gwgen.html">Python API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fortran_api/index.html">Fortran API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="gwgen.html">Python API Reference</a><ul>
+      <li>Previous: <a href="gwgen.parseghcnrow.html" title="previous chapter">gwgen.parseghcnrow module</a></li>
+      <li>Next: <a href="gwgen.sensitivity_analysis.html" title="next chapter">gwgen.sensitivity_analysis module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/gwgen.preproc.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Philipp Sommer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/api/gwgen.preproc.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
