@@ -1295,9 +1295,11 @@ class TemperatureParameterizer(Parameterizer):
             nml[nml_name + '2'] = float(
                 plotter.plot_data[1].attrs.get('slope'))
             # standard deviation
-            vname = v + 'stddev' + '_' + state
-            nml[v + '_sd_breaks'] = [getattr(tc, v + '_range1')[1], 0.0,
-                                     getattr(tc, v + '_range2')[0]]
+            vinfo = info.setdefault('%s_%s_sd' % (v, state), {})
+            nml[v + '_sd_breaks'] = breaks = [
+                getattr(tc, v + '_range1')[1], 0.0,
+                getattr(tc, v + '_range2')[0]]
+            full_breaks = list(zip([-np.inf] + breaks, breaks + [np.inf]))
             sd_coeffs = np.zeros((4, 6))
             base = v + 'stddev'
             for i, arr in enumerate(
@@ -1305,6 +1307,9 @@ class TemperatureParameterizer(Parameterizer):
                         [base, state, 'mean'])).plotters[0].plot_data):
                 for j in range(6):
                     sd_coeffs[i, j] = arr.attrs.get('c%i' % j, 0.0)
+                vinfo[full_breaks[i]] = {
+                    'params': np.round(sd_coeffs[i, :], 8).tolist(),
+                    'rsquared': float(arr.attrs['rsquared'])}
             nml[v + '_sd_' + state[0]] = np.round(sd_coeffs, 8).tolist()
 
 _CloudConfig = namedtuple('_CloudConfig', ['args_type'])
