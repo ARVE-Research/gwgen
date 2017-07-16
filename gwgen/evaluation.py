@@ -547,9 +547,10 @@ class QuantileEvaluation(Evaluator):
             QuantileEvaluation, cls)._modify_parser(parser)
         parser.update_arg(
             'quantiles', short='q', group=run_grp, type=utils.str_ranges,
-            metavar='f1[;f21[,f22[,f23]]]', help=docstrings.dedents("""
+            metavar='f1[,f21[-f22[-f23]]]', help=docstrings.dedents("""
                 The quantiles to use for calculating the percentiles.
                 %(str_ranges.s_help)s."""))
+        parser.pop_key('quantiles', 'nargs', None)
         parser.update_arg('no_rounding', short='nr', group=run_grp)
         parser.update_arg('names', short='n', group=setup_grp,
                           nargs='+', metavar='variable',
