@@ -470,8 +470,9 @@ class SensitivityAnalysis(object):
         for key, val in kwargs.items():
             if isinstance(val, Namespace):
                 kwargs[key] = val = vars(val)
-            if isinstance(val, dict) and 'experiments' in val:
-                val.pop('experiments')
+            if isinstance(val, dict):
+                val.pop('experiments', None)
+                val.pop('loop_exps', None)
         self._parallelilze_command(dict(evaluate=kwargs),
                                    experiments=experiments,
                                    loop_exps=loop_exps)
