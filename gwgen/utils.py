@@ -1113,7 +1113,7 @@ class TaskBase(object):
                             tuple(key)])
                 self._set_data(pd.concat(data), i)
             else:
-                self._set_data(pd.read_csv(datafile, **kwargs[i]))
+                self._set_data(pd.read_csv(datafile, **kwargs[i]), i)
 
     def setup_from_db(self, **kwargs):
         """Set up the task from datatables already created"""
