@@ -120,6 +120,7 @@ class SensitivityAnalysis(object):
             nprocs = config.get('nprocs', 'all')
             if nprocs == 'all':
                 nprocs = mp.cpu_count()
+            nprocs = min([nprocs, len(experiments)])
             config['serial'] = True
             self.logger.debug('Starting %i processes', nprocs)
             pool = mp.Pool(nprocs)
