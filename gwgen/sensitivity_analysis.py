@@ -85,8 +85,8 @@ class SensitivityAnalysis(object):
 
     @docstrings.get_sectionsf('SensitivityAnalysis._parallelize_command')
     @docstrings.dedent
-    def _parallelilze_command(self, kws, experiments=None,
-                              loop_exps=False):
+    def _parallelize_command(self, kws, experiments=None,
+                             loop_exps=False):
         """
         Run a GWGENOrganizer command in parallel for all the experiments in
         this analysis
@@ -450,8 +450,8 @@ class SensitivityAnalysis(object):
         ----------
         %(SensitivityAnalysis._parallelize_command.parameters.experiments)s
         %(GWGENOrganizer.run.parameters.remove)s"""
-        self._parallelilze_command(dict(run=dict(remove=remove)),
-                                   experiments=experiments)
+        self._parallelize_command(dict(run=dict(remove=remove)),
+                                  experiments=experiments)
 
     docstrings.keep_params(
         'SensitivityAnalysis._parallelize_command.parameters', 'loop_exps')
@@ -473,9 +473,9 @@ class SensitivityAnalysis(object):
             if isinstance(val, dict):
                 val.pop('experiments', None)
                 val.pop('loop_exps', None)
-        self._parallelilze_command(dict(evaluate=kwargs),
-                                   experiments=experiments,
-                                   loop_exps=loop_exps)
+        self._parallelize_command(dict(evaluate=kwargs),
+                                  experiments=experiments,
+                                  loop_exps=loop_exps)
 
     @docstrings.dedent
     def plot(self, indicators=['rsquared', 'slope', 'ks', 'quality'],

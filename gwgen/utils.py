@@ -1740,9 +1740,8 @@ class TaskManager(object):
                 else:
                     res = pool.map_async(self, args)
                     tasks = res.get()
-                    pool.close()
-                    pool.join()
                     pool.terminate()
+                    pool.join()
                 tasks = [
                     task.setup_from_instances(
                         next(t for t in all_tasks if t.name == task.name),
