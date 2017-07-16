@@ -1010,7 +1010,7 @@ class GWGENOrganizer(ModelOrganizer):
             metavar='f1[,f21[-f22[-f23]]]', help=docstrings.dedents("""
                 The quantiles to use for calculating the percentiles.
                 %(str_ranges.s_help)s."""))
-        parser.pop_key('quantiles', 'nargs')
+        parser.pop_key('quantiles', 'nargs', None)
         parser.update_arg('new_project', short='np')
         parser.update_arg('no_evaluation', short='ne')
 
