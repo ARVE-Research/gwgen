@@ -255,7 +255,7 @@ parameterization.</td></tr>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate ks [-h] [-ido str] [-nr]
                               [-n variable [variable ...]] [-tw]
                               [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                              [-to-csv] [-to-db] [-rm] [-o str]
+                              [-to-csv] [-to-db] [-rm] [-sf] [-o str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -313,6 +313,10 @@ parameterization.</td></tr>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -366,8 +370,8 @@ parameterization.</td></tr>
                                   [-n variable [variable ...]] [-tw]
                                   [-q f1[,f21[-f22[-f23]]]]
                                   [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                  [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
-                                  [-op str] [-np] [-p str]
+                                  [-to-csv] [-to-db] [-rm] [-sf] [-o str]
+                                  [-onc str] [-op str] [-np] [-p str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -425,6 +429,10 @@ parameterization.</td></tr>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -511,8 +519,8 @@ parameterization.</td></tr>
 <dt><strong>plot1d</strong></dt>
 <dd><p class="first">1d plots with the indicator on the y-axis and the namelist parameter on the x-axis</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens plot plot1d [-h] [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                              [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
-                              [-op str] [-np] [-p str]
+                              [-to-csv] [-to-db] [-rm] [-sf] [-o str]
+                              [-onc str] [-op str] [-np] [-p str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -547,6 +555,10 @@ parameterization.</td></tr>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -584,8 +596,8 @@ parameterization.</td></tr>
 <dt><strong>plot2d</strong></dt>
 <dd><p class="first">2d plots with one namelist parameter on the y-axis and one on the x-axis and a color coding the the indicator</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens plot plot2d [-h] [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                              [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
-                              [-op str] [-np] [-p str]
+                              [-to-csv] [-to-db] [-rm] [-sf] [-o str]
+                              [-onc str] [-op str] [-np] [-p str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -620,6 +632,10 @@ parameterization.</td></tr>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>

@@ -46,7 +46,7 @@
   <div class="section" id="gwgen-preproc-cloud-eecra-ghcn-map">
 <span id="id1"></span><h1>gwgen preproc cloud eecra_ghcn_map<a class="headerlink" href="#gwgen-preproc-cloud-eecra-ghcn-map" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_ghcn_map [-h] [-ido str] [-md float]
-                                          [-to-csv] [-rm]
+                                          [-to-csv] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="docutils">
@@ -79,6 +79,10 @@
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>

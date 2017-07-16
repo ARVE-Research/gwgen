@@ -155,7 +155,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_inventory [-h] [-ido str]
                                            [-xstall bool or str]
                                            [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                           [-to-csv] [-to-db] [-rm]
+                                           [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -208,6 +208,10 @@
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -216,7 +220,7 @@
 <dt><strong>eecra_ghcn_map</strong></dt>
 <dd><p class="first">Compute the inventory of the EECRA stations</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_ghcn_map [-h] [-ido str] [-md float]
-                                          [-to-csv] [-rm]
+                                          [-to-csv] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -249,6 +253,10 @@
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>

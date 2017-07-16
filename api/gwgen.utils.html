@@ -502,6 +502,9 @@ all possible arguments</p>
 <dd>To combine multiple instances of the class</dd>
 </dl>
 </div>
+<p class="rubric">Notes</p>
+<p>Besides the <cite>skip_filtering</cite> parameter, the <code class="xref py py-attr docutils literal"><span class="pre">task_config</span></code> is not
+inherited from <cite>task</cite></p>
 </dd></dl>
 
 <dl class="classmethod">
@@ -791,7 +794,7 @@ process</p>
 
 <dl class="class">
 <dt id="gwgen.utils.TaskConfig">
-<em class="property">class </em><code class="descclassname">gwgen.utils.</code><code class="descname">TaskConfig</code><span class="sig-paren">(</span><em>setup_from</em>, <em>to_csv</em>, <em>to_db</em>, <em>remove</em>, <em>plot_output</em>, <em>nc_output</em>, <em>project_output</em>, <em>new_project</em>, <em>project</em>, <em>close</em><span class="sig-paren">)</span><a class="headerlink" href="#gwgen.utils.TaskConfig" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">gwgen.utils.</code><code class="descname">TaskConfig</code><span class="sig-paren">(</span><em>setup_from</em>, <em>to_csv</em>, <em>to_db</em>, <em>remove</em>, <em>skip_filtering</em>, <em>plot_output</em>, <em>nc_output</em>, <em>project_output</em>, <em>new_project</em>, <em>project</em>, <em>close</em><span class="sig-paren">)</span><a class="headerlink" href="#gwgen.utils.TaskConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#gwgen.utils.TaskConfig" title="gwgen.utils.TaskConfig"><code class="xref py py-class docutils literal"><span class="pre">gwgen.utils.TaskConfig</span></code></a></p>
 <p>Configuration of tasks for their <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> and
 <a class="reference internal" href="#gwgen.utils.TaskBase.run" title="gwgen.utils.TaskBase.run"><code class="xref py py-meth docutils literal"><span class="pre">run()</span></code></a> methods.</p>
@@ -817,6 +820,7 @@ from scratch</dd>
 <li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
 <li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
 <li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>skip_filtering</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, skip the filtering for the correct stations in the datafile</li>
 <li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
 <li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
 netCDF file of the plot data</li>
@@ -1053,7 +1057,7 @@ run method will be returned</li>
 
 <dl class="function">
 <dt id="gwgen.utils.default_config">
-<code class="descclassname">gwgen.utils.</code><code class="descname">default_config</code><span class="sig-paren">(</span><em>setup_from=None</em>, <em>to_csv=False</em>, <em>to_db=False</em>, <em>remove=False</em>, <em>plot_output=None</em>, <em>nc_output=None</em>, <em>project_output=None</em>, <em>new_project=False</em>, <em>project=None</em>, <em>close=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#default_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.default_config" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gwgen.utils.</code><code class="descname">default_config</code><span class="sig-paren">(</span><em>setup_from=None</em>, <em>to_csv=False</em>, <em>to_db=False</em>, <em>remove=False</em>, <em>skip_filtering=False</em>, <em>plot_output=None</em>, <em>nc_output=None</em>, <em>project_output=None</em>, <em>new_project=False</em>, <em>project=None</em>, <em>close=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#default_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.default_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>The default configuration for TaskBase instances. See also the
 <a class="reference internal" href="#gwgen.utils.TaskBase.default_config" title="gwgen.utils.TaskBase.default_config"><code class="xref py py-attr docutils literal"><span class="pre">TaskBase.default_config</span></code></a> attribute</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1078,6 +1082,7 @@ from scratch</dd>
 <li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
 <li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
 <li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>skip_filtering</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, skip the filtering for the correct stations in the datafile</li>
 <li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
 <li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
 netCDF file of the plot data</li>

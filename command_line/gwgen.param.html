@@ -126,7 +126,7 @@
 <dd><p class="first">Hourly cloud data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param hourly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                 [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                [-to-csv] [-to-db] [-rm]
+                                [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -187,6 +187,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -196,7 +200,7 @@ Default: ghcn</p>
 <dd><p class="first">Calculate the daily cloud values from hourly cloud data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param daily_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                               [-to-csv] [-to-db] [-rm]
+                               [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -257,6 +261,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -266,7 +274,7 @@ Default: ghcn</p>
 <dd><p class="first">Read in the daily GHCN data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param day [-h] [-ido str] [-d { &#39;single&#39; | &#39;all&#39; | None }]
                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                       [-to-db] [-rm]
+                       [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -321,6 +329,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -330,7 +342,7 @@ Default: ghcn</p>
 <dd><p class="first">Calculate monthly means from the daily GHCN data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param month [-h] [-ido str]
                          [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                         [-to-db] [-rm]
+                         [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -377,6 +389,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -386,7 +402,7 @@ Default: ghcn</p>
 <dd><p class="first">Extract the complete months from the monthly data in complete years</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonth [-h] [-ido str]
                                  [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                 [-to-csv] [-to-db] [-rm]
+                                 [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -433,6 +449,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -442,7 +462,7 @@ Default: ghcn</p>
 <dd><p class="first">Calculate the monthly cloud values from daily cloud data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param monthly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                  [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                 [-to-csv] [-to-db] [-rm]
+                                 [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -503,6 +523,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -512,7 +536,7 @@ Default: ghcn</p>
 <dd><p class="first">Extract the months with complete wind data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonthly_wind [-h] [-ido str] [-at {ghcn,eecra,files}]
                                  [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                 [-to-csv] [-to-db] [-rm]
+                                 [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -573,6 +597,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -582,7 +610,7 @@ Default: ghcn</p>
 <dd><p class="first">Extract the months with complete wind data in complete years</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonthly_wind [-h] [-ido str] [-at {ghcn,eecra}]
                                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                        [-to-csv] [-to-db] [-rm]
+                                        [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -641,6 +669,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -650,7 +682,7 @@ Default: ghcn</p>
 <dd><p class="first">Get the days of the complete months</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cday [-h] [-ido str]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                        [-to-db] [-rm]
+                        [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -697,6 +729,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -710,8 +746,8 @@ Default: ghcn</p>
                         [-tmax-range1 floats with length 2 floats with length 2]
                         [-tmax-range2 floats with length 2 floats with length 2]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                        [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
-                        [-p str]
+                        [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
+                        [-np] [-p str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -786,6 +822,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -824,7 +864,7 @@ Default: ghcn</p>
 <dd><p class="first">Get the days of the complete daily cloud months</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cdaily_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                 [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                [-to-csv] [-to-db] [-rm]
+                                [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -885,6 +925,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -894,7 +938,7 @@ Default: ghcn</p>
 <dd><p class="first">Extract the complete months from the monthly data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonth [-h] [-ido str]
                           [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                          [-to-db] [-rm]
+                          [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -941,6 +985,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -950,8 +998,8 @@ Default: ghcn</p>
 <dd><p class="first">Calculate the markov chain parameterization</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param markov [-h] [-ido str]
                           [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                          [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
-                          [-p str]
+                          [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
+                          [-np] [-p str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -998,6 +1046,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1036,7 +1088,7 @@ Default: ghcn</p>
 <dd><p class="first">Extract the months with complete cloud data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonthly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                   [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                  [-to-csv] [-to-db] [-rm]
+                                  [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -1097,6 +1149,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1106,8 +1162,8 @@ Default: ghcn</p>
 <dd><p class="first">Parameterize the cloud data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cloud [-h] [-ido str] [-at {ghcn,eecra}]
                          [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                         [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
-                         [-p str]
+                         [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
+                         [-np] [-p str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -1166,6 +1222,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1204,7 +1264,7 @@ Default: ghcn</p>
 <dd><p class="first">Get the days of the complete daily cloud months in complete years</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cdaily_cloud [-h] [-ido str] [-at {ghcn,eecra}]
                                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                       [-to-csv] [-to-db] [-rm]
+                                       [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -1263,6 +1323,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1272,7 +1336,7 @@ Default: ghcn</p>
 <dd><p class="first">Cross corellation between temperature and cloudiness</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param corr [-h] [-ido str]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                        [-to-db] [-rm]
+                        [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -1319,6 +1383,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1328,7 +1396,7 @@ Default: ghcn</p>
 <dd><p class="first">Extract the months with complete cloud data in complete years</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonthly_cloud [-h] [-ido str] [-at {ghcn,eecra}]
                                          [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                                         [-to-csv] [-to-db] [-rm]
+                                         [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -1387,6 +1455,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1396,7 +1468,7 @@ Default: ghcn</p>
 <dd><p class="first">Get the days of the complete months in complete years</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cday [-h] [-ido str]
                                [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
-                               [-to-csv] [-to-db] [-rm]
+                               [-to-csv] [-to-db] [-rm] [-sf]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -1443,6 +1515,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1452,8 +1528,8 @@ Default: ghcn</p>
 <dd><p class="first">Calculate the precipitation distribution parameters of the hybrid Gamma-GP</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param prcp [-h] [-ido str] [-t float] [-t2c float [float ...]]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                        [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
-                        [-p str]
+                        [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
+                        [-np] [-p str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -1504,6 +1580,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1546,8 +1626,8 @@ Default: ghcn</p>
 <dd><p class="first">Parameterize the wind data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param wind [-h] [-ido str] [-at {ghcn,eecra}]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                        [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
-                        [-p str]
+                        [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
+                        [-np] [-p str]
 </pre></div>
 </div>
 <dl class="last docutils">
@@ -1606,6 +1686,10 @@ Default: ghcn</p>
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>

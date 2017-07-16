@@ -47,8 +47,8 @@
 <span id="id1"></span><h1>gwgen param markov<a class="headerlink" href="#gwgen-param-markov" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param markov [-h] [-ido str]
                           [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
-                          [-to-db] [-rm] [-o str] [-onc str] [-op str] [-np]
-                          [-p str]
+                          [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
+                          [-np] [-p str]
 </pre></div>
 </div>
 <dl class="docutils">
@@ -95,6 +95,10 @@
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
 <tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>

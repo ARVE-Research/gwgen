@@ -414,7 +414,8 @@
 
 
 <span class="n">_SetupConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
-    <span class="s1">&#39;_SetupConfig&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;setup_from&#39;</span><span class="p">,</span> <span class="s1">&#39;to_csv&#39;</span><span class="p">,</span> <span class="s1">&#39;to_db&#39;</span><span class="p">,</span> <span class="s1">&#39;remove&#39;</span><span class="p">])</span>
+    <span class="s1">&#39;_SetupConfig&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;setup_from&#39;</span><span class="p">,</span> <span class="s1">&#39;to_csv&#39;</span><span class="p">,</span> <span class="s1">&#39;to_db&#39;</span><span class="p">,</span> <span class="s1">&#39;remove&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;skip_filtering&#39;</span><span class="p">])</span>
 
 <span class="n">_SetupConfig</span> <span class="o">=</span> <span class="n">append_doc</span><span class="p">(</span><span class="n">_SetupConfig</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">Configuration for the setup of tasks via their :meth:`~TaskBase.setup`</span>
@@ -440,6 +441,8 @@
 <span class="s2">    If True, the data at setup will be written to into a database</span>
 <span class="s2">remove: bool</span>
 <span class="s2">    If True and the old data file already exists, remove before writing to it</span>
+<span class="s2">skip_filtering: bool</span>
+<span class="s2">    If True, skip the filtering for the correct stations in the datafile</span>
 <span class="s2">&quot;&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;_SetupConfig&#39;</span><span class="p">))</span>
 
 
@@ -486,6 +489,7 @@
 <span class="nd">@docstrings.dedent</span>
 <div class="viewcode-block" id="default_config"><a class="viewcode-back" href="../../api/gwgen.utils.html#gwgen.utils.default_config">[docs]</a><span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span>
         <span class="n">setup_from</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">to_csv</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">to_db</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">skip_filtering</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
         <span class="n">plot_output</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nc_output</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">project_output</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
         <span class="n">new_project</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">close</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -495,8 +499,9 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    %(TaskConfig.parameters)s&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">TaskConfig</span><span class="p">(</span><span class="n">setup_from</span><span class="p">,</span> <span class="n">to_csv</span><span class="p">,</span> <span class="n">to_db</span><span class="p">,</span> <span class="n">remove</span><span class="p">,</span> <span class="n">plot_output</span><span class="p">,</span>
-                      <span class="n">nc_output</span><span class="p">,</span> <span class="n">project_output</span><span class="p">,</span> <span class="n">new_project</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">close</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">TaskConfig</span><span class="p">(</span><span class="n">setup_from</span><span class="p">,</span> <span class="n">to_csv</span><span class="p">,</span> <span class="n">to_db</span><span class="p">,</span> <span class="n">remove</span><span class="p">,</span> <span class="n">skip_filtering</span><span class="p">,</span>
+                      <span class="n">plot_output</span><span class="p">,</span> <span class="n">nc_output</span><span class="p">,</span> <span class="n">project_output</span><span class="p">,</span> <span class="n">new_project</span><span class="p">,</span>
+                      <span class="n">project</span><span class="p">,</span> <span class="n">close</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TaskMeta"><a class="viewcode-back" href="../../api/gwgen.utils.html#gwgen.utils.TaskMeta">[docs]</a><span class="k">class</span> <span class="nc">TaskMeta</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
@@ -978,7 +983,15 @@
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
 <span class="sd">        setup_from_instances: To combine multiple instances of the class</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Besides the `skip_filtering` parameter, the :attr:`task_config` is not</span>
+<span class="sd">        inherited from `task`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_config</span><span class="p">,</span> <span class="s1">&#39;skip_filtering&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;skip_filtering&#39;</span><span class="p">,</span>
+                              <span class="n">task</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">skip_filtering</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">stations</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">project_config</span><span class="p">,</span>
                    <span class="n">task</span><span class="o">.</span><span class="n">global_config</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -1124,30 +1137,42 @@
         <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">chunksize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;chunksize&#39;</span><span class="p">,</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">5</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">datafile</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">safe_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="p">)):</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">all_data</span> <span class="ow">in</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
-                                        <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
-                <span class="k">if</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">all_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-                    <span class="n">all_data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-                <span class="n">stations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">all_data</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">stations</span><span class="p">])</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">names</span> <span class="o">=</span> <span class="n">all_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">names</span>
-                    <span class="n">axis</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
-                    <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">axis</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">stations</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
-                        <span class="nb">slice</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
-                    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">all_data</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">key</span><span class="p">)])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">i</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">skip_filtering</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">all_data</span> <span class="ow">in</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">,</span>
+                                            <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">all_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="n">all_data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="n">stations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">all_data</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="n">stations</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">names</span> <span class="o">=</span> <span class="n">all_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">names</span>
+                        <span class="n">axis</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+                        <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">axis</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span>
+                            <span class="n">stations</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+                                <span class="nb">slice</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
+                                    <span class="n">axis</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+                        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">all_data</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span>
+                            <span class="nb">tuple</span><span class="p">(</span><span class="n">key</span><span class="p">)])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="TaskBase.setup_from_db"><a class="viewcode-back" href="../../api/gwgen.utils.html#gwgen.utils.TaskBase.setup_from_db">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set up the task from datatables already created&quot;&quot;&quot;</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dbname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">safe_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbname</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span>
-                <span class="s2">&quot;SELECT * FROM </span><span class="si">%s</span><span class="s2"> WHERE id IN (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                    <span class="n">dbname</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s2">&quot;&#39;{0}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">))),</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">skip_filtering</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dbname</span><span class="p">,</span> <span class="p">),</span>
+                                      <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+                    <span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span>
+                    <span class="s2">&quot;SELECT * FROM </span><span class="si">%s</span><span class="s2"> WHERE id IN (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">dbname</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="s2">&quot;&#39;{0}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stations</span><span class="p">))),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">)</span></div>
 
     <span class="nd">@classmethod</span>
     <span class="nd">@docstrings.get_sectionsf</span><span class="p">(</span><span class="s1">&#39;TaskBase.setup_from_instances&#39;</span><span class="p">)</span>
@@ -1329,6 +1354,7 @@
             <span class="n">parser</span><span class="o">.</span><span class="n">pop_arg</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;rm&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;skip_filtering&#39;</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="s1">&#39;sf&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">has_run</span><span class="p">:</span>
             <span class="n">run_grp</span> <span class="o">=</span> <span class="bp">None</span>
