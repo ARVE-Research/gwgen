@@ -370,7 +370,8 @@ def append_doc(namedtuple_cls, doc):
 
 
 _SetupConfig = namedtuple(
-    '_SetupConfig', ['setup_from', 'to_csv', 'to_db', 'remove'])
+    '_SetupConfig', ['setup_from', 'to_csv', 'to_db', 'remove',
+                     'skip_filtering'])
 
 _SetupConfig = append_doc(_SetupConfig, docstrings.get_sections("""
 Configuration for the setup of tasks via their :meth:`~TaskBase.setup`
@@ -396,6 +397,8 @@ to_db: bool
     If True, the data at setup will be written to into a database
 remove: bool
     If True and the old data file already exists, remove before writing to it
+skip_filtering: bool
+    If True, skip the filtering for the correct stations in the datafile
 """, '_SetupConfig'))
 
 
@@ -442,6 +445,7 @@ Parameters
 @docstrings.dedent
 def default_config(
         setup_from=None, to_csv=False, to_db=False, remove=False,
+        skip_filtering=False,
         plot_output=None, nc_output=None, project_output=None,
         new_project=False, project=None, close=True):
     """
@@ -451,8 +455,9 @@ def default_config(
     Parameters
     ----------
     %(TaskConfig.parameters)s"""
-    return TaskConfig(setup_from, to_csv, to_db, remove, plot_output,
-                      nc_output, project_output, new_project, project, close)
+    return TaskConfig(setup_from, to_csv, to_db, remove, skip_filtering,
+                      plot_output, nc_output, project_output, new_project,
+                      project, close)
 
 
 class TaskMeta(abc.ABCMeta):
@@ -934,7 +939,15 @@ class TaskBase(object):
         See Also
         --------
         setup_from_instances: To combine multiple instances of the class
+
+        Notes
+        -----
+        Besides the `skip_filtering` parameter, the :attr:`task_config` is not
+        inherited from `task`
         """
+        if getattr(task.task_config, 'skip_filtering', None):
+            kwargs.setdefault('skip_filtering',
+                              task.task_config.skip_filtering)
         return cls(task.stations, task.config, task.project_config,
                    task.global_config, *args, **kwargs)
 
@@ -1080,30 +1093,42 @@ class TaskBase(object):
         kwargs = self._split_kwargs(kwargs)
         chunksize = self.global_config.get('chunksize', 10 ** 5)
         for i, datafile in enumerate(safe_list(self.datafile)):
-            data = []
-            for all_data in pd.read_csv(datafile, chunksize=chunksize,
-                                        **kwargs[i]):
-                if 'id' in all_data.columns:
-                    all_data.set_index('id', inplace=True)
-                stations = list(self.stations)
-                if len(all_data.index.names) == 1:
-                    data.append(all_data.loc(axis=0)[stations])
-                else:
-                    names = all_data.index.names
-                    axis = names.index('id')
-                    key = [slice(None) for _ in range(axis)] + [stations] + [
-                        slice(None) for _ in range(axis, len(names) - 1)]
-                    data.append(all_data.sort_index().loc(axis=0)[tuple(key)])
-            self._set_data(pd.concat(data), i)
+            if not self.task_config.skip_filtering:
+                data = []
+                for all_data in pd.read_csv(datafile, chunksize=chunksize,
+                                            **kwargs[i]):
+                    if 'id' in all_data.columns:
+                        all_data.set_index('id', inplace=True)
+                    stations = list(self.stations)
+                    if len(all_data.index.names) == 1:
+                        data.append(all_data.loc(axis=0)[stations])
+                    else:
+                        names = all_data.index.names
+                        axis = names.index('id')
+                        key = [slice(None) for _ in range(axis)] + [
+                            stations] + [
+                                slice(None) for _ in range(
+                                    axis, len(names) - 1)]
+                        data.append(all_data.sort_index().loc(axis=0)[
+                            tuple(key)])
+                self._set_data(pd.concat(data), i)
+            else:
+                self._set_data(pd.read_csv(datafile, **kwargs[i]))
 
     def setup_from_db(self, **kwargs):
         """Set up the task from datatables already created"""
         kwargs = self._split_kwargs(kwargs)
         for i, dbname in enumerate(safe_list(self.dbname)):
-            self._set_data(pd.read_sql_query(
-                "SELECT * FROM %s WHERE id IN (%s)" % (
-                    dbname, ', '.join(map("'{0}'".format, self.stations))),
-                self.engine, **kwargs[i]), i)
+            if self.task_config.skip_filtering:
+                self._set_data(
+                    pd.read_sql_query("SELECT * FROM %s" % (dbname, ),
+                                      self.engine, **kwargs[i]),
+                    i)
+            else:
+                self._set_data(pd.read_sql_query(
+                    "SELECT * FROM %s WHERE id IN (%s)" % (
+                        dbname, ', '.join(map("'{0}'".format, self.stations))),
+                    self.engine, **kwargs[i]), i)
 
     @classmethod
     @docstrings.get_sectionsf('TaskBase.setup_from_instances')
@@ -1285,6 +1310,7 @@ class TaskBase(object):
             parser.pop_arg('remove')
         else:
             parser.update_arg('remove', short='rm')
+        parser.update_arg('skip_filtering', short='sf')
 
         if not cls.has_run:
             run_grp = None
