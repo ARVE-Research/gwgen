@@ -2813,8 +2813,8 @@ Default: ghcn</p>
 <dd><p class="first">Compare the quantiles of simulation and observation</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen evaluate quants [-h] [-ido str] [-nr]
                              [-n variable [variable ...]] [-tw]
-                             [-q f1[;f21[,f22[,f23]]] [f1[;f21[,f22[,f23]]]
-                             ...]] [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+                             [-q f1[,f21[-f22[-f23]]]]
+                             [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                              [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
                              [-op str] [-np] [-p str]
 </pre></div>
@@ -3339,8 +3339,7 @@ parameterization.</td></tr>
 <dd><p class="first">Compare the quantiles of simulation and observation</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate quants [-h] [-ido str] [-nr]
                                   [-n variable [variable ...]] [-tw]
-                                  [-q f1[;f21[,f22[,f23]]]
-                                  [f1[;f21[,f22[,f23]]] ...]]
+                                  [-q f1[,f21[-f22[-f23]]]]
                                   [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                   [-to-csv] [-to-db] [-rm] [-o str] [-onc str]
                                   [-op str] [-np] [-p str]
