@@ -1157,7 +1157,7 @@
                             <span class="nb">tuple</span><span class="p">(</span><span class="n">key</span><span class="p">)])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">i</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_data</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TaskBase.setup_from_db"><a class="viewcode-back" href="../../api/gwgen.utils.html#gwgen.utils.TaskBase.setup_from_db">[docs]</a>    <span class="k">def</span> <span class="nf">setup_from_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set up the task from datatables already created&quot;&quot;&quot;</span>
@@ -1784,9 +1784,8 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">res</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
                     <span class="n">tasks</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-                    <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-                    <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
                     <span class="n">pool</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+                    <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
                 <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">task</span><span class="o">.</span><span class="n">setup_from_instances</span><span class="p">(</span>
                         <span class="nb">next</span><span class="p">(</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">all_tasks</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">task</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>

@@ -129,8 +129,8 @@
 
     <span class="nd">@docstrings.get_sectionsf</span><span class="p">(</span><span class="s1">&#39;SensitivityAnalysis._parallelize_command&#39;</span><span class="p">)</span>
     <span class="nd">@docstrings.dedent</span>
-    <span class="k">def</span> <span class="nf">_parallelilze_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kws</span><span class="p">,</span> <span class="n">experiments</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                              <span class="n">loop_exps</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_parallelize_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kws</span><span class="p">,</span> <span class="n">experiments</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                             <span class="n">loop_exps</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run a GWGENOrganizer command in parallel for all the experiments in</span>
 <span class="sd">        this analysis</span>
@@ -494,8 +494,8 @@
 <span class="sd">        ----------</span>
 <span class="sd">        %(SensitivityAnalysis._parallelize_command.parameters.experiments)s</span>
 <span class="sd">        %(GWGENOrganizer.run.parameters.remove)s&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_parallelilze_command</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">remove</span><span class="o">=</span><span class="n">remove</span><span class="p">)),</span>
-                                   <span class="n">experiments</span><span class="o">=</span><span class="n">experiments</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parallelize_command</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">remove</span><span class="o">=</span><span class="n">remove</span><span class="p">)),</span>
+                                  <span class="n">experiments</span><span class="o">=</span><span class="n">experiments</span><span class="p">)</span></div>
 
     <span class="n">docstrings</span><span class="o">.</span><span class="n">keep_params</span><span class="p">(</span>
         <span class="s1">&#39;SensitivityAnalysis._parallelize_command.parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;loop_exps&#39;</span><span class="p">)</span>
@@ -517,9 +517,9 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="n">val</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;experiments&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
                 <span class="n">val</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;loop_exps&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_parallelilze_command</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">evaluate</span><span class="o">=</span><span class="n">kwargs</span><span class="p">),</span>
-                                   <span class="n">experiments</span><span class="o">=</span><span class="n">experiments</span><span class="p">,</span>
-                                   <span class="n">loop_exps</span><span class="o">=</span><span class="n">loop_exps</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parallelize_command</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">evaluate</span><span class="o">=</span><span class="n">kwargs</span><span class="p">),</span>
+                                  <span class="n">experiments</span><span class="o">=</span><span class="n">experiments</span><span class="p">,</span>
+                                  <span class="n">loop_exps</span><span class="o">=</span><span class="n">loop_exps</span><span class="p">)</span></div>
 
     <span class="nd">@docstrings.dedent</span>
 <div class="viewcode-block" id="SensitivityAnalysis.plot"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityAnalysis.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indicators</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rsquared&#39;</span><span class="p">,</span> <span class="s1">&#39;slope&#39;</span><span class="p">,</span> <span class="s1">&#39;ks&#39;</span><span class="p">,</span> <span class="s1">&#39;quality&#39;</span><span class="p">],</span>
