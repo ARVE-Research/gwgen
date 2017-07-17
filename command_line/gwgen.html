@@ -3678,7 +3678,8 @@ parameterization.</td></tr>
 </dd>
 <dt><strong>plot2d</strong></dt>
 <dd><p class="first">2d plots with one namelist parameter on the y-axis and one on the x-axis and a color coding the the indicator</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens plot plot2d [-h] [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
+<div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens plot plot2d [-h] [-logx] [-logy]
+                              [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                               [-to-csv] [-to-db] [-rm] [-sf] [-o str]
                               [-onc str] [-op str] [-np] [-p str]
 </pre></div>
@@ -3727,6 +3728,12 @@ parameterization.</td></tr>
 <col class="option" />
 <col class="description" />
 <tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-logx=False</span></kbd></td>
+<td>    If True, the x-axis will be logarithmic</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-logy=False</span></kbd></td>
+<td>    If True, the y-axis will be logarithmic</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
 </tr>

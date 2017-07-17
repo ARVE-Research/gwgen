@@ -806,6 +806,39 @@
         <span class="k">return</span> <span class="n">psy</span><span class="o">.</span><span class="n">gcp</span><span class="p">(</span><span class="bp">True</span><span class="p">)[:]</span></div></div>
 
 
+<span class="n">_SensitivityPlot2DConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s1">&#39;_SensitivityPlot2DConfig&#39;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;logx&#39;</span><span class="p">,</span> <span class="s1">&#39;logy&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">_SensitivityPlotConfig</span><span class="o">.</span><span class="n">_fields</span><span class="p">))</span>
+
+<span class="n">_SensitivityPlot2DConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">append_doc</span><span class="p">(</span>
+    <span class="n">_SensitivityPlot2DConfig</span><span class="p">,</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">get_sections</span><span class="p">(</span><span class="n">docstrings</span><span class="o">.</span><span class="n">dedents</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Parameters</span>
+<span class="s2">----------</span>
+<span class="s2">logx: bool</span>
+<span class="s2">    If True, the x-axis will be logarithmic</span>
+<span class="s2">logy: bool</span>
+<span class="s2">    If True, the y-axis will be logarithmic</span>
+<span class="s2">%(_SensitivityPlotConfig.parameters)s</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">),</span> <span class="s1">&#39;_SensitivityPlot2DConfig&#39;</span><span class="p">))</span>
+
+<span class="n">SensitivityPlot2DConfig</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">enhanced_config</span><span class="p">(</span><span class="n">_SensitivityPlot2DConfig</span><span class="p">,</span>
+                                                <span class="s1">&#39;SensitivityPlot2DConfig&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@docstrings.dedent</span>
+<div class="viewcode-block" id="default_plot2d_config"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.default_plot2d_config">[docs]</a><span class="k">def</span> <span class="nf">default_plot2d_config</span><span class="p">(</span>
+        <span class="n">logx</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">logy</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The default configuration for :class:`SensitivityPlot` instances.</span>
+<span class="sd">    See also the :attr:`SensitivityPlot.default_config` attribute</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    %(SensitivityPlot2DConfig.parameters)s&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">SensitivityPlot2DConfig</span><span class="p">(</span>
+            <span class="n">logx</span><span class="p">,</span> <span class="n">logy</span><span class="p">,</span> <span class="o">*</span><span class="n">default_sens_config</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
 <div class="viewcode-block" id="SensitivityPlot2D"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot2D">[docs]</a><span class="k">class</span> <span class="nc">SensitivityPlot2D</span><span class="p">(</span><span class="n">SensitivityPlot</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;2d plots with one namelist parameter on the y-axis and one on the</span>
 <span class="sd">    x-axis and a color coding the the indicator&quot;&quot;&quot;</span>
@@ -816,6 +849,20 @@
                <span class="s1">&#39;the x-axis and a color coding the the indicator&#39;</span><span class="p">)</span>
 
     <span class="n">has_run</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">default_plot2d_config</span><span class="p">()</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">super</span><span class="p">(</span><span class="n">SensitivityPlot2D</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_modify_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">setup_args</span><span class="p">(</span><span class="n">default_plot2d_config</span><span class="p">)</span>
+        <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span>
+            <span class="n">SensitivityPlot2D</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_modify_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;logx&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">run_grp</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">update_arg</span><span class="p">(</span><span class="s1">&#39;logy&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">run_grp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="n">setup_grp</span><span class="p">,</span> <span class="n">run_grp</span>
 
 <div class="viewcode-block" id="SensitivityPlot2D.run"><a class="viewcode-back" href="../../api/gwgen.sensitivity_analysis.html#gwgen.sensitivity_analysis.SensitivityPlot2D.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">psyplot.data</span> <span class="kn">as</span> <span class="nn">psyd</span>
@@ -862,6 +909,10 @@
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables_meta</span><span class="p">[</span><span class="n">variable</span><span class="p">])</span>
                 <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">plots</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">)</span>
                 <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="s1">&#39;long_name&#39;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">logx</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_config</span><span class="o">.</span><span class="n">logy</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
                 <span class="c1"># draw box around colorbar</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span>
                 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">],</span> <span class="n">axisbg</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>

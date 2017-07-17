@@ -74,7 +74,10 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.default_sens_config" title="gwgen.sensitivity_analysis.default_sens_config"><code class="xref py py-obj docutils literal"><span class="pre">default_sens_config</span></code></a>([sa,&nbsp;indicators,&nbsp;names,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.default_plot2d_config" title="gwgen.sensitivity_analysis.default_plot2d_config"><code class="xref py py-obj docutils literal"><span class="pre">default_plot2d_config</span></code></a>([logx,&nbsp;logy])</td>
+<td>The default configuration for <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-class docutils literal"><span class="pre">SensitivityPlot</span></code></a> instances.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.default_sens_config" title="gwgen.sensitivity_analysis.default_sens_config"><code class="xref py py-obj docutils literal"><span class="pre">default_sens_config</span></code></a>([sa,&nbsp;indicators,&nbsp;names,&nbsp;...])</td>
 <td>The default configuration for <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-class docutils literal"><span class="pre">SensitivityPlot</span></code></a> instances.</td>
 </tr>
 </tbody>
@@ -698,13 +701,16 @@ all possible arguments</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.has_run" title="gwgen.sensitivity_analysis.SensitivityPlot2D.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.default_config" title="gwgen.sensitivity_analysis.SensitivityPlot2D.default_config"><code class="xref py py-obj docutils literal"><span class="pre">default_config</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.has_run" title="gwgen.sensitivity_analysis.SensitivityPlot2D.has_run"><code class="xref py py-obj docutils literal"><span class="pre">has_run</span></code></a></td>
 <td>bool(x) -&gt; bool</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.name" title="gwgen.sensitivity_analysis.SensitivityPlot2D.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.name" title="gwgen.sensitivity_analysis.SensitivityPlot2D.name"><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.summary" title="gwgen.sensitivity_analysis.SensitivityPlot2D.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.summary" title="gwgen.sensitivity_analysis.SensitivityPlot2D.summary"><code class="xref py py-obj docutils literal"><span class="pre">summary</span></code></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
 </tr>
 </tbody>
@@ -721,6 +727,11 @@ all possible arguments</p>
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="gwgen.sensitivity_analysis.SensitivityPlot2D.default_config">
+<code class="descname">default_config</code><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.default_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="gwgen.sensitivity_analysis.SensitivityPlot2D.has_run">
 <code class="descname">has_run</code><em class="property"> = True</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.has_run" title="Permalink to this definition">¶</a></dt>
@@ -741,6 +752,55 @@ all possible arguments</p>
 <code class="descname">summary</code><em class="property"> = '2d plots with one namelist parameter on the y-axis and one on the x-axis and a color coding the the indicator'</em><a class="headerlink" href="#gwgen.sensitivity_analysis.SensitivityPlot2D.summary" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="gwgen.sensitivity_analysis.default_plot2d_config">
+<code class="descclassname">gwgen.sensitivity_analysis.</code><code class="descname">default_plot2d_config</code><span class="sig-paren">(</span><em>logx=False</em>, <em>logy=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/sensitivity_analysis.html#default_plot2d_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.sensitivity_analysis.default_plot2d_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default configuration for <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot" title="gwgen.sensitivity_analysis.SensitivityPlot"><code class="xref py py-class docutils literal"><span class="pre">SensitivityPlot</span></code></a> instances.
+See also the <a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityPlot.default_config" title="gwgen.sensitivity_analysis.SensitivityPlot.default_config"><code class="xref py py-attr docutils literal"><span class="pre">SensitivityPlot.default_config</span></code></a> attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>logx</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the x-axis will be logarithmic</li>
+<li><strong>logy</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the y-axis will be logarithmic</li>
+<li><strong>sa</strong> (<a class="reference internal" href="#gwgen.sensitivity_analysis.SensitivityAnalysis" title="gwgen.sensitivity_analysis.SensitivityAnalysis"><em>SensitivityAnalysis</em></a>) &#8211; The analyser to use</li>
+<li><strong>indicators</strong> (<em>str or list of str</em>) &#8211; The name of the indicators from the <cite>quality</cite> evaluation task</li>
+<li><strong>names</strong> (<em>str or list of str</em>) &#8211; The name of the variables to plot</li>
+<li><strong>meta</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; Alternative meta information for the data set</li>
+<li><strong>setup_from</strong> (<em>{ 'scratch' | 'file' | 'db' | None }</em>) &#8211; <p>The method how to setup the instance either from</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'scratch'</span></code></dt>
+<dd>To set up the task from the raw data</dd>
+<dt><code class="docutils literal"><span class="pre">'file'</span></code></dt>
+<dd>Set up the task from an existing file</dd>
+<dt><code class="docutils literal"><span class="pre">'db'</span></code></dt>
+<dd>Set up the task from a database</dd>
+<dt><code class="docutils literal"><span class="pre">None</span></code></dt>
+<dd>If the file name of this this task exists, use this one,
+otherwise a database is provided, use this one, otherwise go
+from scratch</dd>
+</dl>
+</li>
+<li><strong>to_csv</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to a csv file</li>
+<li><strong>to_db</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, the data at setup will be written to into a database</li>
+<li><strong>remove</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True and the old data file already exists, remove before writing to it</li>
+<li><strong>skip_filtering</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, skip the filtering for the correct stations in the datafile</li>
+<li><strong>plot_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the PDF file of the plot</li>
+<li><strong>nc_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</li>
+<li><strong>project_output</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; An alternative path to use for the psyplot project file of the plot</li>
+<li><strong>new_project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If True, a new project will be created even if a file in <cite>project_output</cite>
+exists already</li>
+<li><strong>project</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path to a psyplot project file to use for this parameterization</li>
+<li><strong>close</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Close the project at the end</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
