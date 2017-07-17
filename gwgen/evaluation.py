@@ -534,6 +534,7 @@ class QuantileEvaluation(Evaluator):
             df['wind_sim'] **= 0.5
         # calculate the percentiles for each station and month
         g = df.sort_index().groupby(level=['id', 'year'])
+        self.logger.debug('Done with basic setup')
         data = g.apply(self.calc)
         if len(data):
             data.index = data.index.droplevel(2)

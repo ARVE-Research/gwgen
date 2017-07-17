@@ -762,6 +762,39 @@ class SensitivityPlot1D(SensitivityPlot):
         return psy.gcp(True)[:]
 
 
+_SensitivityPlot2DConfig = namedtuple(
+    '_SensitivityPlot2DConfig',
+    ['logx', 'logy'] + list(_SensitivityPlotConfig._fields))
+
+_SensitivityPlot2DConfig = utils.append_doc(
+    _SensitivityPlot2DConfig, docstrings.get_sections(docstrings.dedents("""
+Parameters
+----------
+logx: bool
+    If True, the x-axis will be logarithmic
+logy: bool
+    If True, the y-axis will be logarithmic
+%(_SensitivityPlotConfig.parameters)s
+"""), '_SensitivityPlot2DConfig'))
+
+SensitivityPlot2DConfig = utils.enhanced_config(_SensitivityPlot2DConfig,
+                                                'SensitivityPlot2DConfig')
+
+
+@docstrings.dedent
+def default_plot2d_config(
+        logx=False, logy=False, *args, **kwargs):
+    """
+    The default configuration for :class:`SensitivityPlot` instances.
+    See also the :attr:`SensitivityPlot.default_config` attribute
+
+    Parameters
+    ----------
+    %(SensitivityPlot2DConfig.parameters)s"""
+    return SensitivityPlot2DConfig(
+            logx, logy, *default_sens_config(*args, **kwargs))
+
+
 class SensitivityPlot2D(SensitivityPlot):
     """2d plots with one namelist parameter on the y-axis and one on the
     x-axis and a color coding the the indicator"""
@@ -772,6 +805,20 @@ class SensitivityPlot2D(SensitivityPlot):
                'the x-axis and a color coding the the indicator')
 
     has_run = True
+
+    @property
+    def default_config(self):
+        return default_plot2d_config()._replace(
+            **super(SensitivityPlot2D, self).default_config._asdict())
+
+    @classmethod
+    def _modify_parser(cls, parser):
+        parser.setup_args(default_plot2d_config)
+        parser, setup_grp, run_grp = super(
+            SensitivityPlot2D, cls)._modify_parser(parser)
+        parser.update_arg('logx', group=run_grp)
+        parser.update_arg('logy', group=run_grp)
+        return parser, setup_grp, run_grp
 
     def run(self, info):
         import psyplot.data as psyd
@@ -818,6 +865,10 @@ class SensitivityPlot2D(SensitivityPlot):
                 ax.set_title(self.variables_meta[variable])
                 cbar = plt.colorbar(plots[-1], orientation='horizontal')
                 cbar.set_label(self.meta[ind]['long_name'])
+                if self.task_config.logx:
+                    ax.set_xscale('log')
+                if self.task_config.logy:
+                    ax.set_yscale('log')
                 # draw box around colorbar
                 plt.rcParams['axes.edgecolor'] = 'k'
                 ax = plt.axes([0.08, 0.03, 0.85, 0.22], axisbg='none')
