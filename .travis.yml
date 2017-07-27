@@ -14,11 +14,11 @@ matrix:
                PYTHON_VERSION=2.7
                ONLINE_TESTS=true
           os: linux
-        - env: PYTHON_VERSION=3.5
+        - env: PYTHON_VERSION=3.6
           os: linux
         - env: PYTHON_VERSION=2.7
           os: osx
-        - env: PYTHON_VERSION=3.5
+        - env: PYTHON_VERSION=3.6
           os: osx
 services:
     - postgresql
@@ -67,7 +67,7 @@ install:
     # Useful for debugging any issues with conda
     - conda info -a
     # install the conda constructor for releases
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
+    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
           conda install -n root constructor conda-build six numpy;
       fi
     - conda create -n test python="$PYTHON_VERSION" pip dask seaborn scipy numpy statsmodels matplotlib xarray six
@@ -78,28 +78,28 @@ install:
     # ---- CUSTOM INSTALLATIONS ----
     # NOTE: Remove this when psyplot is stable enough
     - git clone "https://github.com/Chilipp/psyplot.git" -b dev
-    - cd psyplot && python setup.py install
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          pypi_skeleton . tmp && build_conda tmp/psyplot && rm -rf tmp &&
+    - cd psyplot && python setup.py install && cd ..
+    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+          pypi_skeleton . tmp && build_conda tmp && rm -rf tmp &&
           export PSYPLOT_FILE="${BUILD_FNAME}";
       fi
-    - cd .. && rm -rf psyplot
+    - rm -rf psyplot
     # install psy-simple
     - git clone "https://github.com/Chilipp/psy-simple.git" -b dev
-    - cd psy-simple && python setup.py install
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          pypi_skeleton . tmp && build_conda tmp/psy-simple && rm -rf tmp &&
+    - cd psy-simple && python setup.py install && cd ..
+    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+          pypi_skeleton . tmp && build_conda tmp && rm -rf tmp &&
           export PSY_SIMPLE_FILE="${BUILD_FNAME}";
       fi
-    - cd .. && rm -rf psy-simple
+    - rm -rf psy-simple
     # install psy-reg
     - git clone "https://github.com/Chilipp/psy-reg.git" -b dev
-    - cd psy-reg && python setup.py install
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          pypi_skeleton . tmp && build_conda tmp/psy-reg && rm -rf tmp &&
+    - cd psy-reg && python setup.py install && cd ../
+    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+          pypi_skeleton . tmp && build_conda tmp && rm -rf tmp &&
           export PSY_REG_FILE="${BUILD_FNAME}";
       fi
-    - cd .. && rm -rf psy-reg
+    - rm -rf psy-reg
     # ---- END CUSTOM installations ----
     - python setup.py install
     # install necessary module for the documentation and clone the existing
@@ -113,13 +113,6 @@ install:
           ls -ad  * .* | grep -v ".git$" | grep -v "^\.$" | grep -v "^\.\.$" | xargs rm -r;
           touch .nojekyll;
           cd ..;
-      fi
-    # on osx, we have to unset LDFLAGS in the build script
-    # https://groups.google.com/a/continuum.io/forum/#!topic/conda/1COIyu1ch2c
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-          export INSERT_INTO_BUILD="sed -i '2 i\unset LDFLAGS' tmp/gwgen/build.sh";
-      else
-          export INSERT_INTO_BUILD="echo Nothing to insert on linux";
       fi
     # export the environment for debugging
     - conda env export -n test
@@ -139,8 +132,8 @@ script:
           sphinx-build docs deploy;
       fi
     # construct conda environment for releases
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          pypi_skeleton . tmp && bash -c "$INSERT_INTO_BUILD" && build_conda tmp/gwgen && rm -rf tmp &&
+    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+          pypi_skeleton . tmp && build_conda tmp && rm -rf tmp &&
           export GWGEN_FILE="${BUILD_FNAME}" &&
           bash ci/setup_constructor_files.sh &&
           cat ci/gwgen_conda/construct.yaml &&

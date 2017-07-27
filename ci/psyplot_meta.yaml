@@ -1,0 +1,46 @@
+# template for psyplot recipe.
+package:
+  name: psyplot
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/Chilipp/psyplot
+  git_tag: dev
+
+build:
+  script: python setup.py install --single-version-externally-managed --record record.txt
+  entry_points:
+    - psyplot=psyplot.__main__:main
+    - psyplot-plugin=psyplot.plugin_template:main
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+    - matplotlib
+    - docrep
+    - funcargparse
+    - xarray
+    - pyyaml
+
+test:
+  imports:
+    - psyplot
+    - psyplot.compat
+    - psyplot.config
+    - psyplot.sphinxext
+
+  commands:
+    - psyplot --help
+    - psyplot-plugin --help
+
+about:
+  home: https://github.com/Chilipp/psyplot
+  license: GNU General Public License v2 (GPLv2)
+  summary: 'Python package for interactive data visualization'
+  license_family: GPL2
+  license_file: LICENSE
+  doc_url: http://psyplot.readthedocs.io/
+  dev_url: https://github.com/Chilipp/psyplot

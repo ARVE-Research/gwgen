@@ -1,0 +1,35 @@
+# template for psy-reg recipe.
+package:
+  name: psy-reg
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/Chilipp/psy-reg
+  git_tag: dev
+
+build:
+  script: python setup.py install --single-version-externally-managed --record record.txt
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+    - setuptools
+    - psyplot
+    - psy-simple
+    - statsmodels
+    - scipy
+
+test:
+  imports:
+    - psy_reg
+about:
+  home: https://github.com/Chilipp/psy-reg
+  license: GNU General Public License v2 (GPLv2)
+  summary: 'Psyplot plugin for visualizing and calculating regression plots'
+  license_family: GPL2
+  license_file: LICENSE
+  doc_url: http://psyplot.readthedocs.io/projects/psy-reg
+  dev_url: https://github.com/Chilipp/psy-reg

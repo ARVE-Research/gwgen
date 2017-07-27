@@ -8,15 +8,20 @@ function pypi_skeleton() {
     WORK=`pwd`
 
     cd $DIR
+    FULL_DIR=`pwd`
+
+    PKG=`basename ${FULL_DIR}`
+    PYPKG=${PKG/-/_}
+
+    VERSION=`python -c "import ${PYPKG}; print(${PYPKG}.__version__)"`
     # build the tarball
     python setup.py sdist
     FNAME=`ls -rt dist/* | tail -n 1`
     # create the receipt
-    mkdir tmp
-    RUNNING_SKELETON=1 conda skeleton pypi --output-dir $ODIR --python-version ${PYTHON_VERSION} \
-        --manual-url file://`pwd`/${FNAME}
-
     cd $WORK
+    mkdir $ODIR
+    echo "{% set version = '$VERSION' %}" > $ODIR/meta.yaml
+    cat ci/${PKG}_meta.yaml >> $ODIR/meta.yaml
 
 }
 
