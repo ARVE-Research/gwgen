@@ -65,7 +65,7 @@ install_requires = ['f90nml', 'psyplot', 'scipy', 'sqlalchemy', 'psycopg2',
 
 
 setup(name='gwgen',
-      version='1.0.0',
+      version='1.0.1',
       description='A global weather generator for daily data',
       long_description=readme(),
       classifiers=[
