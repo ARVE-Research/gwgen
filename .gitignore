@@ -70,3 +70,4 @@ target/
 
 # test files
 tests/ghcn/ghcnd-stations.txt
+tmp
