@@ -106,7 +106,7 @@ You can test whether it was successfully installed by typing::
 
 .. note::
 
-    If you download the repository from Github_, you have to initialize the
-    ``src`` submodule via::
+    If you download the repository from Github_ via ``git clone``, you have to
+    initialize the ``src`` submodule via::
 
         git submodule update --init gwgen/src
