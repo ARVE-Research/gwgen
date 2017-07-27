@@ -4,9 +4,7 @@ package:
   version: {{ version }}
 
 source:
-  git_url: https://github.com/ARVE-Research/gwgen
-  git_tag: v{{ version }}
-  git_tag: master
+  path: ..
 
 build:
   script: unset LDFLAGS && python setup.py install --single-version-externally-managed --record record.txt  [osx]

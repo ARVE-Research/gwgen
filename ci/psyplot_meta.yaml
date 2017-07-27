@@ -4,8 +4,7 @@ package:
   version: {{ version }}
 
 source:
-  git_url: https://github.com/Chilipp/psyplot
-  git_tag: dev
+    path: ../psyplot
 
 build:
   script: python setup.py install --single-version-externally-managed --record record.txt
