@@ -7,13 +7,14 @@ source:
   path: ..
 
 build:
-  script: unset LDFLAGS && python setup.py install --single-version-externally-managed --record record.txt  [osx]
   script: python setup.py install --single-version-externally-managed --record record.txt
+  script: unset LDFLAGS && python setup.py install --single-version-externally-managed --record record.txt  [osx]
 
 requirements:
   build:
     - python
     - setuptools
+    - numpy
   run:
     - python
     - setuptools
