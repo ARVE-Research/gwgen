@@ -67,7 +67,7 @@ install:
     # Useful for debugging any issues with conda
     - conda info -a
     # install the conda constructor for releases
-    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+    - if [[ "$TRAVIS_TAG" != "" ]]; then
           conda install -n root constructor conda-build six numpy;
       fi
     - conda create -n test python="$PYTHON_VERSION" pip dask seaborn scipy numpy statsmodels matplotlib xarray six
@@ -79,7 +79,7 @@ install:
     # NOTE: Remove this when psyplot is stable enough
     - git clone "https://github.com/Chilipp/psyplot.git" -b dev
     - cd psyplot && python setup.py install && cd ..
-    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+    - if [[ "$TRAVIS_TAG" != "" ]]; then
           pypi_skeleton psyplot tmp && build_conda tmp && rm -rf tmp &&
           export PSYPLOT_FILE="${BUILD_FNAME}";
       fi
@@ -87,7 +87,7 @@ install:
     # install psy-simple
     - git clone "https://github.com/Chilipp/psy-simple.git" -b dev
     - cd psy-simple && python setup.py install && cd ..
-    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+    - if [[ "$TRAVIS_TAG" != "" ]]; then
           pypi_skeleton psy-simple tmp && build_conda tmp && rm -rf tmp &&
           export PSY_SIMPLE_FILE="${BUILD_FNAME}";
       fi
@@ -95,7 +95,7 @@ install:
     # install psy-reg
     - git clone "https://github.com/Chilipp/psy-reg.git" -b dev
     - cd psy-reg && python setup.py install && cd ../
-    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+    - if [[ "$TRAVIS_TAG" != "" ]]; then
           pypi_skeleton psy-reg tmp && build_conda tmp && rm -rf tmp &&
           export PSY_REG_FILE="${BUILD_FNAME}";
       fi
@@ -120,19 +120,19 @@ install:
 
 script:
     # run test suite
-#    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-#          coverage run --parallel-mode --concurrency=multiprocessing setup.py test -a "-v -m 'not fullrun and not long' --user postgres --offline";
-#      elif [[ "$ONLINE_TESTS" == "true" ]]; then
-#          coverage run --parallel-mode --concurrency=multiprocessing setup.py test -a "-v -m 'not fullrun' --user postgres";
-#      else
-#          coverage run --parallel-mode --concurrency=multiprocessing setup.py test -a "-v -m 'not fullrun' --user postgres --offline";
-#      fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+          coverage run --parallel-mode --concurrency=multiprocessing setup.py test -a "-v -m 'not fullrun and not long' --user postgres --offline";
+      elif [[ "$ONLINE_TESTS" == "true" ]]; then
+          coverage run --parallel-mode --concurrency=multiprocessing setup.py test -a "-v -m 'not fullrun' --user postgres";
+      else
+          coverage run --parallel-mode --concurrency=multiprocessing setup.py test -a "-v -m 'not fullrun' --user postgres --offline";
+      fi
     # build docs
     - if [[ "$BUILD_DOCS" == "true" ]]; then
           sphinx-build docs deploy;
       fi
     # construct conda environment for releases
-    - if [[ 1 == 1 || "$TRAVIS_TAG" != "" ]]; then
+    - if [[ "$TRAVIS_TAG" != "" ]]; then
           pypi_skeleton . tmp && build_conda tmp && rm -rf tmp &&
           export GWGEN_FILE="${BUILD_FNAME}" &&
           bash ci/setup_constructor_files.sh &&
