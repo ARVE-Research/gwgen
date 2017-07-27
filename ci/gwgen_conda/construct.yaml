@@ -9,7 +9,7 @@ specs:
     - conda
     - python PYTHON_VERSION
     - scipy
-    - matplotlib <2.0*
+    - matplotlib
     - dask
     - xarray
     - numpy
