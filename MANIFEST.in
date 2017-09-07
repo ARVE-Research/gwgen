@@ -1,3 +1,0 @@
-include README.rst
-include gwgen/src/*
-include gwgen/data/*

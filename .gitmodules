@@ -1,6 +1,0 @@
-[submodule "tests/test_data"]
-	path = tests/test_data
-	url = https://github.com/ARVE-Research/gwgen_test_data.git
-[submodule "gwgen/src"]
-	path = gwgen/src
-	url = https://github.com/ARVE-Research/gwgen_f90.git
