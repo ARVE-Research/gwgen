@@ -64,7 +64,7 @@ install:
     - conda info -a
     # install the conda constructor for releases
     - conda install -n root constructor conda-build six
-      conda install -c conda-forge numpy
+    - conda install -c conda-forge numpy
     - conda create -n test -c conda-forge python="$PYTHON_VERSION" pip dask seaborn scipy numpy statsmodels matplotlib xarray six psyplot psy-simple psy-reg
     - source activate test
     - conda install -c conda-forge cartopy
