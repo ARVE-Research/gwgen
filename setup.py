@@ -66,11 +66,11 @@ install_requires = ['f90nml', 'psyplot', 'scipy', 'sqlalchemy', 'psycopg2',
 
 
 setup(name='gwgen',
-      version='1.0.1',
+      version='1.0.2',
       description='A global weather generator for daily data',
       long_description=readme(),
       classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
