@@ -26,6 +26,8 @@ addons:  # install gfortran
     apt:
         packages:
         - gfortran
+before_install:
+    - "brew install gcc || :"
 install:
     # select the os name for the conda installer
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
@@ -65,10 +67,6 @@ install:
       conda install -c conda-forge numpy
     - conda create -n test -c conda-forge python="$PYTHON_VERSION" pip dask seaborn scipy numpy statsmodels matplotlib xarray six psyplot psy-simple psy-reg
     - source activate test
-    # install gfortran on OSX
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-          conda install gcc;
-      fi
     - conda install -c conda-forge cartopy
     - pip install model-organization
     - pip install coveralls pytest
