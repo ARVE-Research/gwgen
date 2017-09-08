@@ -61,9 +61,7 @@ install:
     # Useful for debugging any issues with conda
     - conda info -a
     # install the conda constructor for releases
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          conda install -n root constructor conda-build six numpy;
-      fi
+    - conda install -n root constructor conda-build six numpy
     - conda create -n test python="$PYTHON_VERSION" pip dask seaborn scipy numpy statsmodels matplotlib xarray six
     - source activate test
     # install gfortran on OSX
