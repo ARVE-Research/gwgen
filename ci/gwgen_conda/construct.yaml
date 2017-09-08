@@ -2,6 +2,7 @@ name: gwgen_conda
 version: GWGEN_VERSION
 
 channels:
+  - https://conda.anaconda.org/conda-forge
   - http://repo.continuum.io/pkgs/free/
   - https://conda.anaconda.org/chilipp
 
@@ -22,11 +23,9 @@ specs:
     - f90nml
     - sqlalchemy
     - psycopg2
+    - psy-reg
 
 packages:
-    - file://PSYPLOT_FILE
-    - file://PSY_SIMPLE_FILE
-    - file://PSY_REG_FILE
     - file://GWGEN_FILE
 
 license_file: EULA.txt

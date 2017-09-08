@@ -61,8 +61,9 @@ install:
     # Useful for debugging any issues with conda
     - conda info -a
     # install the conda constructor for releases
-    - conda install -n root constructor conda-build six numpy
-    - conda create -n test python="$PYTHON_VERSION" pip dask seaborn scipy numpy statsmodels matplotlib xarray six
+    - conda install -n root constructor conda-build six
+      conda install -c conda-forge numpy
+    - conda create -n test -c conda-forge python="$PYTHON_VERSION" pip dask seaborn scipy numpy statsmodels matplotlib xarray six psyplot psy-simple psy-reg
     - source activate test
     # install gfortran on OSX
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
@@ -71,32 +72,6 @@ install:
     - conda install -c conda-forge cartopy
     - pip install model-organization
     - pip install coveralls pytest
-    # ---- CUSTOM INSTALLATIONS ----
-    # NOTE: Remove this when psyplot is stable enough
-    - git clone "https://github.com/Chilipp/psyplot.git" -b dev
-    - cd psyplot && python setup.py install && cd ..
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          pypi_skeleton psyplot tmp && build_conda tmp && rm -rf tmp &&
-          export PSYPLOT_FILE="${BUILD_FNAME}";
-      fi
-    - rm -rf psyplot
-    # install psy-simple
-    - git clone "https://github.com/Chilipp/psy-simple.git" -b dev
-    - cd psy-simple && python setup.py install && cd ..
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          pypi_skeleton psy-simple tmp && build_conda tmp && rm -rf tmp &&
-          export PSY_SIMPLE_FILE="${BUILD_FNAME}";
-      fi
-    - rm -rf psy-simple
-    # install psy-reg
-    - git clone "https://github.com/Chilipp/psy-reg.git" -b dev
-    - cd psy-reg && python setup.py install && cd ../
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          pypi_skeleton psy-reg tmp && build_conda tmp && rm -rf tmp &&
-          export PSY_REG_FILE="${BUILD_FNAME}";
-      fi
-    - rm -rf psy-reg
-    # ---- END CUSTOM installations ----
     - python setup.py install
     # install necessary module for the documentation and clone the existing
     # gh-pages for this repo into the *deploy* folder and clear everything

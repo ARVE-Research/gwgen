@@ -1,14 +1,12 @@
 # Replace the necessary parts in the files for conda constructor
 #
 # This script replaces some of the parts in the files in ci/gwgen_conda,
-# mainly versions but also builds for psyplot and gwgen
+# mainly versions but also the build for gwgen
 #
 # Necessary environment variables are
 #
-# PSYPLOT_FILE
-#     The path to the created psyplot build
 # GWGEN_FILE
-#     The path to the created psyplot build
+#     The path to the created gwgen build
 # GWGEN_VERSION
 #     The version of gwgen
 # PYTHON_VERSION
@@ -26,7 +24,6 @@ else
     INPLACE='-i'
 fi
 
-sed $INPLACE "s/PYTHON_VERSION/${PYTHON_VERSION}*/; s/GWGEN_VERSION/${GWGEN_VERSION}/; s#GWGEN_FILE#${GWGEN_FILE}#; s#PSYPLOT_FILE#${PSYPLOT_FILE}#" ci/gwgen_conda/construct.yaml
-sed $INPLACE "s#PSY_SIMPLE_FILE#${PSY_SIMPLE_FILE}#; s#PSY_REG_FILE#${PSY_REG_FILE}#" ci/gwgen_conda/construct.yaml
+sed $INPLACE "s/PYTHON_VERSION/${PYTHON_VERSION}*/; s/GWGEN_VERSION/${GWGEN_VERSION}/; s#GWGEN_FILE#${GWGEN_FILE}#" ci/gwgen_conda/construct.yaml
 sed $INPLACE "s/<<<BASH_RC>>>/${BASH_RC}/" ci/gwgen_conda/post.sh
 sed $INPLACE "s#CREATION TIME#`date`#; s/PYTHON_VERSION/${PYTHON_VERSION}/; s/GWGEN_VERSION/${GWGEN_VERSION}/; s/CONSTRUCTOR VERSION/`constructor -V`/" ci/gwgen_conda/EULA.txt
