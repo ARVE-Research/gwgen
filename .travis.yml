@@ -132,18 +132,16 @@ script:
           sphinx-build docs deploy;
       fi
     # construct conda environment for releases
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          pypi_skeleton . tmp && build_conda tmp && rm -rf tmp &&
-          export GWGEN_FILE="${BUILD_FNAME}" &&
-          bash ci/setup_constructor_files.sh &&
-          cat ci/gwgen_conda/construct.yaml &&
-          echo "Creating executable" &&
-          constructor ci/gwgen_conda &&
-          echo "Testing executable" &&
-          NO_GWGEN_ALIAS=1 bash `ls gwgen_conda-*.sh` -b -p $HOME/gwgen_conda &&
-          $HOME/gwgen_conda/bin/gwgen -h &&
-          echo "Build succeeded";
-      fi
+    - pypi_skeleton . tmp && build_conda tmp && rm -rf tmp &&
+      export GWGEN_FILE="${BUILD_FNAME}" &&
+      bash ci/setup_constructor_files.sh &&
+      cat ci/gwgen_conda/construct.yaml &&
+      echo "Creating executable" &&
+      constructor ci/gwgen_conda &&
+      echo "Testing executable" &&
+      NO_GWGEN_ALIAS=1 bash `ls gwgen_conda-*.sh` -b -p $HOME/gwgen_conda &&
+      $HOME/gwgen_conda/bin/gwgen -h &&
+      echo "Build succeeded";
     - if [[ "$TRAVIS_TAG" != "" && "$BUILD_DOCS" == "true" ]]; then
           cd deploy && zip -r "../gwgen_docs_${TRAVIS_TAG}.zip" . -x *.git* && cd ..;
       fi
