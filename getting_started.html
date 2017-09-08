@@ -178,10 +178,13 @@ the gamma shape parameter</p>
 <p>This procedure now modified the namelist of our experiment and added two
 namelist parameters</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="o">!</span>gwgen get-value namelist
-<span class="go">weathergen_ctl:</span>
-<span class="go">  g_scale_coeff: 1.377457228995608</span>
-<span class="go">  thresh: 5.0</span>
-<span class="go">  gp_shape: 0.0974</span>
+<span class="go">weathergen_ctl: !!python/object/apply:cyordereddict._cyordereddict.OrderedDict</span>
+<span class="go">- - - g_scale_coeff</span>
+<span class="go">    - 1.3774572289956073</span>
+<span class="go">  - - thresh</span>
+<span class="go">    - 5.0</span>
+<span class="go">  - - gp_shape</span>
+<span class="go">    - 0.0974</span>
 </pre></div>
 </div>
 <p>Otherwise you can of course always modify the namelist of your experiment using
