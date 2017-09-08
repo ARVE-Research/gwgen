@@ -155,6 +155,7 @@ class SensitivityAnalysisTest(bt.BaseTest):
             self.assertIn('ks', all_exps[exp]['evaluation'],
                           msg='No ks evaluation made for %s' % exp)
 
+    @pytest.mark.long
     def test_plot(self):
         """Test whether the plot of a simple sensitivity analysis works"""
         self._test_plot()
