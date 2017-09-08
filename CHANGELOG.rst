@@ -1,3 +1,11 @@
+v1.0.2
+======
+Final version for Geoscientific Model Development
+
+Changed
+-------
+* Minor changes in LICENSE file
+
 v1.0.1
 ======
 Added
