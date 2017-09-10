@@ -17,6 +17,10 @@ def pytest_addoption(parser):
     group.addoption('--no-remove', action='store_true',
                     help=("Do not remove the test directory at the end of the "
                           "tests."))
+    group.addoption('--nprocs', type=int,
+                    help=("The number of processors to start."))
+    group.addoption('--serial', action='store_true',
+                    help="Run tests in serial")
 
 
 def pytest_configure(config):
@@ -29,3 +33,5 @@ def pytest_configure(config):
         bt.db_config[option] = config.getoption(option)
     if config.getoption('no_remove'):
         bt.BaseTest.remove_at_cleanup = False
+    bt.BaseTest.serial = config.getoption('serial')
+    bt.BaseTest.nprocs = config.getoption('nprocs')

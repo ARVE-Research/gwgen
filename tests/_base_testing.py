@@ -45,6 +45,12 @@ class BaseTest(unittest.TestCase):
 
     stations_type = 'normal'
 
+    #: number of cores to use
+    nprocs = None
+
+    #: Boolean that is True, if the tests should be run in serial
+    serial = False
+
     _station_files = {
         'normal': _test_stations,
         'short': _short_test_stations,
@@ -89,8 +95,8 @@ class BaseTest(unittest.TestCase):
         global_conf = self.organizer.config.global_config
         global_conf['data'] = osp.join(test_root, 'test_data')
         global_conf['use_relative_links'] = False
-        if on_travis:
-            global_conf['nprocs'] = 2
+        global_conf['nprocs'] = self.nprocs or 'all'
+        global_conf['serial'] = self.serial
         if self.use_db:
             self._clear_db()
             global_conf.update(db_config)
