@@ -5,6 +5,7 @@ an error within the setup"""
 import unittest
 import os.path as osp
 import pandas as pd
+import pytest
 # we use assert_frame_equal instead of pd.equal, because it is less strict
 from pandas.util.testing import assert_frame_equal
 import _base_testing as bt
@@ -42,6 +43,7 @@ class EvaluationPreparationTest(bt.BaseTest):
     """Test case for the :class:`gwgen.evaluation.EvaluationPreparation` class
     """
 
+    @pytest.mark.long
     def test_setup(self):
         """Test the setup from scratch"""
         self._test_init()
