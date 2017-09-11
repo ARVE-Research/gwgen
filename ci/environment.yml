@@ -16,6 +16,9 @@ dependencies:
     - docrep
     - model-organization
     - f90nml
+    - cartopy
     - sqlalchemy
     - psycopg2
+    - psyplot
+    - psy-simple
     - psy-reg
