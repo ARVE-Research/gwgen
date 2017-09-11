@@ -115,7 +115,7 @@ script:
           sphinx-build docs deploy;
       fi
     # construct conda environment for releases
-    - constructor ci/gwgen-conda &&
+    - constructor gwgen-conda &&
       echo "Testing executable" &&
       NO_GWGEN_ALIAS=1 bash `ls gwgen-conda-*.sh` -b -p $HOME/gwgen-conda &&
       $HOME/gwgen-conda/bin/gwgen -h
