@@ -1,7 +1,7 @@
 """GWGEN: A WGEN-like weather generator for global daily weather
 """
+from gwgen.version import __version__
 
-__version__ = '1.0.2'
 __author__ = "Philipp Sommer and Jed Kaplan"
 __maintainer__ = "Philipp Sommer"
 __licence__ = "GPLv2"

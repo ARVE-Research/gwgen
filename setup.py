@@ -44,6 +44,11 @@ def readme():
         return f.read()
 
 
+# read the version from version.py
+with open(osp.join('gwgen', 'version.py')) as f:
+    exec(f.read())
+
+
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
 
@@ -66,7 +71,7 @@ install_requires = ['f90nml', 'psyplot', 'scipy', 'sqlalchemy', 'psycopg2',
 
 
 setup(name='gwgen',
-      version='1.0.2',
+      version=__version__,
       description='A global weather generator for daily data',
       long_description=readme(),
       classifiers=[
