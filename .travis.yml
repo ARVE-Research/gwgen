@@ -80,7 +80,7 @@ install:
       fi
     - export ARGS="-v $PKG_VERSION"
     # build the recipe and prepare the constructor files
-    - python prepare_constructor_files.py ci/recipe/gwgen $ARGS -n test
+    - python ci/prepare_constructor_files.py ci/recipe/gwgen $ARGS -n test
     - cat ci/gwgen-conda/construct.yaml
     # install necessary module for the documentation and clone the existing
     # gh-pages for this repo into the *deploy* folder and clear everything
