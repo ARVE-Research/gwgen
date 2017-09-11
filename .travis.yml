@@ -66,6 +66,9 @@ install:
     - source activate test
     - conda install -c conda-forge cartopy
     - conda install -c chilipp model-organization
+    - if [[ "$PYTHON_VERSION" == "2.7" ]]; then
+          pip install pathlib;
+      fi
     - pip install coveralls pytest
     - python setup.py install
     # build conda recipe
@@ -81,7 +84,7 @@ install:
     - export ARGS="-v $PKG_VERSION"
     # build the recipe and prepare the constructor files
     - python ci/prepare_constructor_files.py ci/recipe/gwgen $ARGS -n test
-    - cat ci/gwgen-conda/construct.yaml
+    - cat gwgen-conda/construct.yaml
     # install necessary module for the documentation and clone the existing
     # gh-pages for this repo into the *deploy* folder and clear everything
     - export REPO="$(git config remote.origin.url)"
