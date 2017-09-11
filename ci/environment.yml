@@ -1,0 +1,21 @@
+name: test
+channels:
+    - conda-forge
+    - chilipp
+dependencies:
+    - python
+    - scipy
+    - matplotlib
+    - dask
+    - xarray
+    - numpy
+    - netcdf4
+    - seaborn
+    - bottleneck
+    - statsmodels
+    - docrep
+    - model-organization
+    - f90nml
+    - sqlalchemy
+    - psycopg2
+    - psy-reg

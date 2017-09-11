@@ -5,7 +5,7 @@
 
 if [[ $NO_GWGEN_ALIAS == "" ]] # interactive mode
 then
-    BASH_RC=$HOME/'<<<BASH_RC>>>'
+    BASH_RC=$HOME/'.bashrc'
     DEFAULT=yes
     echo -e "\x1b[31mShall I add an alias to $BASH_RC\x1b[0m"
     echo '(This question might be disabled by setting the NO_GWGEN_ALIAS

@@ -70,4 +70,6 @@ target/
 
 # test files
 tests/ghcn/ghcnd-stations.txt
-tmp
+ci/recipe/gwgen/meta.yaml
+gwgen-conda
+gwgen-conda-*.sh

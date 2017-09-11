@@ -49,8 +49,6 @@ install:
           export BUILD_DOCS="false";
       fi
     - echo "$BUILD_DOCS"
-    # load the build_conda function
-    - source ci/build_conda_from_setup.py.sh
     # make sure we use an 'innocent' default matplotlib environment
     - touch matplotlibrc
     - bash miniconda.sh -b -p $HOME/miniconda
@@ -58,7 +56,6 @@ install:
     - pip install pyyaml  # is somehow not included in the current conda installation
     - hash -r
     - conda config --set always_yes yes --set changeps1 no
-    - conda config --add channels chilipp
     - conda update -q conda
     # Useful for debugging any issues with conda
     - conda info -a
@@ -68,9 +65,23 @@ install:
     - conda create -n test -c conda-forge python="$PYTHON_VERSION" pip dask seaborn scipy numpy statsmodels matplotlib xarray six psyplot psy-simple psy-reg
     - source activate test
     - conda install -c conda-forge cartopy
-    - pip install model-organization
+    - conda install -c chilipp model-organization
     - pip install coveralls pytest
     - python setup.py install
+    # build conda recipe
+    - python ci/recipe_from_setup.py `pwd` ci/recipe
+    - # prepare constructor files
+    - conda config --add channels chilipp
+    - conda config --add channels conda-forge
+    - if [[ $TRAVIS_TAG == '' ]]; then
+          export PKG_VERSION=0.01;
+      else
+          export PKG_VERSION=${TRAVIS_TAG:1};
+      fi
+    - export ARGS="-v $PKG_VERSION"
+    # build the recipe and prepare the constructor files
+    - python prepare_constructor_files.py ci/recipe/gwgen $ARGS -n test
+    - cat ci/gwgen_conda/construct.yaml
     # install necessary module for the documentation and clone the existing
     # gh-pages for this repo into the *deploy* folder and clear everything
     - export REPO="$(git config remote.origin.url)"
@@ -85,9 +96,9 @@ install:
       fi
     # export the environment for debugging
     - conda env export -n test
-    - export GWGEN_VERSION=$(python -c 'import gwgen; print(gwgen.__version__)')
 
 script:
+    - gwgen -h
     # run test suite
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
           coverage run --parallel-mode --concurrency=multiprocessing setup.py test -a "-v --serial -m 'not fullrun and not long' -k 'not test_parameterization' --user postgres --offline";
@@ -101,16 +112,10 @@ script:
           sphinx-build docs deploy;
       fi
     # construct conda environment for releases
-    - pypi_skeleton . tmp && build_conda tmp && rm -rf tmp &&
-      export GWGEN_FILE="${BUILD_FNAME}" &&
-      bash ci/setup_constructor_files.sh &&
-      cat ci/gwgen_conda/construct.yaml &&
-      echo "Creating executable" &&
-      constructor ci/gwgen_conda &&
+    - constructor ci/gwgen-conda &&
       echo "Testing executable" &&
-      NO_GWGEN_ALIAS=1 bash `ls gwgen_conda-*.sh` -b -p $HOME/gwgen_conda &&
-      $HOME/gwgen_conda/bin/gwgen -h &&
-      echo "Build succeeded";
+      NO_GWGEN_ALIAS=1 bash `ls gwgen-conda-*.sh` -b -p $HOME/gwgen-conda &&
+      $HOME/gwgen-conda/bin/gwgen -h
     - if [[ "$TRAVIS_TAG" != "" && "$BUILD_DOCS" == "true" ]]; then
           cd deploy && zip -r "../gwgen_docs_${TRAVIS_TAG}.zip" . -x *.git* && cd ..;
       fi
@@ -120,7 +125,7 @@ after_success:
 
 before_deploy:
     - if [[ "$TRAVIS_TAG" != "" ]]; then
-          ORIG_FILE=$(ls gwgen_conda-*.sh);
+          ORIG_FILE=$(ls gwgen-conda-*.sh);
           export FINAL_FILE="${ORIG_FILE%.sh}_${PYTHON_VERSION}.sh";
           mv "$ORIG_FILE" "$FINAL_FILE";
       fi

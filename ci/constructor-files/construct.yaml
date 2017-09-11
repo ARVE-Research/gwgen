@@ -1,5 +1,5 @@
-name: gwgen_conda
-version: GWGEN_VERSION
+name: gwgen-conda
+version: 0.01
 
 channels:
   - https://conda.anaconda.org/conda-forge
