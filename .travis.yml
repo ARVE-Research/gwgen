@@ -68,8 +68,8 @@ install:
           pip install pathlib;
       fi
     # avoid docrep 0.2.0
-    - if [[ `python -c "import docrep; print(docrep.__version__)"` == 0.2.0]]; then
-          conda install -c conda-forge --force docrep<0.2.0; 
+    - if [[ `python -c "import docrep; print(docrep.__version__)"` == 0.2.0 ]]; then
+          conda install -c conda-forge --force "docrep<0.2.0";
       fi
     - pip install coveralls pytest
     - python setup.py install
