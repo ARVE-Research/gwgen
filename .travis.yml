@@ -67,6 +67,10 @@ install:
     - if [[ "$PYTHON_VERSION" == "2.7" ]]; then
           pip install pathlib;
       fi
+    # avoid docrep 0.2.0
+    - if [[ `python -c "import docrep; print(docrep.__version__)"` == 0.2.0]]; then
+          conda install -c conda-forge --force docrep<0.2.0
+      fi
     - pip install coveralls pytest
     - python setup.py install
     # build conda recipe
@@ -110,7 +114,9 @@ script:
       fi
     # build docs
     - if [[ "$BUILD_DOCS" == "true" ]]; then
-          sphinx-build docs deploy;
+          cd docs;
+          sphinx-build . ../deploy;
+          cd ..;
       fi
     # construct conda environment for releases
     - constructor gwgen-conda &&

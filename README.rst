@@ -49,6 +49,16 @@ Authors
 -------
 This package has been developped by `Philipp S. Sommer`_ and `Jed O. Kaplan`_.
 
+Citing GWGEN
+------------
+When using GWGEN, we kindly ask you to provide a reference to the corresponding
+paper published in Geoscientific Model Development:
+
+    Sommer, P. S. and Kaplan, J. O.: *A globally calibrated scheme for
+    generating daily meteorology from monthly statistics: Global-WGEN (GWGEN)
+    v1.0*, Geosci. Model Dev., 10, 3771-3791, :doi:`10.5194/gmd-10-3771-2017`,
+    2017.
+
 
 Acknowledgements
 ----------------
