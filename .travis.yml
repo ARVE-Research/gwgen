@@ -26,8 +26,6 @@ addons:  # install gfortran
     apt:
         packages:
         - gfortran
-before_install:
-    - "brew install gcc || :"
 install:
     # select the os name for the conda installer
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
@@ -61,6 +59,15 @@ install:
     - conda info -a
     # install the conda constructor for releases
     - conda install -n root constructor conda-build six
+    # HACK: Install constructor from source to make sure we solve
+    # https://github.com/conda/constructor/pull/140
+    - git clone https://github.com/conda/constructor.git &&
+      cd constructor && python setup.py install && cd ../ &&
+      rm -rf constructor
+    # install gcc via conda
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+          conda install -n root gcc;
+      fi
     - conda install -c conda-forge numpy
     - conda env create -f ci/environment.yml
     - source activate test
