@@ -1,6 +1,7 @@
 # Python script to prepare the psyplot-conda constructor files
 import sys
 import six
+import os
 import os.path as osp
 import shutil
 from itertools import chain
@@ -62,6 +63,9 @@ def get_all_versions(name=None):
 
 
 all_versions = get_all_versions(args.name)
+root_versions = get_all_versions('root')
+all_versions['conda'] = root_versions['conda']
+all_versions['idna'] = root_versions['idna']
 
 
 def get_version(mod, d=all_versions):
@@ -134,8 +138,9 @@ if version:
     construct['version'] = version
 
 # use all installed packages in the given environment
-construct['specs'] = ['python %s*' % py_version, 'conda', 'pip'] + [
-    '%s %s' % (name, ' '.join(v)) for name, v in all_versions.items()]
+construct['specs'] = ['python %s*' % py_version] + [
+    '%s %s' % (name, ' '.join(v)) for name, v in all_versions.items()
+    if name != 'python']
 
 if sys.platform.startswith('win'):
     post_file = 'post_win.bat'
@@ -147,24 +152,23 @@ if osp.exists(osp.join(build_dir, post_file)):
     construct['post_install'] = post_file
 
 # for packages in the psyplot framework, we use our own local builds
-if not args.no_build:
+if not args.no_build and local_packages:
     spr.check_call(['conda', 'build', '--no-test'] + list(local_packages),
                    stdout=sys.stdout, stderr=sys.stderr)
-builds = [
-    file2html(s) for s in spr.check_output(
+if local_packages:
+
+    builds = spr.check_output(
         ['conda', 'build', '--output'] + list(local_packages)).decode(
-            'utf-8').splitlines()]
+                'utf-8').splitlines()
 
-if sys.platform.startswith('win'):
-    scripts_dir = osp.dirname(sys.executable)
-    mkl_file = next(iter(
-        glob.glob(osp.join(scripts_dir, '..', 'pkgs', 'mkl-*.tar.bz2'))), None)
-    if mkl_file is not None:
-        builds.append(mkl_file)
+    for fname in map(osp.basename, builds):
+        construct['specs'].append(
+            ' '.join(fname.replace('.tar.bz2', '').rsplit('-', 2)))
 
+    conda_bld_dir = file2html(osp.dirname(osp.dirname(builds[0])))
 
-if builds:
-    construct['packages'] = builds
+    construct['channels'] = [conda_bld_dir] + construct['channels']
+
 
 with open(osp.join(build_dir, 'construct.yaml'), 'w') as f:
     yaml.dump(construct, f, default_flow_style=False)
