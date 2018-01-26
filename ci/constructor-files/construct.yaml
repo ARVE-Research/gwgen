@@ -25,6 +25,8 @@ specs:
     - psycopg2
     - psy-reg
 
+ignore_duplicate_files: true
+
 license_file: EULA.txt
 
 post_install: post.sh
