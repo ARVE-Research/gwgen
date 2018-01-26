@@ -56,8 +56,10 @@ paper published in Geoscientific Model Development:
 
     Sommer, P. S. and Kaplan, J. O.: *A globally calibrated scheme for
     generating daily meteorology from monthly statistics: Global-WGEN (GWGEN)
-    v1.0*, Geosci. Model Dev., 10, 3771-3791, :doi:`10.5194/gmd-10-3771-2017`,
+    v1.0*, Geosci. Model Dev., 10, 3771-3791, DOI: `10.5194/gmd-10-3771-2017`_,
     2017.
+
+.. _10.5194/gmd-10-3771-2017: https://doi.org/10.5194/gmd-10-3771-2017
 
 
 Acknowledgements
