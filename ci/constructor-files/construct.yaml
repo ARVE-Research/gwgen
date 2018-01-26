@@ -25,9 +25,6 @@ specs:
     - psycopg2
     - psy-reg
 
-packages:
-    - file://GWGEN_FILE
-
 license_file: EULA.txt
 
 post_install: post.sh
