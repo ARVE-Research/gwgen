@@ -43,8 +43,729 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="weathergenmod-module">
-<span id="gwgen-src-weathergenmod"></span><h1>weathergenmod module<a class="headerlink" href="#weathergenmod-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="f/weathergenmod">
+<span id="weathergenmod-module"></span><span id="gwgen-src-weathergenmod"></span><h1>weathergenmod module<a class="headerlink" href="#f/weathergenmod" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Description</p>
+<p>This module includes subroutines to calculate daily maximum and minimum temperature and cloud cover fraction
+based on an annual timeseries of monthly values of these variables
+The weather generator is based on the WGEN model (Richardson, 1981) with extension to use monthly summary
+data from Geng et al., 1986, and Geng and Auburn 1986.
+Additional statistical relationships for both temperature, cloudiness and wind speed have been produced
+by P.S. Sommer and J.O. Kaplan using global weather station datasets (GHCN and global synoptic cloud
+reports).</p>
+<p>Coded in 2007-2009 by Jed Kaplan and Joe Melton, ARVE Group, EPFL/UVic, <a class="reference external" href="mailto:jed&#46;kaplan&#37;&#52;&#48;unil&#46;ch">jed<span>&#46;</span>kaplan<span>&#64;</span>unil<span>&#46;</span>ch</a>,
+2011, Shawn Koppenhoefer, <a class="reference external" href="mailto:shawn&#46;koppenhoefer&#37;&#52;&#48;unil&#46;ch">shawn<span>&#46;</span>koppenhoefer<span>&#64;</span>unil<span>&#46;</span>ch</a>
+2016, Philipp Sommer, <a class="reference external" href="mailto:philipp&#46;sommer&#37;&#52;&#48;unil&#46;ch">philipp<span>&#46;</span>sommer<span>&#64;</span>unil<span>&#46;</span>ch</a></p>
+<p class="rubric">Quick access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Types:</th><td class="field-body"><a class="reference internal" href="#f/weathergenmod/daymetvars" title="f/weathergenmod/daymetvars"><code class="xref f f-type docutils literal"><span class="pre">daymetvars</span></code></a>, <a class="reference internal" href="#f/weathergenmod/metvars_out" title="f/weathergenmod/metvars_out"><code class="xref f f-type docutils literal"><span class="pre">metvars_out</span></code></a>, <a class="reference internal" href="#f/weathergenmod/metvars_in" title="f/weathergenmod/metvars_in"><code class="xref f f-type docutils literal"><span class="pre">metvars_in</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><a class="reference internal" href="#f/weathergenmod/daymetvars" title="f/weathergenmod/daymetvars"><code class="xref f f-var docutils literal"><span class="pre">daymetvars</span></code></a>, <a class="reference internal" href="#f/weathergenmod/metvars_in" title="f/weathergenmod/metvars_in"><code class="xref f f-var docutils literal"><span class="pre">metvars_in</span></code></a>, <a class="reference internal" href="#f/weathergenmod/metvars_out" title="f/weathergenmod/metvars_out"><code class="xref f f-var docutils literal"><span class="pre">metvars_out</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_d1" title="f/weathergenmod/cldf_d1"><code class="xref f f-var docutils literal"><span class="pre">cldf_d1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_d2" title="f/weathergenmod/cldf_d2"><code class="xref f f-var docutils literal"><span class="pre">cldf_d2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_d3" title="f/weathergenmod/cldf_d3"><code class="xref f f-var docutils literal"><span class="pre">cldf_d3</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_d4" title="f/weathergenmod/cldf_d4"><code class="xref f f-var docutils literal"><span class="pre">cldf_d4</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_w1" title="f/weathergenmod/cldf_w1"><code class="xref f f-var docutils literal"><span class="pre">cldf_w1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_w2" title="f/weathergenmod/cldf_w2"><code class="xref f f-var docutils literal"><span class="pre">cldf_w2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_w3" title="f/weathergenmod/cldf_w3"><code class="xref f f-var docutils literal"><span class="pre">cldf_w3</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_w4" title="f/weathergenmod/cldf_w4"><code class="xref f f-var docutils literal"><span class="pre">cldf_w4</span></code></a>, <a class="reference internal" href="#f/weathergenmod/thresh_pctl" title="f/weathergenmod/thresh_pctl"><code class="xref f f-var docutils literal"><span class="pre">thresh_pctl</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_d1" title="f/weathergenmod/tmin_d1"><code class="xref f f-var docutils literal"><span class="pre">tmin_d1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_w1" title="f/weathergenmod/tmax_w1"><code class="xref f f-var docutils literal"><span class="pre">tmax_w1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_w" title="f/weathergenmod/cldf_w"><code class="xref f f-var docutils literal"><span class="pre">cldf_w</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_intercept_bias_b" title="f/weathergenmod/wind_intercept_bias_b"><code class="xref f f-var docutils literal"><span class="pre">wind_intercept_bias_b</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_bias_min" title="f/weathergenmod/tmin_bias_min"><code class="xref f f-var docutils literal"><span class="pre">tmin_bias_min</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_bias_min" title="f/weathergenmod/wind_bias_min"><code class="xref f f-var docutils literal"><span class="pre">wind_bias_min</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_sd_d1" title="f/weathergenmod/tmax_sd_d1"><code class="xref f f-var docutils literal"><span class="pre">tmax_sd_d1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_sd_d2" title="f/weathergenmod/tmax_sd_d2"><code class="xref f f-var docutils literal"><span class="pre">tmax_sd_d2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_sd_w1" title="f/weathergenmod/tmax_sd_w1"><code class="xref f f-var docutils literal"><span class="pre">tmax_sd_w1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_sd_w2" title="f/weathergenmod/tmax_sd_w2"><code class="xref f f-var docutils literal"><span class="pre">tmax_sd_w2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_sd_d1" title="f/weathergenmod/tmin_sd_d1"><code class="xref f f-var docutils literal"><span class="pre">tmin_sd_d1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_sd_d2" title="f/weathergenmod/tmin_sd_d2"><code class="xref f f-var docutils literal"><span class="pre">tmin_sd_d2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_sd_w1" title="f/weathergenmod/tmin_sd_w1"><code class="xref f f-var docutils literal"><span class="pre">tmin_sd_w1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_sd_w2" title="f/weathergenmod/tmin_sd_w2"><code class="xref f f-var docutils literal"><span class="pre">tmin_sd_w2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_sd_d1" title="f/weathergenmod/wind_sd_d1"><code class="xref f f-var docutils literal"><span class="pre">wind_sd_d1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_sd_d2" title="f/weathergenmod/wind_sd_d2"><code class="xref f f-var docutils literal"><span class="pre">wind_sd_d2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_sd_w1" title="f/weathergenmod/wind_sd_w1"><code class="xref f f-var docutils literal"><span class="pre">wind_sd_w1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_sd_w2" title="f/weathergenmod/wind_sd_w2"><code class="xref f f-var docutils literal"><span class="pre">wind_sd_w2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_slope_bias_k" title="f/weathergenmod/wind_slope_bias_k"><code class="xref f f-var docutils literal"><span class="pre">wind_slope_bias_k</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_slope_bias_l" title="f/weathergenmod/wind_slope_bias_l"><code class="xref f f-var docutils literal"><span class="pre">wind_slope_bias_l</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_slope_bias_x0" title="f/weathergenmod/wind_slope_bias_x0"><code class="xref f f-var docutils literal"><span class="pre">wind_slope_bias_x0</span></code></a>, <a class="reference internal" href="#f/weathergenmod/p001_1" title="f/weathergenmod/p001_1"><code class="xref f f-var docutils literal"><span class="pre">p001_1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/p101_1" title="f/weathergenmod/p101_1"><code class="xref f f-var docutils literal"><span class="pre">p101_1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_d1" title="f/weathergenmod/wind_d1"><code class="xref f f-var docutils literal"><span class="pre">wind_d1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_w1" title="f/weathergenmod/wind_w1"><code class="xref f f-var docutils literal"><span class="pre">wind_w1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/p11_1" title="f/weathergenmod/p11_1"><code class="xref f f-var docutils literal"><span class="pre">p11_1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_d1" title="f/weathergenmod/tmax_d1"><code class="xref f f-var docutils literal"><span class="pre">tmax_d1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_d" title="f/weathergenmod/cldf_d"><code class="xref f f-var docutils literal"><span class="pre">cldf_d</span></code></a>, <a class="reference internal" href="#f/weathergenmod/p001_2" title="f/weathergenmod/p001_2"><code class="xref f f-var docutils literal"><span class="pre">p001_2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/p11_2" title="f/weathergenmod/p11_2"><code class="xref f f-var docutils literal"><span class="pre">p11_2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/p101_2" title="f/weathergenmod/p101_2"><code class="xref f f-var docutils literal"><span class="pre">p101_2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_d2" title="f/weathergenmod/wind_d2"><code class="xref f f-var docutils literal"><span class="pre">wind_d2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_w2" title="f/weathergenmod/tmax_w2"><code class="xref f f-var docutils literal"><span class="pre">tmax_w2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_w2" title="f/weathergenmod/tmin_w2"><code class="xref f f-var docutils literal"><span class="pre">tmin_w2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_sd_w" title="f/weathergenmod/cldf_sd_w"><code class="xref f f-var docutils literal"><span class="pre">cldf_sd_w</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_d2" title="f/weathergenmod/tmax_d2"><code class="xref f f-var docutils literal"><span class="pre">tmax_d2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_d2" title="f/weathergenmod/tmin_d2"><code class="xref f f-var docutils literal"><span class="pre">tmin_d2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_sd_d" title="f/weathergenmod/cldf_sd_d"><code class="xref f f-var docutils literal"><span class="pre">cldf_sd_d</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_w2" title="f/weathergenmod/wind_w2"><code class="xref f f-var docutils literal"><span class="pre">wind_w2</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_intercept_bias_a" title="f/weathergenmod/wind_intercept_bias_a"><code class="xref f f-var docutils literal"><span class="pre">wind_intercept_bias_a</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_w1" title="f/weathergenmod/tmin_w1"><code class="xref f f-var docutils literal"><span class="pre">tmin_w1</span></code></a>, <a class="reference internal" href="#f/weathergenmod/g_scale_coeff" title="f/weathergenmod/g_scale_coeff"><code class="xref f f-var docutils literal"><span class="pre">g_scale_coeff</span></code></a>, <a class="reference internal" href="#f/weathergenmod/gp_shape" title="f/weathergenmod/gp_shape"><code class="xref f f-var docutils literal"><span class="pre">gp_shape</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_bias_max" title="f/weathergenmod/tmin_bias_max"><code class="xref f f-var docutils literal"><span class="pre">tmin_bias_max</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_bias_max" title="f/weathergenmod/wind_bias_max"><code class="xref f f-var docutils literal"><span class="pre">wind_bias_max</span></code></a>, <a class="reference internal" href="#f/weathergenmod/thresh" title="f/weathergenmod/thresh"><code class="xref f f-var docutils literal"><span class="pre">thresh</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_sd_breaks" title="f/weathergenmod/tmax_sd_breaks"><code class="xref f f-var docutils literal"><span class="pre">tmax_sd_breaks</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_sd_breaks" title="f/weathergenmod/tmin_sd_breaks"><code class="xref f f-var docutils literal"><span class="pre">tmin_sd_breaks</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_sd_w" title="f/weathergenmod/wind_sd_w"><code class="xref f f-var docutils literal"><span class="pre">wind_sd_w</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_sd_d" title="f/weathergenmod/wind_sd_d"><code class="xref f f-var docutils literal"><span class="pre">wind_sd_d</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_bias_coeffs" title="f/weathergenmod/wind_bias_coeffs"><code class="xref f f-var docutils literal"><span class="pre">wind_bias_coeffs</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_bias_coeffs" title="f/weathergenmod/tmin_bias_coeffs"><code class="xref f f-var docutils literal"><span class="pre">tmin_bias_coeffs</span></code></a>, <a class="reference internal" href="#f/weathergenmod/wind_intercept_bias_coeffs" title="f/weathergenmod/wind_intercept_bias_coeffs"><code class="xref f f-var docutils literal"><span class="pre">wind_intercept_bias_coeffs</span></code></a>, <a class="reference internal" href="#f/weathergenmod/b" title="f/weathergenmod/b"><code class="xref f f-var docutils literal"><span class="pre">b</span></code></a>, <a class="reference internal" href="#f/weathergenmod/a" title="f/weathergenmod/a"><code class="xref f f-var docutils literal"><span class="pre">a</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_sd_d" title="f/weathergenmod/tmin_sd_d"><code class="xref f f-var docutils literal"><span class="pre">tmin_sd_d</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_sd_w" title="f/weathergenmod/tmax_sd_w"><code class="xref f f-var docutils literal"><span class="pre">tmax_sd_w</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmax_sd_d" title="f/weathergenmod/tmax_sd_d"><code class="xref f f-var docutils literal"><span class="pre">tmax_sd_d</span></code></a>, <a class="reference internal" href="#f/weathergenmod/tmin_sd_w" title="f/weathergenmod/tmin_sd_w"><code class="xref f f-var docutils literal"><span class="pre">tmin_sd_w</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Routines:</th><td class="field-body"><a class="reference internal" href="#f/weathergenmod/calc_cloud_params" title="f/weathergenmod/calc_cloud_params"><code class="xref f f-func docutils literal"><span class="pre">calc_cloud_params()</span></code></a>, <a class="reference internal" href="#f/weathergenmod/init_weathergen" title="f/weathergenmod/init_weathergen"><code class="xref f f-func docutils literal"><span class="pre">init_weathergen()</span></code></a>, <a class="reference internal" href="#f/weathergenmod/temp_sd" title="f/weathergenmod/temp_sd"><code class="xref f f-func docutils literal"><span class="pre">temp_sd()</span></code></a>, <a class="reference internal" href="#f/weathergenmod/meansd" title="f/weathergenmod/meansd"><code class="xref f f-func docutils literal"><span class="pre">meansd()</span></code></a>, <a class="reference internal" href="#f/weathergenmod/rmsmooth" title="f/weathergenmod/rmsmooth"><code class="xref f f-func docutils literal"><span class="pre">rmsmooth()</span></code></a>, <a class="reference internal" href="#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a>, <a class="reference internal" href="#f/weathergenmod/roundto" title="f/weathergenmod/roundto"><code class="xref f f-func docutils literal"><span class="pre">roundto()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Needed modules</p>
+<ul class="simple">
+<li><a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod" title="f/randomdistmod: Random number generators and distributions module"><code class="xref f f-mod docutils literal"><span class="pre">randomdistmod</span></code></a> (<a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><code class="xref f f-func docutils literal"><span class="pre">randomstate()</span></code></a>): Random number generators and distributions module</li>
+<li><a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod" title="f/parametersmod: Simple module defining some types and parameters"><code class="xref f f-mod docutils literal"><span class="pre">parametersmod</span></code></a> (<a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/sp" title="f/parametersmod/sp"><code class="xref f f-func docutils literal"><span class="pre">sp()</span></code></a>, <a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/i4" title="f/parametersmod/i4"><code class="xref f f-func docutils literal"><span class="pre">i4()</span></code></a>, <a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/dp" title="f/parametersmod/dp"><code class="xref f f-func docutils literal"><span class="pre">dp()</span></code></a>): Simple module defining some types and parameters</li>
+</ul>
+<p class="rubric">Types</p>
+<ul>
+<li><dl class="type">
+<dt id="f/weathergenmod/metvars_in">
+<em class="property">type  </em><code class="descclassname">weathergenmod/</code><code class="descname">metvars_in</code><a class="headerlink" href="#f/weathergenmod/metvars_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derived datatype for the monthly weather generator input</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type fields:</th><td class="field-body"><ul class="first last simple">
+<li><code class="descname">% </code><code class="descname">cldf</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmin</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmax</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">prec</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">rndst</code><em> [</em><a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">wetf</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">resid</code> (4)<em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">wetd</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">pday</code> (2)<em> [</em><em>logical</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">wind</code><em> [</em><em>real</em><em>]</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</li>
+<li><dl class="type">
+<dt id="f/weathergenmod/metvars_out">
+<em class="property">type  </em><code class="descclassname">weathergenmod/</code><code class="descname">metvars_out</code><a class="headerlink" href="#f/weathergenmod/metvars_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derived datatype for the daily weather generator output</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type fields:</th><td class="field-body"><ul class="first last simple">
+<li><code class="descname">% </code><code class="descname">wind_sd</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmin</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">pday</code> (2)<em> [</em><em>logical</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">wind_mn</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">wind_bias</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">wind_intercept_bias</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">cldf</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">resid</code> (4)<em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmin_sd</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmax</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmin_bias</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">prec</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">rndst</code><em> [</em><a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmin_mn</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">unorm</code> (4)<em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">wind</code><em> [</em><em>real</em><em>]</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</li>
+<li><dl class="type">
+<dt id="f/weathergenmod/daymetvars">
+<em class="property">type  </em><code class="descclassname">weathergenmod/</code><code class="descname">daymetvars</code><a class="headerlink" href="#f/weathergenmod/daymetvars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derived datatype for monthly climate variables</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type fields:</th><td class="field-body"><ul class="first last simple">
+<li><code class="descname">% </code><code class="descname">wind_sd</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">cldf_sd</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmax_sd</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmin_sd</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">cldf_mn</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">wind_mn</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmin_mn</code><em> [</em><em>real</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">tmax_mn</code><em> [</em><em>real</em><em>]</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</li>
+</ul>
+<p class="rubric">Variables</p>
+<ul>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_sd_w1">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_sd_w1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_sd_w1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_sd_w2">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_sd_w2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_sd_w2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_sd_d1">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_sd_d1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_sd_d1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_sd_d2">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_sd_d2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_sd_d2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_w2">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_w2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_w2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/p101_2">
+<code class="descclassname">weathergenmod/</code><code class="descname">p101_2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/p101_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/p101_1">
+<code class="descclassname">weathergenmod/</code><code class="descname">p101_1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/p101_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_d1">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_d1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_d1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_w2">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_w2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_w2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_w1">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_w1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_w1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_d1">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_d1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_d1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_d3">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_d3</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_d3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_d2">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_d2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_d2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_d4">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_d4</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_d4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_bias_max">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_bias_max</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_bias_max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_bias_coeffs">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_bias_coeffs</code> (6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_bias_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_sd_w">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_sd_w</code> (6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_sd_w" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_bias_min">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_bias_min</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_bias_min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_sd_w1">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_sd_w1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_sd_w1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_sd_w2">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_sd_w2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_sd_w2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_slope_bias_x0">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_slope_bias_x0</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_slope_bias_x0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/thresh">
+<code class="descclassname">weathergenmod/</code><code class="descname">thresh</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/thresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/g_scale_coeff">
+<code class="descclassname">weathergenmod/</code><code class="descname">g_scale_coeff</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/g_scale_coeff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/p11_1">
+<code class="descclassname">weathergenmod/</code><code class="descname">p11_1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/p11_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_sd_w2">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_sd_w2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_sd_w2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/p001_1">
+<code class="descclassname">weathergenmod/</code><code class="descname">p001_1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/p001_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_sd_d2">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_sd_d2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_sd_d2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_sd_d1">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_sd_d1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_sd_d1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_sd_d1">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_sd_d1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_sd_d1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_sd_d2">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_sd_d2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_sd_d2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/thresh_pctl">
+<code class="descclassname">weathergenmod/</code><code class="descname">thresh_pctl</code><em> [</em><em>logical</em><em>]</em><a class="headerlink" href="#f/weathergenmod/thresh_pctl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_sd_breaks">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_sd_breaks</code> (3)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_sd_breaks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_bias_max">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_bias_max</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_bias_max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_w1">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_w1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_w1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_w2">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_w2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_w2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/p11_2">
+<code class="descclassname">weathergenmod/</code><code class="descname">p11_2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/p11_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/gp_shape">
+<code class="descclassname">weathergenmod/</code><code class="descname">gp_shape</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/gp_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt>
+<code class="descclassname">weathergenmod/</code><code class="descname">metvars_out</code><em> [</em><em>public</em><em>]</em></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_d1">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_d1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_d1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_d2">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_d2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_d2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_w4">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_w4</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_w4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_slope_bias_k">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_slope_bias_k</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_slope_bias_k" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/b">
+<code class="descclassname">weathergenmod/</code><code class="descname">b</code> (4,4)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/b" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_w1">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_w1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_w1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_slope_bias_l">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_slope_bias_l</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_slope_bias_l" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_w3">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_w3</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_w3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt>
+<code class="descclassname">weathergenmod/</code><code class="descname">daymetvars</code><em> [</em><em>private</em><em>]</em></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_bias_min">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_bias_min</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_bias_min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_sd_breaks">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_sd_breaks</code> (3)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_sd_breaks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_sd_w">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_sd_w</code> (4,6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_sd_w" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_w">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_w</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_w" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_d2">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_d2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_d2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/p001_2">
+<code class="descclassname">weathergenmod/</code><code class="descname">p001_2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/p001_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_sd_d">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_sd_d</code> (4,6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_sd_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_d1">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_d1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_d1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_w2">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_w2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_w2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_w1">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_w1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_w1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_d">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_d</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/a">
+<code class="descclassname">weathergenmod/</code><code class="descname">a</code> (4,4)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/a" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_intercept_bias_coeffs">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_intercept_bias_coeffs</code> (6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_intercept_bias_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_sd_w">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_sd_w</code> (4,6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_sd_w" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_intercept_bias_b">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_intercept_bias_b</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_intercept_bias_b" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_intercept_bias_a">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_intercept_bias_a</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_intercept_bias_a" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_bias_coeffs">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_bias_coeffs</code> (6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_bias_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_sd_d">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_sd_d</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_sd_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_sd_d">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_sd_d</code> (4,6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_sd_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmin_sd_w1">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmin_sd_w1</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmin_sd_w1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt>
+<code class="descclassname">weathergenmod/</code><code class="descname">metvars_in</code><em> [</em><em>public</em><em>]</em></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/wind_sd_d">
+<code class="descclassname">weathergenmod/</code><code class="descname">wind_sd_d</code> (6)<em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/wind_sd_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/cldf_sd_w">
+<code class="descclassname">weathergenmod/</code><code class="descname">cldf_sd_w</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/cldf_sd_w" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/weathergenmod/tmax_d2">
+<code class="descclassname">weathergenmod/</code><code class="descname">tmax_d2</code><em> [</em><em>real</em><em>]</em><a class="headerlink" href="#f/weathergenmod/tmax_d2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl class="subroutine">
+<dt id="f/weathergenmod/init_weathergen">
+<em class="property">subroutine  </em><code class="descclassname">weathergenmod/</code><code class="descname">init_weathergen</code><span class="sig-paren">(</span><span class="optional">[</span><em>f_unit</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/weathergenmod/init_weathergen" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize the weather generator and read in the parameters from the
+namelist</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Options:</th><td class="field-body"><strong>f_unit</strong><em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><a class="reference internal" href="gwgen.src.main.html#f/gwgen" title="f/gwgen"><code class="xref f f-prog docutils literal"><span class="pre">gwgen</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Call to:</th><td class="field-body"><a class="reference internal" href="#f/weathergenmod/calc_cloud_params" title="f/weathergenmod/calc_cloud_params"><code class="xref f f-func docutils literal"><span class="pre">calc_cloud_params()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/weathergenmod/weathergen">
+<em class="property">subroutine  </em><code class="descclassname">weathergenmod/</code><code class="descname">weathergen</code><span class="sig-paren">(</span><em>met_in</em>, <em>met_out</em><span class="sig-paren">)</span><a class="headerlink" href="#f/weathergenmod/weathergen" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>met_in</strong><em> [</em><a class="reference internal" href="#f/weathergenmod/metvars_in" title="f/weathergenmod/metvars_in"><em>metvars_in</em></a><em>,</em><em>in</em><em>]</em></li>
+<li><strong>met_out</strong><em> [</em><a class="reference internal" href="#f/weathergenmod/metvars_out" title="f/weathergenmod/metvars_out"><em>metvars_out</em></a><em>,</em><em>out</em><em>]</em></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Use :</th><td class="field-body"><p class="first"><a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod" title="f/randomdistmod: Random number generators and distributions module"><code class="xref f f-mod docutils literal"><span class="pre">randomdistmod</span></code></a> (<a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/ran_gamma_gp" title="f/randomdistmod/ran_gamma_gp"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma_gp()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/ran_gamma" title="f/randomdistmod/ran_gamma"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/ran_normal" title="f/randomdistmod/ran_normal"><code class="xref f f-func docutils literal"><span class="pre">ran_normal()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/ranur" title="f/randomdistmod/ranur"><code class="xref f f-func docutils literal"><span class="pre">ranur()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/gamma_cdf_inv" title="f/randomdistmod/gamma_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf_inv()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/gamma_pdf" title="f/randomdistmod/gamma_pdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_pdf()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/gamma_cdf" title="f/randomdistmod/gamma_cdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf()</span></code></a>), <a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod" title="f/parametersmod: Simple module defining some types and parameters"><code class="xref f f-mod docutils literal"><span class="pre">parametersmod</span></code></a> (<a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/tfreeze" title="f/parametersmod/tfreeze"><code class="xref f f-func docutils literal"><span class="pre">tfreeze()</span></code></a>, <a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/sp" title="f/parametersmod/sp"><code class="xref f f-func docutils literal"><span class="pre">sp()</span></code></a>, <a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/dp" title="f/parametersmod/dp"><code class="xref f f-func docutils literal"><span class="pre">dp()</span></code></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="gwgen.src.main.html#f/gwgen" title="f/gwgen"><code class="xref f f-prog docutils literal"><span class="pre">gwgen</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/ranur" title="f/randomdistmod/ranur"><code class="xref f f-func docutils literal"><span class="pre">ranur()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/gamma_cdf_inv" title="f/randomdistmod/gamma_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf_inv()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/gamma_cdf" title="f/randomdistmod/gamma_cdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/gamma_pdf" title="f/randomdistmod/gamma_pdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_pdf()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/ran_gamma_gp" title="f/randomdistmod/ran_gamma_gp"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma_gp()</span></code></a>, <a class="reference internal" href="#f/weathergenmod/roundto" title="f/weathergenmod/roundto"><code class="xref f f-func docutils literal"><span class="pre">roundto()</span></code></a>, <a class="reference internal" href="#f/weathergenmod/meansd" title="f/weathergenmod/meansd"><code class="xref f f-func docutils literal"><span class="pre">meansd()</span></code></a>, <a class="reference internal" href="gwgen.src.randomdistmod.html#f/randomdistmod/ran_normal" title="f/randomdistmod/ran_normal"><code class="xref f f-func docutils literal"><span class="pre">ran_normal()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/weathergenmod/meansd">
+<em class="property">subroutine  </em><code class="descclassname">weathergenmod/</code><code class="descname">meansd</code><span class="sig-paren">(</span><em>pday</em>, <em>tmn</em>, <em>tmx</em>, <em>cld</em>, <em>wind</em>, <em>dm</em><span class="sig-paren">)</span><a class="headerlink" href="#f/weathergenmod/meansd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust the monthly means of temperature, cloud and wind corresponding to the wet/dry state</p>
+<p>This routine makes the first approximation inside the weather generator to adjust the monthly
+mean according to the wet/dry state using the best fit lines from the parameterization.</p>
+<p>Min. and max. temperature, as well as the wind speed, are calculated via</p>
+<div class="math">
+\[x_{w/d} = x_{w/d1} + x_{w/d2} \cdot \bar{x}\]</div>
+<p>Where <span class="math">\(x\)</span> stands either for the <span class="math">\(T_{min}, T_{max}, T_{min, sd}, T_{max, sd}, wind\)</span>
+or <span class="math">\(wind_{sd}\)</span>. <span class="math">\(w/d\)</span> stands for the wet dry state deterimined by <cite>pday</cite>.</p>
+<p>The cloud fraction is calculated via</p>
+<div class="math">
+\[c_{w/d} = \frac{-a_{w/d} - 1}{a_{w/d}^2 * \bar{c} - a_{w/d}^2 - a_{w/d}}  - \frac{1}{a_{w/d}}\]</div>
+<p>and it&#8217;s standard deviation via</p>
+<div class="math">
+\[c_{sd, w/d} = a_{sd, w/d}^2 \cdot c_{w/d} \cdot (1 - c_{w/d})\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pday</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: precipitation status (mm/day)</li>
+<li><strong>tmn</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: smooth interpolation of monthly minimum temperature (degC)</li>
+<li><strong>tmx</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: smooth interpolation of monthly maximum temperature (degC)</li>
+<li><strong>cld</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: fraction (0-1)</li>
+<li><strong>wind</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: wind speed (m/s)</li>
+<li><strong>dm</strong><em> [</em><a class="reference internal" href="#f/weathergenmod/daymetvars" title="f/weathergenmod/daymetvars"><em>daymetvars</em></a><em>,</em><em>out</em><em>]</em> :: the <a class="reference internal" href="#f/weathergenmod/daymetvars" title="f/weathergenmod/daymetvars"><code class="xref f f-type docutils literal"><span class="pre">daymetvars</span></code></a> for the first daily approximation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/weathergenmod/temp_sd" title="f/weathergenmod/temp_sd"><code class="xref f f-func docutils literal"><span class="pre">temp_sd()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/weathergenmod/rmsmooth">
+<em class="property">subroutine  </em><code class="descclassname">weathergenmod/</code><code class="descname">rmsmooth</code><span class="sig-paren">(</span><em>m</em>, <em>dmonth</em>, <em>bcond</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#f/weathergenmod/rmsmooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterative, mean preserving method to smoothly interpolate mean data to pseudo-sub-timestep values
+From Rymes, M.D. and D.R. Myers, 2001. Solar Energy (71) 4, 225-231</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>m</strong> (*)<em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: vector of mean values at super-time step (e.g., monthly), minimum three values</li>
+<li><strong>dmonth</strong> (*)<em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: vector of number of intervals for the time step (e.g., days per month)</li>
+<li><strong>bcond</strong> (2)<em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: boundary conditions for the result vector (1=left side, 2=right side)</li>
+<li><strong>r</strong> (*)<em> [</em><em>real</em><em>,</em><em>out</em><em>]</em> :: result vector of values at chosen time step</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Use :</th><td class="field-body"><p class="first"><a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod" title="f/parametersmod: Simple module defining some types and parameters"><code class="xref f f-mod docutils literal"><span class="pre">parametersmod</span></code></a> (<a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/sp" title="f/parametersmod/sp"><code class="xref f f-func docutils literal"><span class="pre">sp()</span></code></a>)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gwgen.src.main.html#f/gwgen" title="f/gwgen"><code class="xref f f-prog docutils literal"><span class="pre">gwgen</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/weathergenmod/roundto">
+<em class="property">function  </em><code class="descclassname">weathergenmod/</code><code class="descname">roundto</code><span class="sig-paren">(</span><em>val</em>, <em>precision</em><span class="sig-paren">)</span><a class="headerlink" href="#f/weathergenmod/roundto" title="Permalink to this definition">¶</a></dt>
+<dd><p>round a value to the given precision</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>val</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the input value</li>
+<li><strong>precision</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: the precision</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>roundto</strong><em> [</em><em>real</em><em>]</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/weathergenmod/calc_cloud_params">
+<em class="property">subroutine  </em><code class="descclassname">weathergenmod/</code><code class="descname">calc_cloud_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#f/weathergenmod/calc_cloud_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the parameters used for the first approximation in <a class="reference internal" href="#f/weathergenmod/meansd" title="f/weathergenmod/meansd"><code class="xref f f-subr docutils literal"><span class="pre">meansd()</span></code></a></p>
+<p>This subroutine uses <a class="reference internal" href="#f/weathergenmod/cldf_w" title="f/weathergenmod/cldf_w"><code class="xref f f-var docutils literal"><span class="pre">cldf_w</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_d" title="f/weathergenmod/cldf_d"><code class="xref f f-var docutils literal"><span class="pre">cldf_d</span></code></a>, <a class="reference internal" href="#f/weathergenmod/cldf_sd_w" title="f/weathergenmod/cldf_sd_w"><code class="xref f f-var docutils literal"><span class="pre">cldf_sd_w</span></code></a> and
+<a class="reference internal" href="#f/weathergenmod/cldf_sd_d" title="f/weathergenmod/cldf_sd_d"><code class="xref f f-var docutils literal"><span class="pre">cldf_sd_d</span></code></a> to calculate the necessary parameters for the adjustment of
+the monthly cloud fraction mean depending on the wet/dry state</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><a class="reference internal" href="#f/weathergenmod/init_weathergen" title="f/weathergenmod/init_weathergen"><code class="xref f f-func docutils literal"><span class="pre">init_weathergen()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/weathergenmod/temp_sd">
+<em class="property">subroutine  </em><code class="descclassname">weathergenmod/</code><code class="descname">temp_sd</code><span class="sig-paren">(</span><em>pday</em>, <em>dm</em><span class="sig-paren">)</span><a class="headerlink" href="#f/weathergenmod/temp_sd" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pday</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: precipitation status (mm/day)</li>
+<li><strong>dm</strong><em> [</em><a class="reference internal" href="#f/weathergenmod/daymetvars" title="f/weathergenmod/daymetvars"><em>daymetvars</em></a><em>,</em><em>inout</em><em>]</em></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/weathergenmod/meansd" title="f/weathergenmod/meansd"><code class="xref f f-func docutils literal"><span class="pre">meansd()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 

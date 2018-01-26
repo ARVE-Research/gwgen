@@ -43,8 +43,337 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="csv-file-module">
-<span id="gwgen-src-csv-file"></span><h1>csv_file module<a class="headerlink" href="#csv-file-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="f/csv_file">
+<span id="csv-file-module"></span><span id="gwgen-src-csv-file"></span><h1>csv_file module<a class="headerlink" href="#f/csv_file" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Description</p>
+<p>Small module to facilitate writing CSV-files</p>
+<p>The module contains the following subroutines:</p>
+<dl class="docutils">
+<dt>csv_next_record</dt>
+<dd>Advance to the next record</dd>
+<dt>csv_write_integer</dt>
+<dd>Write a single integer to the CSV-file</dd>
+<dt>csv_write_real</dt>
+<dd>Write a single real to the CSV-file</dd>
+<dt>csv_write_dble</dt>
+<dd>Write a single double-precision real to the CSV-file</dd>
+<dt>csv_write_char</dt>
+<dd>Write a single character string to the CSV-file</dd>
+<dt>csv_write_integer_1d</dt>
+<dd>Write a 1D array of integers to the CSV-file</dd>
+<dt>csv_write_real_1d</dt>
+<dd>Write a 1D array of reals to the CSV-file</dd>
+<dt>csv_write_dble_1d</dt>
+<dd>Write a 1D array of double-precision real to the CSV-file</dd>
+<dt>csv_write_char_1d</dt>
+<dd>Write a 1D array of character strings to the CSV-file</dd>
+<dt>csv_write_integer_2d</dt>
+<dd>Write a 2D array of integers to the CSV-file</dd>
+<dt>csv_write_real_2d</dt>
+<dd>Write a 2D array of reals to the CSV-file</dd>
+<dt>csv_write_dble_2d</dt>
+<dd>Write a 2D array of double-precision real to the CSV-file</dd>
+<dt>csv_write_char_2d</dt>
+<dd>Write a 2D array of character strings to the CSV-file</dd>
+</dl>
+<p>For convenience, the generic name &#8220;csv_write&#8221; can be used
+instead of the individual routines.</p>
+<p>The file to write to must already be opened as a LU-number
+is passed.</p>
+<div class="section" id="layout-of-the-csv-file">
+<h2>Layout of the CSV-file:<a class="headerlink" href="#layout-of-the-csv-file" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>single items are written to the end of the current record</li>
+<li>one-dimensional items are also written to the end of the current
+record</li>
+<li>two-dimensional items are written to separate records, one for
+each row</li>
+<li>except for the two-dimensional versions, all routines allow
+you to suppress advancing to the next record:<ul>
+<li>for single items you must indicate whether to advance or not</li>
+<li>for one-dimensional items, the argument is optional. Default
+is to advance.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="note-on-the-format">
+<h2>Note on the format:<a class="headerlink" href="#note-on-the-format" title="Permalink to this headline">¶</a></h2>
+<p>CSV-files apparently come in different guises (Kernighan and Pike,
+The practice of Programming, Addison-Wesley, 1999). This module
+uses the following rules:</p>
+<ul class="simple">
+<li>items are always separated by a single comma (,)</li>
+<li>string items are delimited by double quotes (&#8221;)</li>
+<li>embedded double quotes are treated by doubling the quote</li>
+<li>trailing blanks are considered irrelevant</li>
+</ul>
+<p class="rubric">Quick access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Routines:</th><td class="field-body"><a class="reference internal" href="#f/csv_file/csv_next_record" title="f/csv_file/csv_next_record"><code class="xref f f-func docutils literal"><span class="pre">csv_next_record()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_char_2d" title="f/csv_file/csv_write_char_2d"><code class="xref f f-func docutils literal"><span class="pre">csv_write_char_2d()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_dble_2d" title="f/csv_file/csv_write_dble_2d"><code class="xref f f-func docutils literal"><span class="pre">csv_write_dble_2d()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_integer_2d" title="f/csv_file/csv_write_integer_2d"><code class="xref f f-func docutils literal"><span class="pre">csv_write_integer_2d()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_real_2d" title="f/csv_file/csv_write_real_2d"><code class="xref f f-func docutils literal"><span class="pre">csv_write_real_2d()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_char_1d" title="f/csv_file/csv_write_char_1d"><code class="xref f f-func docutils literal"><span class="pre">csv_write_char_1d()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_dble_1d" title="f/csv_file/csv_write_dble_1d"><code class="xref f f-func docutils literal"><span class="pre">csv_write_dble_1d()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_integer_1d" title="f/csv_file/csv_write_integer_1d"><code class="xref f f-func docutils literal"><span class="pre">csv_write_integer_1d()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_real_1d" title="f/csv_file/csv_write_real_1d"><code class="xref f f-func docutils literal"><span class="pre">csv_write_real_1d()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_dble" title="f/csv_file/csv_write_dble"><code class="xref f f-func docutils literal"><span class="pre">csv_write_dble()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_char" title="f/csv_file/csv_write_char"><code class="xref f f-func docutils literal"><span class="pre">csv_write_char()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_integer" title="f/csv_file/csv_write_integer"><code class="xref f f-func docutils literal"><span class="pre">csv_write_integer()</span></code></a>, <a class="reference internal" href="#f/csv_file/csv_write_real" title="f/csv_file/csv_write_real"><code class="xref f f-func docutils literal"><span class="pre">csv_write_real()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Subroutines and functions</p>
+<dl class="subroutine">
+<dt id="f/csv_file/csv_next_record">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_next_record</code><span class="sig-paren">(</span><em>lun</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_next_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Go to the next record (convenience routine)</p>
+<dl class="docutils">
+<dt>Result:</dt>
+<dd>The current record is closed, the next write will be to the
+new record</dd>
+<dt>Note:</dt>
+<dd>This is a convenience routine, it may result in a superfluous
+comma at the end of the previous record. This does not seem to
+be problematic, though, for MS Excel</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: LU-number of the CSV-file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_integer">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_integer</code><span class="sig-paren">(</span><em>lun</em>, <em>value</em>, <em>advance</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_integer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a single integer/real/double precision real to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: LU-number of the CSV-file</li>
+<li><strong>value</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: Value to write</li>
+<li><strong>advance</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: Advance (.true.) or not, so that more items can be written to the same record</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_real">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_real</code><span class="sig-paren">(</span><em>lun</em>, <em>value</em>, <em>advance</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_real" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a single real to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: LU-number of the CSV-file</li>
+<li><strong>value</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: Value to write</li>
+<li><strong>advance</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: Advance (.true.) or not, so that more items can be written to the same record</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_dble">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_dble</code><span class="sig-paren">(</span><em>lun</em>, <em>value</em>, <em>advance</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_dble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a double to the CSV file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: LU-number of the CSV-file</li>
+<li><strong>value</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: Value to write</li>
+<li><strong>advance</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: Advance (.true.) or not, so that more items can be written to the same record</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_char">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_char</code><span class="sig-paren">(</span><em>lun</em>, <em>value</em>, <em>advance</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_char" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a single character string to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: LU-number of the CSV-file</li>
+<li><strong>value</strong><em> [</em><em>character</em><em>,</em><em>in</em><em>]</em> :: Value to write</li>
+<li><strong>advance</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: Advance (.true.) or not, so that more items can be written to the same record</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_integer_1d">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_integer_1d</code><span class="sig-paren">(</span><em>lun</em>, <em>array</em><span class="optional">[</span>, <em>advance</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_integer_1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a one-dimensional array of integer items to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>array</strong> (*)<em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: Array to write</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><p class="first last"><strong>advance</strong><em> [</em><em>logical</em><em>,</em><em>in,optional</em><em>]</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_real_1d">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_real_1d</code><span class="sig-paren">(</span><em>lun</em>, <em>array</em><span class="optional">[</span>, <em>advance</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_real_1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a one-dimensional array of real items to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>array</strong> (*)<em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: Array to write</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><p class="first last"><strong>advance</strong><em> [</em><em>logical</em><em>,</em><em>in,optional</em><em>]</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_dble_1d">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_dble_1d</code><span class="sig-paren">(</span><em>lun</em>, <em>array</em><span class="optional">[</span>, <em>advance</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_dble_1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a one-dimensional array of double items to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>array</strong> (*)<em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: Array to write</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><p class="first last"><strong>advance</strong><em> [</em><em>logical</em><em>,</em><em>in,optional</em><em>]</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_char_1d">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_char_1d</code><span class="sig-paren">(</span><em>lun</em>, <em>array</em><span class="optional">[</span>, <em>advance</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_char_1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a one-dimensional array of character items to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>array</strong> (*)<em> [</em><em>character</em><em>,</em><em>in</em><em>]</em> :: Array to write</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Options:</th><td class="field-body"><p class="first last"><strong>advance</strong><em> [</em><em>logical</em><em>,</em><em>in,optional</em><em>]</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_integer_2d">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_integer_2d</code><span class="sig-paren">(</span><em>lun</em>, <em>array</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_integer_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a two-dimensional array of integer items to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>array</strong> (,)<em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: Array to write</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_real_2d">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_real_2d</code><span class="sig-paren">(</span><em>lun</em>, <em>array</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_real_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a two-dimensional array of real items to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>array</strong> (,)<em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: Array to write</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_dble_2d">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_dble_2d</code><span class="sig-paren">(</span><em>lun</em>, <em>array</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_dble_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a two-dimensional array of double items to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>array</strong> (,)<em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: Array to write</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/csv_file/csv_write_char_2d">
+<em class="property">subroutine  </em><code class="descclassname">csv_file/</code><code class="descname">csv_write_char_2d</code><span class="sig-paren">(</span><em>lun</em>, <em>array</em><span class="sig-paren">)</span><a class="headerlink" href="#f/csv_file/csv_write_char_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a two-dimensional array of character items to the CSV-file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lun</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>array</strong> (,)<em> [</em><em>character</em><em>,</em><em>in</em><em>]</em> :: Array to write</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -91,6 +420,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
 </ul>
 
+
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">csv_file module</a><ul>
+<li><a class="reference internal" href="#layout-of-the-csv-file">Layout of the CSV-file:</a></li>
+<li><a class="reference internal" href="#note-on-the-format">Note on the format:</a></li>
+</ul>
+</li>
+</ul>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>

@@ -86,7 +86,7 @@ additional day column</p>
 <h2>Using the python package<a class="headerlink" href="#using-the-python-package" title="Permalink to this headline">¶</a></h2>
 <p>The GWGEN package uses the <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/">model-organization</a> framework and thus can be used
 from the command line. The corresponding subclass of the
-<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.8)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a> is the
+<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.9)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a> is the
 <a class="reference internal" href="api/gwgen.main.html#gwgen.main.GWGENOrganizer" title="gwgen.main.GWGENOrganizer"><code class="xref py py-class docutils literal"><span class="pre">gwgen.main.GWGENOrganizer</span></code></a> class.</p>
 <p>After <a class="reference internal" href="install.html#install-full"><span>having installed the full python package</span></a> you can
 setup a new project with the <a class="reference internal" href="command_line/gwgen.setup.html#gwgen-setup"><span>gwgen setup</span></a> command via</p>
@@ -99,7 +99,7 @@ can then modify them according to your needs. To compile the model, use the
 <a class="reference internal" href="command_line/gwgen.compile.html#gwgen-compile"><span>gwgen compile</span></a> command:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="o">!</span>gwgen compile -p my_first_project
 <span class="go">INFO:gwgen.my_first_project:Compiling my_first_project</span>
-<span class="go">make: Entering directory `/home/travis/build/ARVE-Research/gwgen/my_first_project/bin&#39;</span>
+<span class="go">make: Entering directory `/home/travis/build/ARVE-Research/gwgen/docs/my_first_project/bin&#39;</span>
 <span class="go">gfortran  -c -o parametersmod.o  parametersmod.f90</span>
 <span class="go">gfortran  -c -o geohashmod.o  geohashmod.f90</span>
 <span class="go">gfortran  -c -o randomdistmod.o  randomdistmod.f90</span>
@@ -107,7 +107,7 @@ can then modify them according to your needs. To compile the model, use the
 <span class="go">gfortran  -c -o csv_file.o  csv_file.f90</span>
 <span class="go">gfortran  -c -o main.o  main.f90</span>
 <span class="go">gfortran -o weathergen parametersmod.o geohashmod.o randomdistmod.o weathergenmod.o csv_file.o main.o  </span>
-<span class="go">make: Leaving directory `/home/travis/build/ARVE-Research/gwgen/my_first_project/bin&#39;</span>
+<span class="go">make: Leaving directory `/home/travis/build/ARVE-Research/gwgen/docs/my_first_project/bin&#39;</span>
 </pre></div>
 </div>
 <p>Note that you can also omit the <code class="docutils literal"><span class="pre">-p</span></code> option. If you do so, it uses the last
@@ -165,10 +165,62 @@ your region but note that you should have as many weather stations as you can.</
 data files and run our <a class="reference internal" href="command_line/gwgen.param.prcp.html#gwgen-param-prcp"><span>prcp</span></a> parameterization:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="o">!</span>gwgen param -s hamburg_stations.dat day --download single prcp
 <span class="go">INFO:gwgen.my_first_experiment:Parameterizing experiment my_first_experiment of project my_first_project</span>
-<span class="go">INFO:gwgen.utils:Downloading ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/GM000010147.dly to /home/travis/build/ARVE-Research/gwgen/my_first_project/data/ghcn/ghcnd_all/GM000010147.dly</span>
-<span class="go">INFO:gwgen.utils:Downloading ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/GM000003865.dly to /home/travis/build/ARVE-Research/gwgen/my_first_project/data/ghcn/ghcnd_all/GM000003865.dly</span>
+<span class="go">INFO:gwgen.utils:Downloading ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/GM000010147.dly to /home/travis/build/ARVE-Research/gwgen/docs/my_first_project/data/ghcn/ghcnd_all/GM000010147.dly</span>
+<span class="go">INFO:gwgen.utils:Downloading ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/GM000003865.dly to /home/travis/build/ARVE-Research/gwgen/docs/my_first_project/data/ghcn/ghcnd_all/GM000003865.dly</span>
 <span class="go">INFO:gwgen.utils.TaskManager.MainProcess:Processing 4 tasks in parallel</span>
 <span class="go">INFO:gwgen.utils.PrcpDistParams.prcp.MainProcess:Calculating prcp task</span>
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/bin/gwgen&quot;, line 11, in &lt;module&gt;</span>
+<span class="go">    load_entry_point(&#39;gwgen==1.0.2&#39;, &#39;console_scripts&#39;, &#39;gwgen&#39;)()</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/gwgen-1.0.2-py2.7-linux-x86_64.egg/gwgen/main.py&quot;, line 1704, in main</span>
+<span class="go">    GWGENOrganizer.main(args)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/model_organization/__init__.py&quot;, line 152, in main</span>
+<span class="go">    organizer.parse_args(args)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/model_organization/__init__.py&quot;, line 1574, in parse_args</span>
+<span class="go">    ret = self.start(**vars(self.parser.parse_args(args)))</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/model_organization/__init__.py&quot;, line 183, in start</span>
+<span class="go">    ret[cmd] = func(**kws)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/gwgen-1.0.2-py2.7-linux-x86_64.egg/gwgen/main.py&quot;, line 651, in param</span>
+<span class="go">    exp_dict.setdefault(&#39;namelist&#39;, OrderedDict()))</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/gwgen-1.0.2-py2.7-linux-x86_64.egg/gwgen/utils.py&quot;, line 1823, in run</span>
+<span class="go">    task.run(info, *args)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/gwgen-1.0.2-py2.7-linux-x86_64.egg/gwgen/utils.py&quot;, line 1209, in run</span>
+<span class="go">    sp = self.create_project(ds_orig)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/gwgen-1.0.2-py2.7-linux-x86_64.egg/gwgen/parameterization.py&quot;, line 640, in create_project</span>
+<span class="go">    return psy.plot.densityreg(ds, name=&#39;gscale&#39;, fmt=self.fmt)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 1403, in __call__</span>
+<span class="go">    six.iteritems(self._default_dims), six.iteritems(kwargs))))</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 146, in wrapper</span>
+<span class="go">    return func(self, *args, **kwargs)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 509, in _add_data</span>
+<span class="go">    project=self, enable_post=enable_post, **fmt)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1117, in __init__</span>
+<span class="go">    make_plot=make_plot)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1272, in initialize_plot</span>
+<span class="go">    self._plot_by_priority(priority, grouper, initializing=True)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1470, in _plot_by_priority</span>
+<span class="go">    update(fmto)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1450, in update</span>
+<span class="go">    fmto.initialize_plot(fmto.value)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 595, in initialize_plot</span>
+<span class="go">    self.update(value, *args, **kwargs)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psy_simple/plotters.py&quot;, line 1431, in update</span>
+<span class="go">    ax = self.plotter.ax</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 899, in ax</span>
+<span class="go">    plt.figure()</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/pyplot.py&quot;, line 539, in figure</span>
+<span class="go">    **kwargs)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backend_bases.py&quot;, line 171, in new_figure_manager</span>
+<span class="go">    return cls.new_figure_manager_given_figure(num, fig)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backend_bases.py&quot;, line 177, in new_figure_manager_given_figure</span>
+<span class="go">    canvas = cls.FigureCanvas(figure)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5agg.py&quot;, line 35, in __init__</span>
+<span class="go">    super(FigureCanvasQTAggBase, self).__init__(figure=figure)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5.py&quot;, line 235, in __init__</span>
+<span class="go">    _create_qApp()</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5.py&quot;, line 122, in _create_qApp</span>
+<span class="go">    raise RuntimeError(&#39;Invalid DISPLAY variable&#39;)</span>
+<span class="go">RuntimeError: Invalid DISPLAY variable</span>
 </pre></div>
 </div>
 <p>This then also creates a plot that shows the relation ship between the mean
@@ -178,13 +230,20 @@ the gamma shape parameter</p>
 <p>This procedure now modified the namelist of our experiment and added two
 namelist parameters</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="o">!</span>gwgen get-value namelist
-<span class="go">weathergen_ctl: !!python/object/apply:cyordereddict._cyordereddict.OrderedDict</span>
-<span class="go">- - - g_scale_coeff</span>
-<span class="go">    - 1.3774572289956073</span>
-<span class="go">  - - thresh</span>
-<span class="go">    - 5.0</span>
-<span class="go">  - - gp_shape</span>
-<span class="go">    - 0.0974</span>
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/bin/gwgen&quot;, line 11, in &lt;module&gt;</span>
+<span class="go">    load_entry_point(&#39;gwgen==1.0.2&#39;, &#39;console_scripts&#39;, &#39;gwgen&#39;)()</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/gwgen-1.0.2-py2.7-linux-x86_64.egg/gwgen/main.py&quot;, line 1704, in main</span>
+<span class="go">    GWGENOrganizer.main(args)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/model_organization/__init__.py&quot;, line 152, in main</span>
+<span class="go">    organizer.parse_args(args)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/model_organization/__init__.py&quot;, line 1574, in parse_args</span>
+<span class="go">    ret = self.start(**vars(self.parser.parse_args(args)))</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/model_organization/__init__.py&quot;, line 183, in start</span>
+<span class="go">    ret[cmd] = func(**kws)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/model_organization/__init__.py&quot;, line 1192, in get_value</span>
+<span class="go">    ret[i] = sub_config[key]</span>
+<span class="go">KeyError: u&#39;namelist&#39;</span>
 </pre></div>
 </div>
 <p>Otherwise you can of course always modify the namelist of your experiment using

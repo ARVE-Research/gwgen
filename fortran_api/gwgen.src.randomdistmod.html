@@ -43,8 +43,836 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="randomdistmod-module">
-<span id="gwgen-src-randomdistmod"></span><h1>randomdistmod module<a class="headerlink" href="#randomdistmod-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="f/randomdistmod">
+<span id="randomdistmod-module"></span><span id="gwgen-src-randomdistmod"></span><h1>randomdistmod module<a class="headerlink" href="#f/randomdistmod" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Description</p>
+<p>Random number generators and distributions module</p>
+<p>This module contains subroutines and functions to compute the gamma and
+normal distribution, as well as a random number generator. Most of the
+subroutines have been translated from other languages to FORTRAN. The main
+references are</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.johndcook.com/SimpleRNG.cpp">http://www.johndcook.com/SimpleRNG.cpp</a> for the random number generators</li>
+<li><a class="reference external" href="http://people.sc.fsu.edu/~jburkardt/f_src/prob/prob.html">http://people.sc.fsu.edu/~jburkardt/f_src/prob/prob.html</a> by John
+Burkardt for the gamma and normal distribution functions</li>
+</ul>
+<p class="rubric">Quick access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Types:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><code class="xref f f-type docutils literal"><span class="pre">randomstate</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/zero" title="f/randomdistmod/zero"><code class="xref f f-var docutils literal"><span class="pre">zero</span></code></a>, <a class="reference internal" href="#f/randomdistmod/half" title="f/randomdistmod/half"><code class="xref f f-var docutils literal"><span class="pre">half</span></code></a>, <a class="reference internal" href="#f/randomdistmod/rng1" title="f/randomdistmod/rng1"><code class="xref f f-var docutils literal"><span class="pre">rng1</span></code></a>, <a class="reference internal" href="#f/randomdistmod/rng2" title="f/randomdistmod/rng2"><code class="xref f f-var docutils literal"><span class="pre">rng2</span></code></a>, <a class="reference internal" href="#f/randomdistmod/one" title="f/randomdistmod/one"><code class="xref f f-var docutils literal"><span class="pre">one</span></code></a>, <a class="reference internal" href="#f/randomdistmod/qsiz" title="f/randomdistmod/qsiz"><code class="xref f f-var docutils literal"><span class="pre">qsiz</span></code></a>, <a class="reference internal" href="#f/randomdistmod/coffs" title="f/randomdistmod/coffs"><code class="xref f f-var docutils literal"><span class="pre">coffs</span></code></a>, <a class="reference internal" href="#f/randomdistmod/cmul" title="f/randomdistmod/cmul"><code class="xref f f-var docutils literal"><span class="pre">cmul</span></code></a>, <a class="reference internal" href="#f/randomdistmod/vsmall" title="f/randomdistmod/vsmall"><code class="xref f f-var docutils literal"><span class="pre">vsmall</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Routines:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/normal_cdf_inv" title="f/randomdistmod/normal_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">normal_cdf_inv()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/gamma_cdf_inv" title="f/randomdistmod/gamma_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf_inv()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/qchisq_appr" title="f/randomdistmod/qchisq_appr"><code class="xref f f-func docutils literal"><span class="pre">qchisq_appr()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/normal_01_cdf_inv" title="f/randomdistmod/normal_01_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">normal_01_cdf_inv()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_normal" title="f/randomdistmod/ran_normal"><code class="xref f f-func docutils literal"><span class="pre">ran_normal()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_seed" title="f/randomdistmod/ran_seed"><code class="xref f f-func docutils literal"><span class="pre">ran_seed()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/gamma_cdf" title="f/randomdistmod/gamma_cdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/gamma_pdf" title="f/randomdistmod/gamma_pdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_pdf()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/normal_01_cdf" title="f/randomdistmod/normal_01_cdf"><code class="xref f f-func docutils literal"><span class="pre">normal_01_cdf()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/r8poly_value_horner" title="f/randomdistmod/r8poly_value_horner"><code class="xref f f-func docutils literal"><span class="pre">r8poly_value_horner()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/gamma_inc" title="f/randomdistmod/gamma_inc"><code class="xref f f-func docutils literal"><span class="pre">gamma_inc()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ranur" title="f/randomdistmod/ranur"><code class="xref f f-func docutils literal"><span class="pre">ranur()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/refill" title="f/randomdistmod/refill"><code class="xref f f-func docutils literal"><span class="pre">refill()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ranu" title="f/randomdistmod/ranu"><code class="xref f f-func docutils literal"><span class="pre">ranu()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_gp" title="f/randomdistmod/ran_gp"><code class="xref f f-func docutils literal"><span class="pre">ran_gp()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/gamma_log" title="f/randomdistmod/gamma_log"><code class="xref f f-func docutils literal"><span class="pre">gamma_log()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/r8_gamma" title="f/randomdistmod/r8_gamma"><code class="xref f f-func docutils literal"><span class="pre">r8_gamma()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_gamma" title="f/randomdistmod/ran_gamma"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_gamma_gp" title="f/randomdistmod/ran_gamma_gp"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma_gp()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Needed modules</p>
+<ul class="simple">
+<li><a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod" title="f/parametersmod: Simple module defining some types and parameters"><code class="xref f f-mod docutils literal"><span class="pre">parametersmod</span></code></a> (<a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/sp" title="f/parametersmod/sp"><code class="xref f f-func docutils literal"><span class="pre">sp()</span></code></a>, <a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/i4" title="f/parametersmod/i4"><code class="xref f f-func docutils literal"><span class="pre">i4()</span></code></a>): Simple module defining some types and parameters</li>
+</ul>
+<p class="rubric">Types</p>
+<ul>
+<li><dl class="type">
+<dt id="f/randomdistmod/randomstate">
+<em class="property">type  </em><code class="descclassname">randomdistmod/</code><code class="descname">randomstate</code><a class="headerlink" href="#f/randomdistmod/randomstate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type fields:</th><td class="field-body"><ul class="first last simple">
+<li><code class="descname">% </code><code class="descname">q</code> (<a class="reference internal" href="#f/randomdistmod/qsiz" title="f/randomdistmod/qsiz">qsiz</a>)<em> [</em><em>integer</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">have</code><em> [</em><em>logical</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">carry</code><em> [</em><em>integer</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">xs</code><em> [</em><em>integer</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">indx</code><em> [</em><em>integer</em><em>]</em></li>
+<li><code class="descname">% </code><code class="descname">xcng</code><em> [</em><em>integer</em><em>]</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</li>
+</ul>
+<p class="rubric">Variables</p>
+<ul>
+<li><dl class="variable">
+<dt id="f/randomdistmod/cmul">
+<code class="descclassname">randomdistmod/</code><code class="descname">cmul</code><em> [</em><em>integer</em><em>,</em><em>parameter=</em>69609<em>]</em><a class="headerlink" href="#f/randomdistmod/cmul" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/randomdistmod/one">
+<code class="descclassname">randomdistmod/</code><code class="descname">one</code><em> [</em><em>real</em><em>,</em><em>parameter=</em>1.0<em>]</em><a class="headerlink" href="#f/randomdistmod/one" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/randomdistmod/rng1">
+<code class="descclassname">randomdistmod/</code><code class="descname">rng1</code><em> [</em><em>real</em><em>,</em><em>parameter=</em>1./(2.*real(huge(<a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/i4" title="f/parametersmod/i4">i4</a>)))<em>]</em><a class="headerlink" href="#f/randomdistmod/rng1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/randomdistmod/zero">
+<code class="descclassname">randomdistmod/</code><code class="descname">zero</code><em> [</em><em>real</em><em>,</em><em>parameter=</em>0.0<em>]</em><a class="headerlink" href="#f/randomdistmod/zero" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/randomdistmod/half">
+<code class="descclassname">randomdistmod/</code><code class="descname">half</code><em> [</em><em>real</em><em>,</em><em>parameter=</em>0.5<em>]</em><a class="headerlink" href="#f/randomdistmod/half" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/randomdistmod/coffs">
+<code class="descclassname">randomdistmod/</code><code class="descname">coffs</code><em> [</em><em>integer</em><em>,</em><em>parameter=</em>123<em>]</em><a class="headerlink" href="#f/randomdistmod/coffs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/randomdistmod/rng2">
+<code class="descclassname">randomdistmod/</code><code class="descname">rng2</code><em> [</em><em>real</em><em>,</em><em>parameter=</em>1./real(huge(<a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/i4" title="f/parametersmod/i4">i4</a>))<em>]</em><a class="headerlink" href="#f/randomdistmod/rng2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/randomdistmod/qsiz">
+<code class="descclassname">randomdistmod/</code><code class="descname">qsiz</code><em> [</em><em>integer</em><em>,</em><em>parameter=</em>10<em>]</em><a class="headerlink" href="#f/randomdistmod/qsiz" title="Permalink to this definition">¶</a></dt>
+<dd><p>41265_i4</p>
+</dd></dl>
+
+</li>
+<li><dl class="variable">
+<dt id="f/randomdistmod/vsmall">
+<code class="descclassname">randomdistmod/</code><code class="descname">vsmall</code><em> [</em><em>real</em><em>,</em><em>parameter=</em>tiny(1.)<em>]</em><a class="headerlink" href="#f/randomdistmod/vsmall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl class="function">
+<dt id="f/randomdistmod/ranu">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">ranu</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/ranu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a uniformly distributed random 4 byte integer with the range (-huge(i4),+huge(i4))
+based on the 32-bit super KISS random number generator by George Marsaglia, published online
+and translated to Fortran 90 by user &#8220;mecej4&#8221; and Marsaglia, <a class="reference external" href="http://forums.silverfrost.com/viewtopic.php?t=1480">http://forums.silverfrost.com/viewtopic.php?t=1480</a>
+Further modifications to pass the complete state of the generator as an argument by J.O. Kaplan, 2011</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong><em> [</em><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>,</em><em>inout,target</em><em>]</em> :: state of the uniform random number generator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><strong>ranu</strong><em> [</em><em>integer</em><em>]</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/ranur" title="f/randomdistmod/ranur"><code class="xref f f-func docutils literal"><span class="pre">ranur()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_normal" title="f/randomdistmod/ran_normal"><code class="xref f f-func docutils literal"><span class="pre">ran_normal()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/refill" title="f/randomdistmod/refill"><code class="xref f f-func docutils literal"><span class="pre">refill()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/ranur">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">ranur</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/ranur" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate a random number in the range (0,1)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong><em> [</em><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>,</em><em>inout,target</em><em>]</em> :: state of the uniform random number generator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><strong>ranur</strong><em> [</em><em>real</em><em>]</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/ran_gp" title="f/randomdistmod/ran_gp"><code class="xref f f-func docutils literal"><span class="pre">ran_gp()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_gamma" title="f/randomdistmod/ran_gamma"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma()</span></code></a>, <a class="reference internal" href="gwgen.src.weathergenmod.html#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/ranu" title="f/randomdistmod/ranu"><code class="xref f f-func docutils literal"><span class="pre">ranu()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/refill">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">refill</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/refill" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset a random state</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong><em> [</em><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>,</em><em>inout,target</em><em>]</em> :: state of the uniform random number generator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><strong>s</strong><em> [</em><em>integer</em><em>]</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/ranu" title="f/randomdistmod/ranu"><code class="xref f f-func docutils literal"><span class="pre">ranu()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/randomdistmod/ran_seed">
+<em class="property">subroutine  </em><code class="descclassname">randomdistmod/</code><code class="descname">ran_seed</code><span class="sig-paren">(</span><em>sval</em>, <em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/ran_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed of the random state</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sval</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: state of the uniform random number generator</li>
+<li><strong>state</strong><em> [</em><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>,</em><em>inout,target</em><em>]</em> :: the random state</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gwgen.src.main.html#f/gwgen" title="f/gwgen"><code class="xref f f-prog docutils literal"><span class="pre">gwgen</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/randomdistmod/ran_normal">
+<em class="property">subroutine  </em><code class="descclassname">randomdistmod/</code><code class="descname">ran_normal</code><span class="sig-paren">(</span><em>state</em>, <em>nval</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/ran_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sampler for the normal distribution centered at 0 with std. dev. of unity,
+based on Marsaglia polar method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>state</strong><em> [</em><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>,</em><em>inout</em><em>]</em> :: state of the uniform random number generator</li>
+<li><strong>nval</strong><em> [</em><em>real</em><em>,</em><em>out</em><em>]</em> :: output: The random number from the normal distribution</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/randomdistmod/ran_gamma" title="f/randomdistmod/ran_gamma"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma()</span></code></a>, <a class="reference internal" href="gwgen.src.weathergenmod.html#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/ranu" title="f/randomdistmod/ranu"><code class="xref f f-func docutils literal"><span class="pre">ranu()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/ran_gamma">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">ran_gamma</code><span class="sig-paren">(</span><em>state</em>, <em>first</em>, <em>shape_bn</em>, <em>scale</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/ran_gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select a random number from a Gamma distribution</p>
+<p>adapted from the cpp adaptation of the Marsaglia &amp; Tsang random gamma algorithm in:
+<a class="reference external" href="http://www.johndcook.com/SimpleRNG.cpp">http://www.johndcook.com/SimpleRNG.cpp</a></p>
+<p>Uses the algorithm in
+Marsaglia, G. and Tsang, W.W. (2000), <em>A simple method for generating
+gamma variables</em>, Trans. om Math. Software (TOMS), vol.26(3), pp.363-372.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>state</strong><em> [</em><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>,</em><em>inout</em><em>]</em> :: state of the uniform random number generator</li>
+<li><strong>first</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: flag if this is the first call to the distribution with this shape</li>
+<li><strong>shape_bn</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>scale</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: scale parameter of the Gamma distribution (theta = 1/beta)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>ret</strong></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/randomdistmod/ran_gamma_gp" title="f/randomdistmod/ran_gamma_gp"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma_gp()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_gamma" title="f/randomdistmod/ran_gamma"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/ran_normal" title="f/randomdistmod/ran_normal"><code class="xref f f-func docutils literal"><span class="pre">ran_normal()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ranur" title="f/randomdistmod/ranur"><code class="xref f f-func docutils literal"><span class="pre">ranur()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_gamma" title="f/randomdistmod/ran_gamma"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/ran_gamma_gp">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">ran_gamma_gp</code><span class="sig-paren">(</span><em>state</em>, <em>first</em>, <em>shape_bn</em>, <em>scale</em>, <em>thresh</em>, <em>shape_gp</em>, <em>scale_gp</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/ran_gamma_gp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select a random number from a hybrid Gamma-GP distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>state</strong><em> [</em><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>,</em><em>inout</em><em>]</em> :: state of the uniform random number generator</li>
+<li><strong>first</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: flag if this is the first call to the distribution with this shape</li>
+<li><strong>shape_bn</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>scale</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: scale parameter of the Gamma distribution (theta = 1/beta)</li>
+<li><strong>thresh</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the threshold above which to choose the GP distribution</li>
+<li><strong>shape_gp</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: shape parameter of the GP distribution</li>
+<li><strong>scale_gp</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: scale parameter of the GP distribution</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>ret</strong></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="gwgen.src.weathergenmod.html#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/ran_gamma" title="f/randomdistmod/ran_gamma"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/ran_gp" title="f/randomdistmod/ran_gp"><code class="xref f f-func docutils literal"><span class="pre">ran_gp()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/ran_gp">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">ran_gp</code><span class="sig-paren">(</span><em>state</em>, <em>shape_bn</em>, <em>scale</em>, <em>loc</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/ran_gp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select a random number from a generalized pareto (GP) distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>state</strong><em> [</em><a class="reference internal" href="#f/randomdistmod/randomstate" title="f/randomdistmod/randomstate"><em>randomstate</em></a><em>,</em><em>inout</em><em>]</em> :: state of the uniform random number generator</li>
+<li><strong>shape_bn</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>scale</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: scale parameter of the GP distribution (theta = 1/beta)</li>
+<li><strong>loc</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the location of the GP distribution</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>ran_gp</strong><em> [</em><em>real</em><em>]</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/randomdistmod/ran_gamma_gp" title="f/randomdistmod/ran_gamma_gp"><code class="xref f f-func docutils literal"><span class="pre">ran_gamma_gp()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/ranur" title="f/randomdistmod/ranur"><code class="xref f f-func docutils literal"><span class="pre">ranur()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/qchisq_appr">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">qchisq_appr</code><span class="sig-paren">(</span><em>p</em>, <em>nu</em>, <em>g</em>, <em>tol</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/qchisq_appr" title="Permalink to this definition">¶</a></dt>
+<dd><p>chi-square approximation for the <a class="reference internal" href="#f/randomdistmod/gamma_cdf_inv" title="f/randomdistmod/gamma_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf_inv()</span></code></a> function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the quantile</li>
+<li><strong>nu</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: twice the gamma shape</li>
+<li><strong>g</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the logarithm of the gamma function at the gamma shape</li>
+<li><strong>tol</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the tolerance for the approximation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>qchisq_appr</strong><em> [</em><em>real</em><em>]</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/randomdistmod/gamma_cdf_inv" title="f/randomdistmod/gamma_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf_inv()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/gamma_log" title="f/randomdistmod/gamma_log"><code class="xref f f-func docutils literal"><span class="pre">gamma_log()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/normal_cdf_inv" title="f/randomdistmod/normal_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">normal_cdf_inv()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/gamma_cdf_inv">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">gamma_cdf_inv</code><span class="sig-paren">(</span><em>p</em>, <em>alpha</em>, <em>scale</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/gamma_cdf_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the quantile function of the gamma distribution.</p>
+<blockquote>
+<div><p>This function is based on the Applied Statistics Algorithm AS 91
+(&#8220;ppchi2&#8221;) and via pgamma(.) AS 239.</p>
+<dl class="docutils">
+<dt>References</dt>
+<dd>Best, D. J. and D. E. Roberts (1975).
+Percentage Points of the Chi-Squared Distribution.
+Applied Statistics 24, page 385.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Compared to the original R function, we do not use the final
+newton step which might lead to values going to infinity for
+quantiles close to 1</p>
+</div>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the quantile between 0 and 1</li>
+<li><strong>alpha</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the shape of the gamma distribution</li>
+<li><strong>scale</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the scale of the gamma distribution</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>gamma_cdf_inv</strong><em> [</em><em>real</em><em>]</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="gwgen.src.weathergenmod.html#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/gamma_log" title="f/randomdistmod/gamma_log"><code class="xref f f-func docutils literal"><span class="pre">gamma_log()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/qchisq_appr" title="f/randomdistmod/qchisq_appr"><code class="xref f f-func docutils literal"><span class="pre">qchisq_appr()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/gamma_cdf" title="f/randomdistmod/gamma_cdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/randomdistmod/gamma_cdf">
+<em class="property">subroutine  </em><code class="descclassname">randomdistmod/</code><code class="descname">gamma_cdf</code><span class="sig-paren">(</span><em>x</em>, <em>a</em>, <em>b</em>, <em>c</em>, <em>cdf</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/gamma_cdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the Gamma CDF.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Licensing:</dt>
+<dd>This code is distributed under the GNU LGPL license.</dd>
+<dt>Modified:</dt>
+<dd>02 January 2000
+Extracted: June, 2016</dd>
+<dt>Author:</dt>
+<dd>John Burkardt
+Extracted by Philipp Sommer</dd>
+</dl>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the input value for which to compute the CDF</li>
+<li><strong>a</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the location (&lt; <cite>x</cite>) of the gamma distribution (usually 0)</li>
+<li><strong>b</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the shape (&gt; 0.0) of the distribution</li>
+<li><strong>c</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the scale (&gt;0.0) of the distribution</li>
+<li><strong>cdf</strong><em> [</em><em>real</em><em>,</em><em>out</em><em>]</em> :: the returned value of the CDF</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/randomdistmod/gamma_cdf_inv" title="f/randomdistmod/gamma_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf_inv()</span></code></a>, <a class="reference internal" href="gwgen.src.weathergenmod.html#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/gamma_inc" title="f/randomdistmod/gamma_inc"><code class="xref f f-func docutils literal"><span class="pre">gamma_inc()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/gamma_inc">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">gamma_inc</code><span class="sig-paren">(</span><em>p</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/gamma_inc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the incomplete Gamma function.</p>
+<p>Formulas:</p>
+<blockquote>
+<div><div class="math">
+\[\Gamma_{inc}(P, 0) = 0\]</div>
+<div class="math">
+\[\Gamma_{inc}(P, \infty) = 1.\]</div>
+<div class="math">
+\[\Gamma_{inc}(P,X) = \int_0^x{T^{P-1} \exp{(-T)} \mathrm{d}t} / \Gamma(P)\]</div>
+</div></blockquote>
+<dl class="docutils">
+<dt>Licensing:</dt>
+<dd>This code is distributed under the GNU LGPL license.</dd>
+<dt>Modified:</dt>
+<dd><ul class="first last simple">
+<li>01 May 2001</li>
+<li>Extracted: June, 2016</li>
+</ul>
+</dd>
+<dt>Author:</dt>
+<dd><ul class="first last simple">
+<li>Original FORTRAN77 version by B L Shea.</li>
+<li>FORTRAN90 version by John Burkardt</li>
+<li>Extracted by Philipp Sommer</li>
+</ul>
+</dd>
+<dt>Reference:</dt>
+<dd>BL Shea,
+Chi-squared and Incomplete Gamma Integral,
+Algorithm AS239,
+Applied Statistics,
+Volume 37, Number 3, 1988, pages 466-473.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the exponent parameter (0.0 &lt; P)</li>
+<li><strong>x</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the integral limit parameter. If X is less than or equal to 0, GAMMA_INC is returned as 0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>gamma_inc</strong><em> [</em><em>real</em><em>]</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/randomdistmod/gamma_cdf" title="f/randomdistmod/gamma_cdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/normal_01_cdf" title="f/randomdistmod/normal_01_cdf"><code class="xref f f-func docutils literal"><span class="pre">normal_01_cdf()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/gamma_log" title="f/randomdistmod/gamma_log"><code class="xref f f-func docutils literal"><span class="pre">gamma_log()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/gamma_log">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">gamma_log</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/gamma_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the natural logarithm of GAMMA ( X ).</p>
+<p>Computation is based on an algorithm outlined in references 1 and 2.
+The program uses rational functions that theoretically approximate
+<span class="math">\(\log(\Gamma(X))\)</span> to at least 18 significant decimal digits.  The
+approximation for 12 &lt; X is from Hart et al, while approximations
+for X &lt; 12.0D+00 are similar to those in Cody and Hillstrom,
+but are unpublished.</p>
+<p>The accuracy achieved depends on the arithmetic system, the compiler,
+intrinsic functions, and proper selection of the machine dependent
+constants.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Licensing:</dt>
+<dd>This code is distributed under the GNU LGPL license.</dd>
+<dt>Modified:</dt>
+<dd><ul class="first last simple">
+<li>16 June 1999</li>
+<li>Extracted June, 2016</li>
+</ul>
+</dd>
+<dt>Author:</dt>
+<dd><ul class="first last simple">
+<li>Original FORTRAN77 version by William Cody, Laura Stoltz.</li>
+<li>FORTRAN90 version by John Burkardt.</li>
+<li>Extracted by Philipp Sommer</li>
+</ul>
+</dd>
+<dt>Reference:</dt>
+<dd><ul class="first last simple">
+<li>William Cody, Kenneth Hillstrom,
+Chebyshev Approximations for the Natural Logarithm of the Gamma Function,
+Mathematics of Computation,
+Volume 21, 1967, pages 198-203.</li>
+<li>Kenneth Hillstrom,
+ANL/AMD Program ANLC366S, DGAMMA/DLGAMA,
+May 1969.</li>
+<li>John Hart, Ward Cheney, Charles Lawson, Hans Maehly,
+Charles Mesztenyi, John Rice, Henry Thacher, Christoph Witzgall,
+Computer Approximations, Wiley, 1968.</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the argument of the Gamma function (&gt; 0.0)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><strong>gamma_log</strong><em> [</em><em>real</em><em>]</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/gamma_cdf_inv" title="f/randomdistmod/gamma_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">gamma_cdf_inv()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/qchisq_appr" title="f/randomdistmod/qchisq_appr"><code class="xref f f-func docutils literal"><span class="pre">qchisq_appr()</span></code></a>, <a class="reference internal" href="#f/randomdistmod/gamma_inc" title="f/randomdistmod/gamma_inc"><code class="xref f f-func docutils literal"><span class="pre">gamma_inc()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/randomdistmod/gamma_pdf">
+<em class="property">subroutine  </em><code class="descclassname">randomdistmod/</code><code class="descname">gamma_pdf</code><span class="sig-paren">(</span><em>x</em>, <em>a</em>, <em>b</em>, <em>c</em>, <em>pdf</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/gamma_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the Gamma PDF.</p>
+<div class="math">
+\[PDF(a,b,c;x) = \exp({-(x-a)/b}) \cdot ((x-a)/b)^{c-1} / (b \cdot \Gamma(c))\]</div>
+<ul class="simple">
+<li>GAMMA_PDF(A,B,C;X), where C is an integer, is the Erlang PDF.</li>
+<li>GAMMA_PDF(A,B,1;X) is the Exponential PDF.</li>
+<li>GAMMA_PDF(0,2,C/2;X) is the Chi Squared PDF with C degrees of freedom.</li>
+</ul>
+<dl class="docutils">
+<dt>Licensing:</dt>
+<dd>This code is distributed under the GNU LGPL license.</dd>
+<dt>Modified:</dt>
+<dd><ul class="first last simple">
+<li>02 January 2000</li>
+<li>Extracted: June, 2016</li>
+</ul>
+</dd>
+<dt>Author:</dt>
+<dd><ul class="first last simple">
+<li>John Burkardt</li>
+<li>Extracted by Philipp Sommer</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the argument of the PDF. A &lt;= X</li>
+<li><strong>a</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the location of the peak;  A is often chosen to be 0.0.</li>
+<li><strong>b</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the &#8220;scale&#8221; parameter; 0.0 &lt; B, and is often 1.0.</li>
+<li><strong>c</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the &#8220;shape&#8221; parameter; 0.0 &lt; C, and is often 1.0.</li>
+<li><strong>pdf</strong><em> [</em><em>real</em><em>,</em><em>out</em><em>]</em> :: the returned value of the PDF.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="gwgen.src.weathergenmod.html#f/weathergenmod/weathergen" title="f/weathergenmod/weathergen"><code class="xref f f-func docutils literal"><span class="pre">weathergen()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/r8_gamma" title="f/randomdistmod/r8_gamma"><code class="xref f f-func docutils literal"><span class="pre">r8_gamma()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/r8_gamma">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">r8_gamma</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/r8_gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate Gamma(X) for a real argument.</p>
+<p>This routine calculates the gamma function for a real argument X.</p>
+<p>Computation is based on an algorithm outlined in reference 1.
+The program uses rational functions that approximate the gamma
+function to at least 20 significant decimal digits.  Coefficients
+for the approximation over the interval (1,2) are unpublished.
+Those for the approximation for 12 &lt;= X are from reference 2.</p>
+<dl class="docutils">
+<dt>Modified:</dt>
+<dd><ul class="first last simple">
+<li>11 February 2008</li>
+<li>Extracted: June, 2016</li>
+</ul>
+</dd>
+<dt>Author:</dt>
+<dd><ul class="first last simple">
+<li>Original FORTRAN77 version by William Cody, Laura Stoltz.</li>
+<li>FORTRAN90 version by John Burkardt.</li>
+<li>Extracted by Philipp Sommer</li>
+</ul>
+</dd>
+<dt>Reference:</dt>
+<dd><ul class="first last simple">
+<li>William Cody,
+An Overview of Software Development for Special Functions,
+in Numerical Analysis Dundee, 1975,
+edited by GA Watson, Lecture Notes in Mathematics 506,
+Springer, 1976.</li>
+<li>John Hart, Ward Cheney, Charles Lawson, Hans Maehly,
+Charles Mesztenyi, John Rice, Henry Thatcher,
+Christoph Witzgall, Computer Approximations, Wiley, 1968,
+LC: QA297.C64.</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the argument of the function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><strong>r8_gamma</strong><em> [</em><em>real</em><em>]</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><a class="reference internal" href="#f/randomdistmod/gamma_pdf" title="f/randomdistmod/gamma_pdf"><code class="xref f f-func docutils literal"><span class="pre">gamma_pdf()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/randomdistmod/normal_cdf_inv">
+<em class="property">subroutine  </em><code class="descclassname">randomdistmod/</code><code class="descname">normal_cdf_inv</code><span class="sig-paren">(</span><em>cdf</em>, <em>a</em>, <em>b</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/normal_cdf_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invert the Normal CDF.</p>
+<dl class="docutils">
+<dt>Licensing:</dt>
+<dd>This code is distributed under the GNU LGPL license.</dd>
+<dt>Modified:</dt>
+<dd><ul class="first last simple">
+<li>23 February 1999</li>
+<li>Extracted: November, 2016</li>
+</ul>
+</dd>
+<dt>Author:</dt>
+<dd><ul class="first last simple">
+<li>John Burkardt</li>
+<li>Extracted by Philipp Sommer</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cdf</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the value of the CDF. 0.0 &lt;= CDF &lt;= 1.0.</li>
+<li><strong>a</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the mean of the pdf</li>
+<li><strong>b</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the standard deviation of the pdf</li>
+<li><strong>x</strong><em> [</em><em>real</em><em>,</em><em>out</em><em>]</em> :: the corresponding argument</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/randomdistmod/qchisq_appr" title="f/randomdistmod/qchisq_appr"><code class="xref f f-func docutils literal"><span class="pre">qchisq_appr()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/normal_01_cdf_inv" title="f/randomdistmod/normal_01_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">normal_01_cdf_inv()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/randomdistmod/normal_01_cdf_inv">
+<em class="property">subroutine  </em><code class="descclassname">randomdistmod/</code><code class="descname">normal_01_cdf_inv</code><span class="sig-paren">(</span><em>p</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/normal_01_cdf_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invert the standard normal CDF.</p>
+<dl class="docutils">
+<dt>Licensing:</dt>
+<dd>This code is distributed under the GNU LGPL license.</dd>
+<dt>Modified:</dt>
+<dd><ul class="first last simple">
+<li>05 June 2007</li>
+<li>Extracted: November, 2016</li>
+</ul>
+</dd>
+<dt>Author:</dt>
+<dd><ul class="first last simple">
+<li>Original FORTRAN77 version by Michael Wichura.</li>
+<li>FORTRAN90 version by John Burkardt.</li>
+<li>Extracted by Philipp Sommer</li>
+</ul>
+</dd>
+<dt>Reference:</dt>
+<dd>Michael Wichura,
+Algorithm AS241:
+The Percentage Points of the Normal Distribution,
+Applied Statistics,
+Volume 37, Number 3, pages 477-484, 1988.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The result is accurate to about 1 part in 10^16.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the value of the cumulative probability densitity function.  0 &lt; P &lt; 1.</li>
+<li><strong>x</strong><em> [</em><em>real</em><em>,</em><em>out</em><em>]</em> :: the normal deviate value with the property that the probability of a</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first"><a class="reference internal" href="#f/randomdistmod/normal_cdf_inv" title="f/randomdistmod/normal_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">normal_cdf_inv()</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Call to:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/r8poly_value_horner" title="f/randomdistmod/r8poly_value_horner"><code class="xref f f-func docutils literal"><span class="pre">r8poly_value_horner()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="f/randomdistmod/r8poly_value_horner">
+<em class="property">function  </em><code class="descclassname">randomdistmod/</code><code class="descname">r8poly_value_horner</code><span class="sig-paren">(</span><em>m</em>, <em>c</em>, <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/r8poly_value_horner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a polynomial using Horner&#8217;s method.</p>
+<p>The polynomial</p>
+<div class="math">
+\[p(x) = c_0 + c_1 * x + c_2 * x^2 + ... + c_m * x^m\]</div>
+<p>is to be evaluated at the value X.</p>
+<dl class="docutils">
+<dt>Licensing:</dt>
+<dd>This code is distributed under the GNU LGPL license.</dd>
+<dt>Modified:</dt>
+<dd><ul class="first last simple">
+<li>02 January 2014</li>
+<li>Extracted: November, 2016</li>
+</ul>
+</dd>
+<dt>Author:</dt>
+<dd><ul class="first last simple">
+<li>John Burkardt</li>
+<li>Extracted by Philipp Sommer</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>m</strong><em> [</em><em>integer</em><em>,</em><em>in,</em><em>]</em> :: the polynomial coefficients. C(I) is the coefficient of  <span class="math">\(X^I\)</span></li>
+<li><strong>c</strong> (m + 1)<em> [</em><em>real</em><em>,</em><em>in</em><em>]</em></li>
+<li><strong>x</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the polynomial value</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>r8poly_value_horner</strong><em> [</em><em>real</em><em>]</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/normal_01_cdf_inv" title="f/randomdistmod/normal_01_cdf_inv"><code class="xref f f-func docutils literal"><span class="pre">normal_01_cdf_inv()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="subroutine">
+<dt id="f/randomdistmod/normal_01_cdf">
+<em class="property">subroutine  </em><code class="descclassname">randomdistmod/</code><code class="descname">normal_01_cdf</code><span class="sig-paren">(</span><em>x</em>, <em>cdf</em><span class="sig-paren">)</span><a class="headerlink" href="#f/randomdistmod/normal_01_cdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate the Normal 01 CDF.</p>
+<dl class="docutils">
+<dt>Licensing:</dt>
+<dd>This code is distributed under the GNU LGPL license.</dd>
+<dt>Modified:</dt>
+<dd><ul class="first last simple">
+<li>10 February 1999</li>
+<li>Extracted: June, 2016</li>
+</ul>
+</dd>
+<dt>Author:</dt>
+<dd><ul class="first last simple">
+<li>John Burkardt</li>
+<li>Extracted by Philipp Sommer</li>
+</ul>
+</dd>
+<dt>Reference:</dt>
+<dd>AG Adams,
+Algorithm 39,
+Areas Under the Normal Curve,
+Computer Journal,
+Volume 12, pages 197-198, 1969.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the argument of the CDF.</li>
+<li><strong>cdf</strong><em> [</em><em>real</em><em>,</em><em>out</em><em>]</em> :: the value of the CDF.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Called from:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#f/randomdistmod/gamma_inc" title="f/randomdistmod/gamma_inc"><code class="xref f f-func docutils literal"><span class="pre">gamma_inc()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 

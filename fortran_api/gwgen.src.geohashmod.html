@@ -43,8 +43,63 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="geohashmod-module">
-<span id="gwgen-src-geohashmod"></span><h1>geohashmod module<a class="headerlink" href="#geohashmod-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="f/geohashmod">
+<span id="geohashmod-module"></span><span id="gwgen-src-geohashmod"></span><h1>geohashmod module<a class="headerlink" href="#f/geohashmod" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Description</p>
+<p>Module for setting the seed based upon the location on the earth</p>
+<p class="rubric">Quick access</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><a class="reference internal" href="#f/geohashmod/mv" title="f/geohashmod/mv"><code class="xref f f-var docutils literal"><span class="pre">mv</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Routines:</th><td class="field-body"><a class="reference internal" href="#f/geohashmod/geohash" title="f/geohashmod/geohash"><code class="xref f f-func docutils literal"><span class="pre">geohash()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Needed modules</p>
+<ul class="simple">
+<li><a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod" title="f/parametersmod: Simple module defining some types and parameters"><code class="xref f f-mod docutils literal"><span class="pre">parametersmod</span></code></a> (<a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/sp" title="f/parametersmod/sp"><code class="xref f f-func docutils literal"><span class="pre">sp()</span></code></a>, <a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/i4" title="f/parametersmod/i4"><code class="xref f f-func docutils literal"><span class="pre">i4()</span></code></a>, <a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/dp" title="f/parametersmod/dp"><code class="xref f f-func docutils literal"><span class="pre">dp()</span></code></a>): Simple module defining some types and parameters</li>
+</ul>
+<p class="rubric">Variables</p>
+<ul>
+<li><dl class="variable">
+<dt id="f/geohashmod/mv">
+<code class="descclassname">geohashmod/</code><code class="descname">mv</code><em> [</em><em>integer</em><em>,</em><em>parameter=</em>huge(<a class="reference internal" href="gwgen.src.parametersmod.html#f/parametersmod/i4" title="f/parametersmod/i4">i4</a>)<em>]</em><a class="headerlink" href="#f/geohashmod/mv" title="Permalink to this definition">¶</a></dt>
+<dd><p>add offset to fit into values into signed number</p>
+</dd></dl>
+
+</li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl class="function">
+<dt id="f/geohashmod/geohash">
+<em class="property">function  </em><code class="descclassname">geohashmod/</code><code class="descname">geohash</code><span class="sig-paren">(</span><em>lon</em>, <em>lat</em><span class="sig-paren">)</span><a class="headerlink" href="#f/geohashmod/geohash" title="Permalink to this definition">¶</a></dt>
+<dd><p>encode a lon and lat pair into a signed 4-byte integer</p>
+<p>original use: to seed a random number generator in a predictable but geographically non-uniform way
+this should be precise and provide a unique number down to 30 arc-second resolution (1km)
+Jed O. Kaplan, 2011</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lon</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the longitude</li>
+<li><strong>lat</strong><em> [</em><em>real</em><em>,</em><em>in</em><em>]</em> :: the latitude</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first"><strong>geohash</strong><em> [</em><em>integer</em><em>]</em></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Called from:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gwgen.src.main.html#f/gwgen" title="f/gwgen"><code class="xref f f-prog docutils literal"><span class="pre">gwgen</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
