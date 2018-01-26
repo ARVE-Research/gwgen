@@ -2,9 +2,13 @@ name: gwgen-conda
 version: 0.01
 
 channels:
-  - https://conda.anaconda.org/conda-forge
-  - http://repo.continuum.io/pkgs/free/
-  - https://conda.anaconda.org/chilipp
+    - https://conda.anaconda.org/conda-forge
+    - http://repo.continuum.io/pkgs/main
+    - http://repo.continuum.io/pkgs/free
+    - http://repo.continuum.io/pkgs/msys2  [win]
+    - https://conda.anaconda.org/chilipp
+
+conda_default_channels: *id1
 
 specs:
     - conda
