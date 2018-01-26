@@ -27,7 +27,7 @@ addons:  # install gfortran
         packages:
         - gfortran
 before_install:
-    - "brew install gfortran || :"
+    - "brew install gcc || brew link --overwrite gcc || :"
 install:
     # select the os name for the conda installer
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
