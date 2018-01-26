@@ -65,7 +65,6 @@ def get_all_versions(name=None):
 all_versions = get_all_versions(args.name)
 root_versions = get_all_versions('root')
 all_versions['conda'] = root_versions['conda']
-all_versions['idna'] = root_versions['idna']
 
 
 def get_version(mod, d=all_versions):
