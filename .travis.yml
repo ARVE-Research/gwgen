@@ -70,7 +70,7 @@ install:
     - conda env create -f ci/environment.yml
     - source activate test
     # install noarch packages from the defaults channel
-    - conda install --force -c defaults dask-core pytz toolz cloudpickle dask
+    - conda install --force -c defaults dask-core pytz toolz cloudpickle
     - if [[ "$PYTHON_VERSION" == "2.7" ]]; then
           pip install pathlib;
       fi
