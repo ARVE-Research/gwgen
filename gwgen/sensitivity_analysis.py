@@ -875,7 +875,10 @@ class SensitivityPlot2D(SensitivityPlot):
                     ax.set_yscale('log')
                 # draw box around colorbar
                 plt.rcParams['axes.edgecolor'] = 'k'
-                ax = plt.axes([0.08, 0.03, 0.85, 0.22], axisbg='none')
+                if mpl.__version__ < '2.0':
+                    ax = plt.axes([0.08, 0.03, 0.85, 0.22], axisbg='none')
+                else:
+                    ax = plt.axes([0.08, 0.03, 0.85, 0.22], fc='none')
                 ax.grid(False)
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
