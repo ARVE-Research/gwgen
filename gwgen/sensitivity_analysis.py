@@ -13,6 +13,7 @@ import numpy as np
 from gwgen.main import OrderedDict, GWGENOrganizer
 import gwgen.utils as utils
 from gwgen.utils import isstring, docstrings
+import matplotlib as mpl
 
 
 class SensitivityAnalysis(object):
@@ -841,7 +842,10 @@ class SensitivityPlot2D(SensitivityPlot):
                     for key, group in df.groupby('thresh')}
                 y = psyd._infer_interval_breaks(sorted(vals.keys()))
                 fig = plt.figure(edgecolor='none', facecolor='none')
-                ax = plt.axes(axisbg='0.9')
+                if mpl.__version__ < '2.0':
+                    ax = plt.axes(axisbg='0.9')
+                else:
+                    ax = plt.axes(facecolor='0.9')
                 all_vals = np.concatenate(list(vals.values()))
                 vmin, vmax = psyps.DataTicksCalculator._round_min_max(
                     np.nanmin(all_vals), np.nanmax(all_vals))
