@@ -1493,17 +1493,17 @@ class HourlyCloud(CloudParameterizerBase):
 
     urls = {
         ((1971, 1), (1977, 4)): (
-            'http://cdiac.ornl.gov/ftp/ndp026c/land_197101_197704/'),
+            'http://cdiac.ess-dive.lbl.gov/ftp/ndp026c/land_197101_197704/'),
         ((1977, 5), (1982, 10)): (
-            'http://cdiac.ornl.gov/ftp/ndp026c/land_197705_198210/'),
+            'http://cdiac.ess-dive.lbl.gov/ftp/ndp026c/land_197705_198210/'),
         ((1982, 11), (1987, 6)): (
-            'http://cdiac.ornl.gov/ftp/ndp026c/land_198211_198706/'),
+            'http://cdiac.ess-dive.lbl.gov/ftp/ndp026c/land_198211_198706/'),
         ((1987, 7), (1992, 2)): (
-            'http://cdiac.ornl.gov/ftp/ndp026c/land_198707_199202/'),
+            'http://cdiac.ess-dive.lbl.gov/ftp/ndp026c/land_198707_199202/'),
         ((1992, 3), (1996, 12)): (
-            'http://cdiac.ornl.gov/ftp/ndp026c/land_199203_199612/'),
+            'http://cdiac.ess-dive.lbl.gov/ftp/ndp026c/land_199203_199612/'),
         ((1997, 1), (2009, 12)): (
-            'http://cdiac.ornl.gov/ftp/ndp026c/land_199701_200912/')}
+            'http://cdiac.ess-dive.lbl.gov/ftp/ndp026c/land_199701_200912/')}
 
     mon_map = dict(zip(
         range(1, 13),
