@@ -67,7 +67,7 @@ install:
       cd constructor && python setup.py install && cd ../ &&
       rm -rf constructor
     - conda install -c conda-forge numpy
-    - conda env create -f ci/environment.yml
+    - conda env create -f ci/environment_py${PYTHON_VERSION}.yml
     - source activate test
     # install noarch packages from the defaults channel
     - conda install --force -c defaults dask-core pytz toolz cloudpickle python-dateutil
