@@ -41,10 +41,14 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-evaluate-prepare">
 <span id="id1"></span><h1>gwgen evaluate prepare<a class="headerlink" href="#gwgen-evaluate-prepare" title="Permalink to this headline">¶</a></h1>
+<p>The default configuration for <code class="xref py py-class docutils literal"><span class="pre">EvaluationPreparation</span></code> instances.
+See also the <code class="xref py py-attr docutils literal"><span class="pre">EvaluationPreparation.default_config</span></code> attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen evaluate prepare [-h] [-ido str]
                               [-fr { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                               [-raw2db] [-raw2csv] [-r str] [-i str]
@@ -61,7 +65,7 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -73,66 +77,66 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-fr</span>, <span class="option">--raw-from</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The method how to setup the raw data from GHCN and EECRA
+<tr><td>&nbsp;</td><td>The method how to setup the raw data from GHCN and EECRA
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</td></tr>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-raw2db=False</span></kbd></td>
-<td>    If True, the raw data from GHCN and EECRA is stored in a postgres database</td></tr>
+<td>If True, the raw data from GHCN and EECRA is stored in a postgres database</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-raw2csv=False</span></kbd></td>
-<td>    If True, the raw data from GHCN and EECRA is stored in a csv file</td></tr>
+<td>If True, the raw data from GHCN and EECRA is stored in a csv file</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-r</span>, <span class="option">--reference</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The path of the file where to store the reference data. If None and not
-    already set in the configuration, it will default to
-    ``&#8217;evaluation/reference.csv&#8217;``</td></tr>
+<tr><td>&nbsp;</td><td>The path of the file where to store the reference data. If None and not
+already set in the configuration, it will default to
+``&#8217;evaluation/reference.csv&#8217;``</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-i</span>, <span class="option">--input</span></kbd></td>
-<td>    The path of the file where to store the model input. If None, and not
-    already set in the configuration, it will default to
-    ``&#8217;inputdir/input.csv&#8217;`` where *inputdir* is the path to the input
-    directory (by default, *input* in the experiment directory)</td></tr>
+<td>The path of the file where to store the model input. If None, and not
+already set in the configuration, it will default to
+``&#8217;inputdir/input.csv&#8217;`` where *inputdir* is the path to the input
+directory (by default, *input* in the experiment directory)</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -141,6 +145,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -225,7 +230,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.evaluate.prepare.txt"

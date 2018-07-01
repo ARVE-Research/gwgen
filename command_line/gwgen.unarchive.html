@@ -41,10 +41,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-unarchive">
 <span id="id1"></span><h1>gwgen unarchive<a class="headerlink" href="#gwgen-unarchive" title="Permalink to this headline">¶</a></h1>
+<p>Extract archived experiments</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen unarchive [-h] [-ids exp1,[exp2[,...]]] [exp1,[exp2[,...]]] ...]]
                        [-f str] [-a] [-pd] [-P] [-d str] [-p str]
                        [-fmt { &#39;gztar&#39; | &#39;bztar&#39; | &#39;tar&#39; | &#39;zip&#39; }] [--force]
@@ -59,49 +62,49 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ids</span>, <span class="option">--experiments</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The experiments to extract. If None the current experiment is used</td></tr>
+<tr><td>&nbsp;</td><td>The experiments to extract. If None the current experiment is used</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--file</span></kbd></td>
-<td>    The path to an archive to extract the experiments from. If None,
-    we assume that the path to the archive has been stored in the
-    configuration when using the :meth:`archive` command</td></tr>
+<td>The path to an archive to extract the experiments from. If None,
+we assume that the path to the archive has been stored in the
+configuration when using the :meth:`archive` command</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-a=False</span>, <span class="option">--all=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, archives are extracted completely, not only the experiment
-    (implies ``project_data = True``)</td></tr>
+<tr><td>&nbsp;</td><td>If True, archives are extracted completely, not only the experiment
+(implies ``project_data = True``)</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-pd=False</span>, <span class="option">--project-data=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, the data for the project is extracted as well</td></tr>
+<tr><td>&nbsp;</td><td>If True, the data for the project is extracted as well</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-P=False</span>, <span class="option">--replace-project-config=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the project does already exist in the configuration, it
-    is updated with what is stored in the archive</td></tr>
+<tr><td>&nbsp;</td><td>If True and the project does already exist in the configuration, it
+is updated with what is stored in the archive</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-d</span>, <span class="option">--root</span></kbd></td>
-<td>    An alternative root directory to use. Otherwise the experiment will
-    be exctracted to
+<td>An alternative root directory to use. Otherwise the experiment will
+be exctracted to
 
-    1. the root directory specified in the configuration files
-       (if the project exists in it) and `replace_project_config` is
-       False
-    2. the root directory as stored in the archive</td></tr>
+1. the root directory specified in the configuration files
+   (if the project exists in it) and `replace_project_config` is
+   False
+2. the root directory as stored in the archive</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The projectname to use. If None, use the one specified in the
-    archive</td></tr>
+<tr><td>&nbsp;</td><td>The projectname to use. If None, use the one specified in the
+archive</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-fmt</span></kbd></td>
-<td>    The format of the archive. If None, it is inferred</td></tr>
+<td>The format of the archive. If None, it is inferred</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--force=False</span></kbd></td>
-<td>    If True, force to overwrite the configuration of all experiments
-    from what is stored in `archive`. Otherwise, the configuration of
-    the experiments in `archive` are only used if missing in the
-    current configuration</td></tr>
+<td>If True, force to overwrite the configuration of all experiments
+from what is stored in `archive`. Otherwise, the configuration of
+the experiments in `archive` are only used if missing in the
+current configuration</td></tr>
 </tbody>
 </table>
 </dd>
@@ -110,6 +113,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -192,7 +196,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.unarchive.txt"

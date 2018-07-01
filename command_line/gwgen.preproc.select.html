@@ -41,10 +41,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-preproc-select">
 <span id="id1"></span><h1>gwgen preproc select<a class="headerlink" href="#gwgen-preproc-select" title="Permalink to this headline">¶</a></h1>
+<p>Select stations based upon a regular grid</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc select [-h] [-g str] [-og str] [-os str] [-k str]
                             [-ok str] [-gdb str] [-sdb str] [-nc]
                             [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; }]
@@ -59,64 +62,68 @@
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-g</span>, <span class="option">--grid</span></kbd></td>
-<td>    The path to a csv-file containing a lat and a lon column with the
-    information on the centers of the grid. If None, `igrid_key` must
-    not be None and point to a key in the configuration (either the one
-    of the experiment, or the project, or the global configuration)
-    specifying the path</td></tr>
+<td>The path to a csv-file containing a lat and a lon column with the
+information on the centers of the grid. If None, `igrid_key` must
+not be None and point to a key in the configuration (either the one
+of the experiment, or the project, or the global configuration)
+specifying the path</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-og</span>, <span class="option">--grid-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The path to the csv-file where to store the mapping from grid
-    lat-lon to station id.</td></tr>
+<tr><td>&nbsp;</td><td>The path to the csv-file where to store the mapping from grid
+lat-lon to station id.</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-os</span>, <span class="option">--stations-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The path to the csv-file where to store the mapping from station
-    to grid center point</td></tr>
+<tr><td>&nbsp;</td><td>The path to the csv-file where to store the mapping from station
+to grid center point</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-k</span>, <span class="option">--igrid-key</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The key in the configuration where to store the path of the `grid`
-    input file</td></tr>
+<tr><td>&nbsp;</td><td>The key in the configuration where to store the path of the `grid`
+input file</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ok</span>, <span class="option">--grid-key</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The key in the configuration where to store the name of the
-    `grid_output` file.</td></tr>
+<tr><td>&nbsp;</td><td>The key in the configuration where to store the name of the
+`grid_output` file.</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-gdb</span>, <span class="option">--grid-db</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The name of a data table to store the data of `stations_output` in</td></tr>
+<tr><td>&nbsp;</td><td>The name of a data table to store the data of `stations_output` in</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sdb</span>, <span class="option">--stations-db</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The name of a data table to store the data for `stations_output` in</td></tr>
+<tr><td>&nbsp;</td><td>The name of a data table to store the data for `stations_output` in</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-nc=False</span>, <span class="option">--no-prcp-check=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, we will not check for the values between 0.1 and 1.0 for
-    precipitation and save the result in the ``&#8217;best&#8217;`` column</td></tr>
+<tr><td>&nbsp;</td><td>If True, we will not check for the values between 0.1 and 1.0 for
+precipitation and save the result in the ``&#8217;best&#8217;`` column</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td>    The setup method for the daily data for the prcp check</td></tr>
+<td>The setup method for the daily data for the prcp check</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-d</span>, <span class="option">--download</span></kbd></td>
-<td><p class="first">    Handles how to manage missing files for the prcp check. If None
-    (default), an warning is printed and the file is ignored, if
-    ``&#8217;single&#8217;``, the missing file is downloaded, if ``&#8217;all&#8217;``, the
-    entire tarball is downloaded (strongly not recommended for this
-    function)</p>
+<td><p class="first">Handles how to manage missing files for the prcp check. If None
+(default), an warning is printed and the file is ignored, if
+``&#8217;single&#8217;``, the missing file is downloaded, if ``&#8217;all&#8217;``, the
+entire tarball is downloaded (strongly not recommended for this
+function)</p>
 <p class="last">Possible choices: single, all</p>
 </td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
+<p>for <cite>igrid_key</cite> and <cite>ogrid_key</cite> we recommend one of
+<code class="docutils literal"><span class="pre">{'grid',</span> <span class="pre">'param_grid',</span> <span class="pre">'eval_grid'</span></code> because that implies a
+correct path management</p>
 </div>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -201,7 +208,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.preproc.select.txt"

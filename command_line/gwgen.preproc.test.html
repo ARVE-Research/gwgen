@@ -41,10 +41,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-preproc-test">
 <span id="id1"></span><h1>gwgen preproc test<a class="headerlink" href="#gwgen-preproc-test" title="Permalink to this headline">¶</a></h1>
+<p>Create a test sample for the given GHCN stations</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc test [-h] [-nc] [-re float] [-a] str str or list of str
 </pre></div>
 </div>
@@ -56,12 +59,12 @@
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">str</span></kbd></td>
-<td>    The path to the directory containing the test files from Github</td></tr>
+<td>The path to the directory containing the test files from Github</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">str or list of str</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    either a list of GHCN stations to use or a filename containing a
-    1-row table with GHCN stations</td></tr>
+<tr><td>&nbsp;</td><td>either a list of GHCN stations to use or a filename containing a
+1-row table with GHCN stations</td></tr>
 </tbody>
 </table>
 </dd>
@@ -73,17 +76,17 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-nc=False</span>, <span class="option">--no-cloud=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, no cloud stations are extracted</td></tr>
+<tr><td>&nbsp;</td><td>If True, no cloud stations are extracted</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-re=0</span>, <span class="option">--reduce-eecra=0</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The percentage by which to reduce the EECRA data</td></tr>
+<tr><td>&nbsp;</td><td>The percentage by which to reduce the EECRA data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-a=False</span>, <span class="option">--keep-all=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True all years of the EECRA data are used. Otherwise, only the
-    years with complete temperature and cloud are kept. Note
-    that this has only an effect if `reduce_eecra` is not 0</td></tr>
+<tr><td>&nbsp;</td><td>If True all years of the EECRA data are used. Otherwise, only the
+years with complete temperature and cloud are kept. Note
+that this has only an effect if `reduce_eecra` is not 0</td></tr>
 </tbody>
 </table>
 </dd>
@@ -92,6 +95,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -176,7 +180,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.preproc.test.txt"

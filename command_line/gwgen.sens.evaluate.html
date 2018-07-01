@@ -41,6 +41,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-sens-evaluate">
@@ -52,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="gwgen.sens.evaluate.quants.html">gwgen sens evaluate quants</a></li>
 </ul>
 </div>
+<p>Evaluate the experiments of the sensitivity analysis</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate [-h] [-ids id1,id2,...] [-loop]
                            [-s str or list of str] [-ido str] [-f str]
                            [-to-db] [-to-csv] [-db str]
@@ -68,40 +71,40 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ids</span>, <span class="option">--experiments</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The experiments to use. If None, all experiments are used</td></tr>
+<tr><td>&nbsp;</td><td>The experiments to use. If None, all experiments are used</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-loop=False</span>, <span class="option">--loop-exps=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True the experiments of the sensitivity analysis are called
-    one after each other. Otherwise they are called in parallel, each
-    on a single core (unless the the serial option in the global
-    configuration is set)</td></tr>
+<tr><td>&nbsp;</td><td>If True the experiments of the sensitivity analysis are called
+one after each other. Otherwise they are called in parallel, each
+on a single core (unless the the serial option in the global
+configuration is set)</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-s</span>, <span class="option">--stations</span></kbd></td>
-<td>    either a list of stations to use or a filename containing a
-    1-row table with stations</td></tr>
+<td>either a list of stations to use or a filename containing a
+1-row table with stations</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td>    Determine where to get the data from. If `scratch`, the
-    data will be calculated from the raw data. If `file`,
-    the data will be loaded from a file, if `db`, the data
-    will be loaded from a postgres database (Note that the
-    `database` argument must be provided!).</td></tr>
+<td>Determine where to get the data from. If `scratch`, the
+data will be calculated from the raw data. If `file`,
+the data will be loaded from a file, if `db`, the data
+will be loaded from a postgres database (Note that the
+`database` argument must be provided!).</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db</span></kbd></td>
-<td>    Save the data into a postgresql database (Note that the
-    `database` argument must be provided!)</td></tr>
+<td>Save the data into a postgresql database (Note that the
+`database` argument must be provided!)</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv</span></kbd></td>
-<td>    Save the data into a csv file</td></tr>
+<td>Save the data into a csv file</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-db</span>, <span class="option">--database</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The name of a postgres data base to write the data to</td></tr>
+<tr><td>&nbsp;</td><td>The name of a postgres data base to write the data to</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-nr=False</span>, <span class="option">--norun=False</span></kbd></td>
 </tr>
@@ -109,14 +112,15 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-complete=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, setup and run all possible tasks</td></tr>
+<tr><td>&nbsp;</td><td>If True, setup and run all possible tasks</td></tr>
 </tbody>
 </table>
 </dd>
 <dt>Sub-commands:</dt>
 <dd><dl class="first last docutils">
 <dt><strong>ks</strong></dt>
-<dd><p class="first">Perform a kolmogorov smirnoff test</p>
+<dd><p class="first">The default configuration for :class:`KSEvaluation` instances.
+See also the :attr:`KSEvaluation.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate ks [-h] [-ido str] [-nr]
                               [-n variable [variable ...]] [-tw]
                               [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
@@ -132,7 +136,7 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -143,45 +147,45 @@
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-n</span>, <span class="option">--names</span></kbd></td>
-<td><p class="first">    The list of variables use for calculation. If None, all variables will be
-    used</p>
+<td><p class="first">The list of variables use for calculation. If None, all variables will be
+used</p>
 <p class="last">Possible choices: prcp, tmin, tmax, mean_cloud, wind</p>
 </td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-tw=False</span>, <span class="option">--transform-wind=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, the square root of the wind is evaluated (as this is also
-    simulated in the weather generator)</td></tr>
+<tr><td>&nbsp;</td><td>If True, the square root of the wind is evaluated (as this is also
+simulated in the weather generator)</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -193,13 +197,13 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-nr=False</span>, <span class="option">--no-rounding=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Do not round the simulation to the infered precision of the
-    reference. The inferred precision is the minimum difference between
-    two values with in the entire data</td></tr>
+<tr><td>&nbsp;</td><td>Do not round the simulation to the infered precision of the
+reference. The inferred precision is the minimum difference between
+two values with in the entire data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the PDF file of the plot</td></tr>
 </tbody>
 </table>
 </dd>
@@ -223,14 +227,15 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>quants</strong></dt>
-<dd><p class="first">Compare the quantiles of simulation and observation</p>
+<dd><p class="first">The default configuration for :class:`KSEvaluation` instances.
+See also the :attr:`KSEvaluation.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen sens evaluate quants [-h] [-ido str] [-nr]
                                   [-n variable [variable ...]] [-tw]
                                   [-q f1[,f21[-f22[-f23]]]]
@@ -248,7 +253,7 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -259,45 +264,45 @@
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-n</span>, <span class="option">--names</span></kbd></td>
-<td><p class="first">    The list of variables use for calculation. If None, all variables will be
-    used</p>
+<td><p class="first">The list of variables use for calculation. If None, all variables will be
+used</p>
 <p class="last">Possible choices: prcp, tmin, tmax, mean_cloud, wind</p>
 </td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-tw=False</span>, <span class="option">--transform-wind=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, the square root of the wind is evaluated (as this is also
-    simulated in the weather generator)</td></tr>
+<tr><td>&nbsp;</td><td>If True, the square root of the wind is evaluated (as this is also
+simulated in the weather generator)</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -309,9 +314,9 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-nr=False</span>, <span class="option">--no-rounding=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Do not round the simulation to the infered precision of the
-    reference. The inferred precision is the minimum difference between
-    two values with in the entire data</td></tr>
+<tr><td>&nbsp;</td><td>Do not round the simulation to the infered precision of the
+reference. The inferred precision is the minimum difference between
+two values with in the entire data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-q=[1, 5, 10, 25, 50, 75, 90, 95, 99, 100]</span>, <span class="option">--quantiles=[1, 5, 10, 25, 50, 75, 90, 95, 99, 100]</span></kbd></td>
 </tr>
@@ -325,24 +330,24 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the PDF file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
-    netCDF file of the plot data</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the psyplot project file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
-    exists already</td></tr>
+<tr><td>&nbsp;</td><td>If True, a new project will be created even if a file in `project_output`
+exists already</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
-<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+<td>The path to a psyplot project file to use for this parameterization</td></tr>
 </tbody>
 </table>
 </dd>
@@ -355,6 +360,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -439,7 +445,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.sens.evaluate.txt"

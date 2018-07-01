@@ -41,10 +41,14 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-param-daily-cloud">
 <span id="id1"></span><h1>gwgen param daily_cloud<a class="headerlink" href="#gwgen-param-daily-cloud" title="Permalink to this headline">¶</a></h1>
+<p>The default configuration for <code class="xref py py-class docutils literal"><span class="pre">CloudParameterizerBase</span></code> instances.
+See also the <code class="xref py py-attr docutils literal"><span class="pre">CloudParameterizerBase.default_config</span></code> attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param daily_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                [-to-csv] [-to-db] [-rm] [-sf]
@@ -59,7 +63,7 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -71,12 +75,12 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
     files
         Arguments are paths to raw EECRA files
 Default: ghcn</p>
@@ -84,34 +88,34 @@ Default: ghcn</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -120,6 +124,7 @@ Default: ghcn</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -204,7 +209,7 @@ Default: ghcn</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.param.daily_cloud.txt"

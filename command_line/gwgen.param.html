@@ -41,6 +41,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-param">
@@ -70,6 +72,7 @@
 <li class="toctree-l1"><a class="reference internal" href="gwgen.param.cmonth.html">gwgen param cmonth</a></li>
 </ul>
 </div>
+<p>Parameterize the experiment</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param [-h] [-complete] [-s str or list of str] [-ido str]
                    [-f str] [-to-db] [-to-csv] [-db str]
                    [-nr [task1,task2,...]]
@@ -86,33 +89,33 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-complete=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, setup and run all possible tasks</td></tr>
+<tr><td>&nbsp;</td><td>If True, setup and run all possible tasks</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-s</span>, <span class="option">--stations</span></kbd></td>
-<td>    either a list of stations to use or a filename containing a
-    1-row table with stations</td></tr>
+<td>either a list of stations to use or a filename containing a
+1-row table with stations</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td>    Determine where to get the data from. If `scratch`, the
-    data will be calculated from the raw data. If `file`,
-    the data will be loaded from a file, if `db`, the data
-    will be loaded from a postgres database (Note that the
-    `database` argument must be provided!).</td></tr>
+<td>Determine where to get the data from. If `scratch`, the
+data will be calculated from the raw data. If `file`,
+the data will be loaded from a file, if `db`, the data
+will be loaded from a postgres database (Note that the
+`database` argument must be provided!).</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db</span></kbd></td>
-<td>    Save the data into a postgresql database (Note that the
-    `database` argument must be provided!)</td></tr>
+<td>Save the data into a postgresql database (Note that the
+`database` argument must be provided!)</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv</span></kbd></td>
-<td>    Save the data into a csv file</td></tr>
+<td>Save the data into a csv file</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-db</span>, <span class="option">--database</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The name of a postgres data base to write the data to</td></tr>
+<tr><td>&nbsp;</td><td>The name of a postgres data base to write the data to</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-nr=False</span>, <span class="option">--norun=False</span></kbd></td>
 </tr>
@@ -123,7 +126,8 @@
 <dt>Sub-commands:</dt>
 <dd><dl class="first last docutils">
 <dt><strong>hourly_cloud</strong></dt>
-<dd><p class="first">Hourly cloud data</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param hourly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                 [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                 [-to-csv] [-to-db] [-rm] [-sf]
@@ -138,7 +142,7 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -150,12 +154,12 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
     files
         Arguments are paths to raw EECRA files
 Default: ghcn</p>
@@ -163,41 +167,42 @@ Default: ghcn</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>daily_cloud</strong></dt>
-<dd><p class="first">Calculate the daily cloud values from hourly cloud data</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param daily_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                [-to-csv] [-to-db] [-rm] [-sf]
@@ -212,7 +217,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -224,12 +229,12 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
     files
         Arguments are paths to raw EECRA files
 Default: ghcn</p>
@@ -237,41 +242,42 @@ Default: ghcn</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>day</strong></dt>
-<dd><p class="first">Read in the daily GHCN data</p>
+<dd><p class="first">The default configuration for :class:`DailyGHCNData` instances.
+See also the :attr:`DailyGHCNData.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param day [-h] [-ido str] [-d { &#39;single&#39; | &#39;all&#39; | None }]
                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                        [-to-db] [-rm] [-sf]
@@ -286,7 +292,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -297,49 +303,50 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-d</span>, <span class="option">--download</span></kbd></td>
-<td><p class="first">    What to do if a stations file is missing. The default is ``None`` which
-    raises an Error.
-    Otherwise, if ``&#8217;single&#8217;``, download the missing file from ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/{}. If ``&#8217;all&#8217;``
-    the entire tarball is downloaded from ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_all.tar.gz</p>
+<td><p class="first">What to do if a stations file is missing. The default is ``None`` which
+raises an Error.
+Otherwise, if ``&#8217;single&#8217;``, download the missing file from ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/{}. If ``&#8217;all&#8217;``
+the entire tarball is downloaded from ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_all.tar.gz</p>
 <p class="last">Possible choices: single, all</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>month</strong></dt>
-<dd><p class="first">Calculate monthly means from the daily GHCN data</p>
+<dd><p class="first">The default configuration for TaskBase instances. See also the
+:attr:`TaskBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param month [-h] [-ido str]
                          [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                          [-to-db] [-rm] [-sf]
@@ -354,7 +361,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -365,41 +372,42 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>yearly_cmonth</strong></dt>
-<dd><p class="first">Extract the complete months from the monthly data in complete years</p>
+<dd><p class="first">The default configuration for TaskBase instances. See also the
+:attr:`TaskBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonth [-h] [-ido str]
                                  [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                  [-to-csv] [-to-db] [-rm] [-sf]
@@ -414,7 +422,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -425,41 +433,42 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>monthly_cloud</strong></dt>
-<dd><p class="first">Calculate the monthly cloud values from daily cloud data</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param monthly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                  [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                  [-to-csv] [-to-db] [-rm] [-sf]
@@ -474,7 +483,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -486,12 +495,12 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
     files
         Arguments are paths to raw EECRA files
 Default: ghcn</p>
@@ -499,41 +508,42 @@ Default: ghcn</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>cmonthly_wind</strong></dt>
-<dd><p class="first">Extract the months with complete wind data</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonthly_wind [-h] [-ido str] [-at {ghcn,eecra,files}]
                                  [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                  [-to-csv] [-to-db] [-rm] [-sf]
@@ -548,7 +558,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -560,12 +570,12 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
     files
         Arguments are paths to raw EECRA files
 Default: ghcn</p>
@@ -573,41 +583,42 @@ Default: ghcn</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>yearly_cmonthly_wind</strong></dt>
-<dd><p class="first">Extract the months with complete wind data in complete years</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonthly_wind [-h] [-ido str] [-at {ghcn,eecra}]
                                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                         [-to-csv] [-to-db] [-rm] [-sf]
@@ -622,7 +633,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -634,52 +645,53 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
 Default: ghcn</p>
 <p class="last">Possible choices: ghcn, eecra</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>cday</strong></dt>
-<dd><p class="first">Get the days of the complete months</p>
+<dd><p class="first">The default configuration for TaskBase instances. See also the
+:attr:`TaskBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cday [-h] [-ido str]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                         [-to-db] [-rm] [-sf]
@@ -694,7 +706,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -705,41 +717,42 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>temp</strong></dt>
-<dd><p class="first">Temperature mean correlations</p>
+<dd><p class="first">The default configuration for :class:`TemperatureParameterizer` instances.
+See also the :attr:`PrcpDistParams.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param temp [-h] [-ido str] [-cutoff int]
                         [-tmin-range1 floats with length 2 floats with length 2]
                         [-tmin-range2 floats with length 2 floats with length 2]
@@ -759,35 +772,35 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-cutoff=10</span></kbd></td>
-<td>    The minimum number of values that is required for fitting the standard
-    deviation. Default: 10</td></tr>
+<td>The minimum number of values that is required for fitting the standard
+deviation. Default: 10</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-tmin-range1=[-50, -40]</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The ranges ``[vmin, vmax]`` to use for the extrapolation of minimum
-    temperatures standard deviation below 0. The fit will be used for all
-    points below the given ``vmax``. Default: [-50, -40]</td></tr>
+<tr><td>&nbsp;</td><td>The ranges ``[vmin, vmax]`` to use for the extrapolation of minimum
+temperatures standard deviation below 0. The fit will be used for all
+points below the given ``vmax``. Default: [-50, -40]</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-tmin-range2=[25, 30]</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The ranges ``[vmin, vmax]`` to use for the extrapolation of minimum
-    temperatures standard deviation above 0. The fit will be used for all
-    points above the given ``vmin``. Default: [25, 30]</td></tr>
+<tr><td>&nbsp;</td><td>The ranges ``[vmin, vmax]`` to use for the extrapolation of minimum
+temperatures standard deviation above 0. The fit will be used for all
+points above the given ``vmin``. Default: [25, 30]</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-tmax-range1=[-40, -30]</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The ranges ``[vmin, vmax]`` to use for the extrapolation of maximum
-    temperatures standard deviation  below 0. The fit will be used for all
-    points below the given ``vmax``. Default: [-40, -30]</td></tr>
+<tr><td>&nbsp;</td><td>The ranges ``[vmin, vmax]`` to use for the extrapolation of maximum
+temperatures standard deviation  below 0. The fit will be used for all
+points below the given ``vmax``. Default: [-40, -30]</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-tmax-range2=[35, 45]</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The ranges ``[vmin, vmax]`` to use for the extrapolation of maximum
-    temperatures standard deviation above 0. The fit will be used for all
-    points above the given ``vmin``. Default: [35, 45]</td></tr>
+<tr><td>&nbsp;</td><td>The ranges ``[vmin, vmax]`` to use for the extrapolation of maximum
+temperatures standard deviation above 0. The fit will be used for all
+points above the given ``vmin``. Default: [35, 45]</td></tr>
 </tbody>
 </table>
 </dd>
@@ -798,34 +811,34 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -837,31 +850,32 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the PDF file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
-    netCDF file of the plot data</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the psyplot project file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
-    exists already</td></tr>
+<tr><td>&nbsp;</td><td>If True, a new project will be created even if a file in `project_output`
+exists already</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
-<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+<td>The path to a psyplot project file to use for this parameterization</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>cdaily_cloud</strong></dt>
-<dd><p class="first">Get the days of the complete daily cloud months</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cdaily_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                 [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                 [-to-csv] [-to-db] [-rm] [-sf]
@@ -876,7 +890,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -888,12 +902,12 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
     files
         Arguments are paths to raw EECRA files
 Default: ghcn</p>
@@ -901,41 +915,42 @@ Default: ghcn</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>cmonth</strong></dt>
-<dd><p class="first">Extract the complete months from the monthly data</p>
+<dd><p class="first">The default configuration for TaskBase instances. See also the
+:attr:`TaskBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonth [-h] [-ido str]
                           [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                           [-to-db] [-rm] [-sf]
@@ -950,7 +965,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -961,41 +976,42 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>markov</strong></dt>
-<dd><p class="first">Calculate the markov chain parameterization</p>
+<dd><p class="first">The default configuration for TaskBase instances. See also the
+:attr:`TaskBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param markov [-h] [-ido str]
                           [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                           [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
@@ -1011,7 +1027,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1022,34 +1038,34 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1061,31 +1077,32 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the PDF file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
-    netCDF file of the plot data</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the psyplot project file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
-    exists already</td></tr>
+<tr><td>&nbsp;</td><td>If True, a new project will be created even if a file in `project_output`
+exists already</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
-<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+<td>The path to a psyplot project file to use for this parameterization</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>cmonthly_cloud</strong></dt>
-<dd><p class="first">Extract the months with complete cloud data</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cmonthly_cloud [-h] [-ido str] [-at {ghcn,eecra,files}]
                                   [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                   [-to-csv] [-to-db] [-rm] [-sf]
@@ -1100,7 +1117,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1112,12 +1129,12 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
     files
         Arguments are paths to raw EECRA files
 Default: ghcn</p>
@@ -1125,41 +1142,42 @@ Default: ghcn</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>cloud</strong></dt>
-<dd><p class="first">Parameterize the cloud data</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param cloud [-h] [-ido str] [-at {ghcn,eecra}]
                          [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                          [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
@@ -1175,7 +1193,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1187,45 +1205,45 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
 Default: ghcn</p>
 <p class="last">Possible choices: ghcn, eecra</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1237,31 +1255,32 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the PDF file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
-    netCDF file of the plot data</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the psyplot project file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
-    exists already</td></tr>
+<tr><td>&nbsp;</td><td>If True, a new project will be created even if a file in `project_output`
+exists already</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
-<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+<td>The path to a psyplot project file to use for this parameterization</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>yearly_cdaily_cloud</strong></dt>
-<dd><p class="first">Get the days of the complete daily cloud months in complete years</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cdaily_cloud [-h] [-ido str] [-at {ghcn,eecra}]
                                        [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                        [-to-csv] [-to-db] [-rm] [-sf]
@@ -1276,7 +1295,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1288,52 +1307,53 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
 Default: ghcn</p>
 <p class="last">Possible choices: ghcn, eecra</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>corr</strong></dt>
-<dd><p class="first">Cross corellation between temperature and cloudiness</p>
+<dd><p class="first">The default configuration for TaskBase instances. See also the
+:attr:`TaskBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param corr [-h] [-ido str]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                         [-to-db] [-rm] [-sf]
@@ -1348,7 +1368,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1359,41 +1379,42 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>yearly_cmonthly_cloud</strong></dt>
-<dd><p class="first">Extract the months with complete cloud data in complete years</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cmonthly_cloud [-h] [-ido str] [-at {ghcn,eecra}]
                                          [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                          [-to-csv] [-to-db] [-rm] [-sf]
@@ -1408,7 +1429,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1420,52 +1441,53 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
 Default: ghcn</p>
 <p class="last">Possible choices: ghcn, eecra</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>yearly_cday</strong></dt>
-<dd><p class="first">Get the days of the complete months in complete years</p>
+<dd><p class="first">The default configuration for TaskBase instances. See also the
+:attr:`TaskBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param yearly_cday [-h] [-ido str]
                                [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
                                [-to-csv] [-to-db] [-rm] [-sf]
@@ -1480,7 +1502,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1491,41 +1513,42 @@ Default: ghcn</p>
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>prcp</strong></dt>
-<dd><p class="first">Calculate the precipitation distribution parameters of the hybrid Gamma-GP</p>
+<dd><p class="first">The default configuration for :class:`PrcpDistParams` instances.
+See also the :attr:`PrcpDistParams.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param prcp [-h] [-ido str] [-t float] [-t2c float [float ...]]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                         [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
@@ -1541,7 +1564,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1553,37 +1576,37 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-t2c=[5, 7.5, 10, 12.5, 15, 17.5, 20]</span>, <span class="option">--threshs2compute=[5, 7.5, 10, 12.5, 15, 17.5, 20]</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The thresholds to compute during the setup of the data</td></tr>
+<tr><td>&nbsp;</td><td>The thresholds to compute during the setup of the data</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1595,35 +1618,36 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-t=5.0</span>, <span class="option">--thresh=5.0</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The threshold to use for the configuration. Default: 5.0</td></tr>
+<tr><td>&nbsp;</td><td>The threshold to use for the configuration. Default: 5.0</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the PDF file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
-    netCDF file of the plot data</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the psyplot project file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
-    exists already</td></tr>
+<tr><td>&nbsp;</td><td>If True, a new project will be created even if a file in `project_output`
+exists already</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
-<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+<td>The path to a psyplot project file to use for this parameterization</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>wind</strong></dt>
-<dd><p class="first">Parameterize the wind data</p>
+<dd><p class="first">The default configuration for :class:`CloudParameterizerBase` instances.
+See also the :attr:`CloudParameterizerBase.default_config` attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen param wind [-h] [-ido str] [-at {ghcn,eecra}]
                         [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }] [-to-csv]
                         [-to-db] [-rm] [-sf] [-o str] [-onc str] [-op str]
@@ -1639,7 +1663,7 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1651,45 +1675,45 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-at=ghcn</span>, <span class="option">--args-type=ghcn</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td><p class="first">    The type of the stations. One of
+<tr><td>&nbsp;</td><td><p class="first">The type of the stations. One of
 
-    ghcn
-        Stations are GHCN ids
-    eecra
-        Stations are EECRA station numbers
+ghcn
+    Stations are GHCN ids
+eecra
+    Stations are EECRA station numbers
 Default: ghcn</p>
 <p class="last">Possible choices: ghcn, eecra</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1701,24 +1725,24 @@ Default: ghcn</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-o</span>, <span class="option">--plot-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the PDF file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the PDF file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-onc</span>, <span class="option">--nc-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path (or multiples depending on the task) to use for the
-    netCDF file of the plot data</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path (or multiples depending on the task) to use for the
+netCDF file of the plot data</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-op</span>, <span class="option">--project-output</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    An alternative path to use for the psyplot project file of the plot</td></tr>
+<tr><td>&nbsp;</td><td>An alternative path to use for the psyplot project file of the plot</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-np=False</span>, <span class="option">--new-project=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, a new project will be created even if a file in `project_output`
-    exists already</td></tr>
+<tr><td>&nbsp;</td><td>If True, a new project will be created even if a file in `project_output`
+exists already</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-p</span>, <span class="option">--project</span></kbd></td>
-<td>    The path to a psyplot project file to use for this parameterization</td></tr>
+<td>The path to a psyplot project file to use for this parameterization</td></tr>
 </tbody>
 </table>
 </dd>
@@ -1731,6 +1755,7 @@ Default: ghcn</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -1813,7 +1838,7 @@ Default: ghcn</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.param.txt"

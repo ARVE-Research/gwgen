@@ -41,6 +41,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-preproc-cloud">
@@ -51,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="gwgen.preproc.cloud.eecra_ghcn_map.html">gwgen preproc cloud eecra_ghcn_map</a></li>
 </ul>
 </div>
+<p>Extract the inventory of EECRA stations</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud [-h] [-mf int] {eecra_inventory,eecra_ghcn_map} ...
 </pre></div>
 </div>
@@ -63,15 +66,15 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-mf</span>, <span class="option">--max-files</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The maximum number of files to process during one process. If None,
-    it is determined by the global ``&#8217;max_stations&#8217;`` key</td></tr>
+<tr><td>&nbsp;</td><td>The maximum number of files to process during one process. If None,
+it is determined by the global ``&#8217;max_stations&#8217;`` key</td></tr>
 </tbody>
 </table>
 </dd>
 <dt>Sub-commands:</dt>
 <dd><dl class="first last docutils">
 <dt><strong>eecra_inventory</strong></dt>
-<dd><p class="first">Compute the inventory of the EECRA stations</p>
+<dd><p class="first">Default config for :class:`CloudInventory`</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_inventory [-h] [-ido str]
                                            [-xstall bool or str]
                                            [-f { &#39;scratch&#39; | &#39;file&#39; | &#39;db&#39; | None }]
@@ -87,7 +90,7 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -98,47 +101,47 @@
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-xstall=True</span></kbd></td>
-<td>    If True (default), download the XSTALL file from http://cdiac.ornl.gov/ftp/ndp026c/XSTALL.
-    This file contains some estimates of station longitude and latitude.
-    If ``False`` or empty string, the file is not used, otherwise, if set
-    with a string, it is interpreted as the path to the local file</td></tr>
+<td>If True (default), download the XSTALL file from http://cdiac.ornl.gov/ftp/ndp026c/XSTALL.
+This file contains some estimates of station longitude and latitude.
+If ``False`` or empty string, the file is not used, otherwise, if set
+with a string, it is interpreted as the path to the local file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--from</span></kbd></td>
-<td><p class="first">    The method how to setup the instance either from
+<td><p class="first">The method how to setup the instance either from
 
-    ``&#8217;scratch&#8217;``
-        To set up the task from the raw data
-    ``&#8217;file&#8217;``
-        Set up the task from an existing file
-    ``&#8217;db&#8217;``
-        Set up the task from a database
-    ``None``
-        If the file name of this this task exists, use this one,
-        otherwise a database is provided, use this one, otherwise go
-        from scratch</p>
+``&#8217;scratch&#8217;``
+    To set up the task from the raw data
+``&#8217;file&#8217;``
+    Set up the task from an existing file
+``&#8217;db&#8217;``
+    Set up the task from a database
+``None``
+    If the file name of this this task exists, use this one,
+    otherwise a database is provided, use this one, otherwise go
+    from scratch</p>
 <p class="last">Possible choices: scratch, file, db</p>
 </td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-db=False</span></kbd></td>
-<td>    If True, the data at setup will be written to into a database</td></tr>
+<td>If True, the data at setup will be written to into a database</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
 </dd>
 <dt><strong>eecra_ghcn_map</strong></dt>
-<dd><p class="first">Compute the inventory of the EECRA stations</p>
+<dd><p class="first">Default config for :class:`CloudGHCNMap`</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen preproc cloud eecra_ghcn_map [-h] [-ido str] [-md float]
                                           [-to-csv] [-rm] [-sf]
 </pre></div>
@@ -152,7 +155,7 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-ido</span>, <span class="option">--other_id</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Use the configuration from another experiment</td></tr>
+<tr><td>&nbsp;</td><td>Use the configuration from another experiment</td></tr>
 </tbody>
 </table>
 </dd>
@@ -164,19 +167,19 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-md=1000.0</span>, <span class="option">--max-distance=1000.0</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The maximum distance in meters for which we consider two stations as
-    equal (Default: 1000m)</td></tr>
+<tr><td>&nbsp;</td><td>The maximum distance in meters for which we consider two stations as
+equal (Default: 1000m)</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-to-csv=False</span></kbd></td>
-<td>    If True, the data at setup will be written to a csv file</td></tr>
+<td>If True, the data at setup will be written to a csv file</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-rm=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True and the old data file already exists, remove before writing to it</td></tr>
+<tr><td>&nbsp;</td><td>If True and the old data file already exists, remove before writing to it</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-sf=False</span>, <span class="option">--skip-filtering=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, skip the filtering for the correct stations in the datafile</td></tr>
+<tr><td>&nbsp;</td><td>If True, skip the filtering for the correct stations in the datafile</td></tr>
 </tbody>
 </table>
 </dd>
@@ -189,6 +192,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -273,7 +277,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.preproc.cloud.txt"

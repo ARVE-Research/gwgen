@@ -40,6 +40,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="getting-started">
@@ -188,37 +190,39 @@ data files and run our <a class="reference internal" href="command_line/gwgen.pa
 <span class="go">    sp = self.create_project(ds_orig)</span>
 <span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/gwgen-1.0.2-py2.7-linux-x86_64.egg/gwgen/parameterization.py&quot;, line 640, in create_project</span>
 <span class="go">    return psy.plot.densityreg(ds, name=&#39;gscale&#39;, fmt=self.fmt)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 1403, in __call__</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 1717, in __call__</span>
 <span class="go">    six.iteritems(self._default_dims), six.iteritems(kwargs))))</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 146, in wrapper</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 1522, in _add_data</span>
+<span class="go">    return self.project._add_data(*args, **kwargs)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 151, in wrapper</span>
 <span class="go">    return func(self, *args, **kwargs)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 509, in _add_data</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/project.py&quot;, line 566, in _add_data</span>
 <span class="go">    project=self, enable_post=enable_post, **fmt)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1117, in __init__</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1166, in __init__</span>
 <span class="go">    make_plot=make_plot)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1272, in initialize_plot</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1322, in initialize_plot</span>
 <span class="go">    self._plot_by_priority(priority, grouper, initializing=True)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1470, in _plot_by_priority</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1525, in _plot_by_priority</span>
 <span class="go">    update(fmto)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1450, in update</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 1505, in update</span>
 <span class="go">    fmto.initialize_plot(fmto.value)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 595, in initialize_plot</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 614, in initialize_plot</span>
 <span class="go">    self.update(value, *args, **kwargs)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psy_simple/plotters.py&quot;, line 1431, in update</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psy_simple/plotters.py&quot;, line 1495, in update</span>
 <span class="go">    ax = self.plotter.ax</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 899, in ax</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/psyplot/plotter.py&quot;, line 948, in ax</span>
 <span class="go">    plt.figure()</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/pyplot.py&quot;, line 539, in figure</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/pyplot.py&quot;, line 548, in figure</span>
 <span class="go">    **kwargs)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backend_bases.py&quot;, line 171, in new_figure_manager</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backend_bases.py&quot;, line 161, in new_figure_manager</span>
 <span class="go">    return cls.new_figure_manager_given_figure(num, fig)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backend_bases.py&quot;, line 177, in new_figure_manager_given_figure</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backend_bases.py&quot;, line 167, in new_figure_manager_given_figure</span>
 <span class="go">    canvas = cls.FigureCanvas(figure)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5agg.py&quot;, line 35, in __init__</span>
-<span class="go">    super(FigureCanvasQTAggBase, self).__init__(figure=figure)</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5.py&quot;, line 235, in __init__</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5agg.py&quot;, line 24, in __init__</span>
+<span class="go">    super(FigureCanvasQTAgg, self).__init__(figure=figure)</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5.py&quot;, line 234, in __init__</span>
 <span class="go">    _create_qApp()</span>
-<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5.py&quot;, line 122, in _create_qApp</span>
+<span class="go">  File &quot;/home/travis/miniconda/envs/test/lib/python2.7/site-packages/matplotlib/backends/backend_qt5.py&quot;, line 125, in _create_qApp</span>
 <span class="go">    raise RuntimeError(&#39;Invalid DISPLAY variable&#39;)</span>
 <span class="go">RuntimeError: Invalid DISPLAY variable</span>
 </pre></div>
@@ -271,6 +275,7 @@ psyplot project and update the plot:</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -361,7 +366,7 @@ psyplot project and update the plot:</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="_sources/getting_started.txt"

@@ -41,10 +41,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-setup">
 <span id="id1"></span><h1>gwgen setup<a class="headerlink" href="#gwgen-setup" title="Permalink to this headline">¶</a></h1>
+<p>Perform the initial setup for the model</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen setup [-h] [-p str] [-link] [-src str] [-c str] str
 </pre></div>
 </div>
@@ -56,8 +59,8 @@
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">str</span></kbd></td>
-<td>    The path to the root directory where the experiments, etc. will
-    be stored</td></tr>
+<td>The path to the root directory where the experiments, etc. will
+be stored</td></tr>
 </tbody>
 </table>
 </dd>
@@ -69,24 +72,24 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The name of the project that shall be initialized at `root_dir`. A
-    new directory will be created namely
-    ``root_dir + &#8216;/&#8217; + projectname``</td></tr>
+<tr><td>&nbsp;</td><td>The name of the project that shall be initialized at `root_dir`. A
+new directory will be created namely
+``root_dir + &#8216;/&#8217; + projectname``</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-link=False</span></kbd></td>
-<td>    If set, the source files are linked to the original ones instead
-    of copied
+<td>If set, the source files are linked to the original ones instead
+of copied
 link: bool
-    If set, the source files are linked to the original ones instead
-    of copied</td></tr>
+If set, the source files are linked to the original ones instead
+of copied</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-src</span>, <span class="option">--src-project</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Another model name to use the source model files from</td></tr>
+<tr><td>&nbsp;</td><td>Another model name to use the source model files from</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-c</span>, <span class="option">--compiler</span></kbd></td>
-<td>    The path to the compiler to use. If None, the global compiler
-    option is used</td></tr>
+<td>The path to the compiler to use. If None, the global compiler
+option is used</td></tr>
 </tbody>
 </table>
 </dd>
@@ -95,6 +98,7 @@ link: bool
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -177,7 +181,7 @@ link: bool
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.setup.txt"

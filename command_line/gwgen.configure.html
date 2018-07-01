@@ -41,10 +41,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-configure">
 <span id="id1"></span><h1>gwgen configure<a class="headerlink" href="#gwgen-configure" title="Permalink to this headline">¶</a></h1>
+<p>Configure the projects and experiments</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen configure [-h] [-u str or dict] [-max int] [-d str] [-db str]
                        [-user str] [-host str] [-port int] [-chunksize int]
                        [-c str] [-g] [-p] [-i str] [-f str] [-s]
@@ -60,71 +63,71 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-u</span>, <span class="option">--update-nml</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    A python dict or path to a namelist to use for updating the
-    namelist of the experiment</td></tr>
+<tr><td>&nbsp;</td><td>A python dict or path to a namelist to use for updating the
+namelist of the experiment</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-max</span>, <span class="option">--max-stations</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The maximum number of stations to process in one parameterization
-    process. Does automatically impact global settings</td></tr>
+<tr><td>&nbsp;</td><td>The maximum number of stations to process in one parameterization
+process. Does automatically impact global settings</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-d</span>, <span class="option">--datadir</span></kbd></td>
-<td>    Path to the data directory to use (impacts the project
-    configuration)</td></tr>
+<td>Path to the data directory to use (impacts the project
+configuration)</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-db</span>, <span class="option">--database</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The name of a postgres data base to write the data to</td></tr>
+<tr><td>&nbsp;</td><td>The name of a postgres data base to write the data to</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-user</span></kbd></td>
-<td>    The username to use when logging into the database</td></tr>
+<td>The username to use when logging into the database</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-host</span></kbd></td>
-<td>    the host which runs the database server</td></tr>
+<td>the host which runs the database server</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-port</span></kbd></td>
-<td>    The port to use to log into the the database</td></tr>
+<td>The port to use to log into the the database</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-chunksize</span></kbd></td>
-<td>    The chunksize to use for the parameterization and evaluation</td></tr>
+<td>The chunksize to use for the parameterization and evaluation</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-c</span>, <span class="option">--compiler</span></kbd></td>
-<td>    The path to the fortran compiler to use</td></tr>
+<td>The path to the fortran compiler to use</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-g=False</span>, <span class="option">--globally=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True/set, the configuration are applied globally (already
-    existing and configured experiments are not impacted)</td></tr>
+<tr><td>&nbsp;</td><td>If True/set, the configuration are applied globally (already
+existing and configured experiments are not impacted)</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-p=False</span>, <span class="option">--project=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Apply the configuration on the entire project instance instead of
-    only the single experiment (already existing and configured
-    experiments are not impacted)</td></tr>
+<tr><td>&nbsp;</td><td>Apply the configuration on the entire project instance instead of
+only the single experiment (already existing and configured
+experiments are not impacted)</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-i</span>, <span class="option">--ifile</span></kbd></td>
-<td>    The input file for the project. Must be a netCDF file with
-    population data</td></tr>
+<td>The input file for the project. Must be a netCDF file with
+population data</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-f</span>, <span class="option">--forcing</span></kbd></td>
-<td>    The input file for the project containing variables with population
-    evolution information. Possible variables in the netCDF file are
-    *movement* containing the number of people to move and *change*
-    containing the population change (positive or negative)</td></tr>
+<td>The input file for the project containing variables with population
+evolution information. Possible variables in the netCDF file are
+*movement* containing the number of people to move and *change*
+containing the population change (positive or negative)</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-s=False</span>, <span class="option">--serial=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    Do the parameterization always serial (i.e. not in parallel on
-    multiple processors). Does automatically impact global settings</td></tr>
+<tr><td>&nbsp;</td><td>Do the parameterization always serial (i.e. not in parallel on
+multiple processors). Does automatically impact global settings</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-n</span>, <span class="option">--nprocs</span></kbd></td>
-<td>    Maximum number of processes to when making the parameterization in
-    parallel. Does automatically impact global settings and disables
-    `serial`</td></tr>
+<td>Maximum number of processes to when making the parameterization in
+parallel. Does automatically impact global settings and disables
+`serial`</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-update-from</span></kbd></td>
-<td>    Path to a yaml configuration file to update the specified
-    configuration with it</td></tr>
+<td>Path to a yaml configuration file to update the specified
+configuration with it</td></tr>
 </tbody>
 </table>
 </dd>
@@ -133,6 +136,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -215,7 +219,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.configure.txt"

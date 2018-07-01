@@ -41,10 +41,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-run">
 <span id="id1"></span><h1>gwgen run<a class="headerlink" href="#gwgen-run" title="Permalink to this headline">¶</a></h1>
+<p>Run the experiment</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen run [-h] [-i str] [-o str] [-od str] [-wd str] [-r]
 </pre></div>
 </div>
@@ -56,27 +59,27 @@
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-i</span>, <span class="option">--ifile</span></kbd></td>
-<td>    The path to the input file. If None, it is assumed that it is
-    stored in the ``&#8217;input&#8217;`` key in the experiment configuration</td></tr>
+<td>The path to the input file. If None, it is assumed that it is
+stored in the ``&#8217;input&#8217;`` key in the experiment configuration</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-o</span>, <span class="option">--ofile</span></kbd></td>
-<td>    The path to the output file.  If None, it is assumed that it is
-    stored in the ``&#8217;input&#8217;`` key in the experiment configuration or
-    it will be stored in ``&#8217;odir/exp_id.csv&#8217;``. The output directory
-    ``&#8217;odir&#8217;`` is determined by the `odir` parameter</td></tr>
+<td>The path to the output file.  If None, it is assumed that it is
+stored in the ``&#8217;input&#8217;`` key in the experiment configuration or
+it will be stored in ``&#8217;odir/exp_id.csv&#8217;``. The output directory
+``&#8217;odir&#8217;`` is determined by the `odir` parameter</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-od</span>, <span class="option">--odir</span></kbd></td>
-<td>    The path to the output directory. If None and not already saved
-    in the configuration, it will default to
-    ``&#8217;experiment_dir/outdata&#8217;``</td></tr>
+<td>The path to the output directory. If None and not already saved
+in the configuration, it will default to
+``&#8217;experiment_dir/outdata&#8217;``</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-wd</span>, <span class="option">--work-dir</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The path to the work directory where the binaries are copied to.</td></tr>
+<tr><td>&nbsp;</td><td>The path to the work directory where the binaries are copied to.</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-r=False</span>, <span class="option">--remove=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True, the `work_dir` will be removed if it already exists</td></tr>
+<tr><td>&nbsp;</td><td>If True, the `work_dir` will be removed if it already exists</td></tr>
 </tbody>
 </table>
 </dd>
@@ -85,6 +88,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -167,7 +171,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.run.txt"

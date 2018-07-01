@@ -41,10 +41,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="gwgen-set-value">
 <span id="id1"></span><h1>gwgen set-value<a class="headerlink" href="#gwgen-set-value" title="Permalink to this headline">¶</a></h1>
+<p>Set a value in the configuration</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>usage: gwgen set-value [-h] [-a] [-P] [-g] [-p str] [-b str] [-dt str]
                        level0.level1.level...=value
                        [level0.level1.level...=value ...]
@@ -75,29 +78,29 @@
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-a=False</span>, <span class="option">--all=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If True/set, the information on all experiments are printed</td></tr>
+<tr><td>&nbsp;</td><td>If True/set, the information on all experiments are printed</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-P=False</span>, <span class="option">--on-projects=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If set, show information on the projects rather than the
-    experiment</td></tr>
+<tr><td>&nbsp;</td><td>If set, show information on the projects rather than the
+experiment</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-g=False</span>, <span class="option">--globally=False</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    If set, show the global configuration settings</td></tr>
+<tr><td>&nbsp;</td><td>If set, show the global configuration settings</td></tr>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">-p</span>, <span class="option">--projectname</span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>    The name of the project that shall be used. If provided and
-    `on_projects` is not True, the information on all experiments for
-    this project will be shown</td></tr>
+<tr><td>&nbsp;</td><td>The name of the project that shall be used. If provided and
+`on_projects` is not True, the information on all experiments for
+this project will be shown</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-b=</span>, <span class="option">--base=</span></kbd></td>
-<td>    A base string that shall be put in front of each key in `values` to
-    avoid typing it all the time</td></tr>
+<td>A base string that shall be put in front of each key in `values` to
+avoid typing it all the time</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">-dt</span>, <span class="option">--dtype</span></kbd></td>
-<td><p class="first">    The name of the data type or a data type to cast the value to</p>
+<td><p class="first">The name of the data type or a data type to cast the value to</p>
 <p class="last">Possible choices: ArithmeticError, AssertionError, AttributeError, BaseException, BufferError, BytesWarning, DeprecationWarning, EOFError, Ellipsis, EnvironmentError, Exception, False, FloatingPointError, FutureWarning, GeneratorExit, IOError, ImportError, ImportWarning, IndentationError, IndexError, KeyError, KeyboardInterrupt, LookupError, MemoryError, NameError, None, NotImplemented, NotImplementedError, OSError, OverflowError, PendingDeprecationWarning, ReferenceError, RuntimeError, RuntimeWarning, StandardError, StopIteration, SyntaxError, SyntaxWarning, SystemError, SystemExit, TabError, True, TypeError, UnboundLocalError, UnicodeDecodeError, UnicodeEncodeError, UnicodeError, UnicodeTranslateError, UnicodeWarning, UserWarning, ValueError, Warning, ZeroDivisionError, __debug__, __doc__, __import__, __name__, __package__, abs, all, any, apply, basestring, bin, bool, buffer, bytearray, bytes, callable, chr, classmethod, cmp, coerce, compile, complex, copyright, credits, delattr, dict, dir, divmod, enumerate, eval, execfile, exit, file, filter, float, format, frozenset, getattr, globals, hasattr, hash, help, hex, id, input, int, intern, isinstance, issubclass, iter, len, license, list, locals, long, map, max, memoryview, min, next, object, oct, open, ord, pow, print, property, quit, range, raw_input, reduce, reload, repr, reversed, round, set, setattr, slice, sorted, staticmethod, str, sum, super, tuple, type, unichr, unicode, vars, xrange, zip</p>
 </td></tr>
 </tbody>
@@ -108,6 +111,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -190,7 +194,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="../_sources/command_line/gwgen.set-value.txt"
