@@ -1683,9 +1683,8 @@ class HourlyCloud(CloudParameterizerBase):
             self.data.sort_index(inplace=True)
         else:
             files = self.src_files
-            df_map = pd.DataFrame(
-                np.vstack([self.stations, self.eecra_stations]).T,
-                columns=['id', 'station_id'])
+            df_map = pd.DataFrame.from_dict(
+                {'id': self.stations, 'station_id': self.eecra_stations})
             self.data = pd.concat(
                 [pd.read_csv(fname).merge(df_map, on='station_id', how='inner')
                  for fname in files], ignore_index=False, copy=False)
