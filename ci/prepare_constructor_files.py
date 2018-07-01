@@ -160,9 +160,9 @@ if local_packages:
         ['conda', 'build', '--output'] + list(local_packages)).decode(
                 'utf-8').splitlines()
 
-    for fname in map(osp.basename, builds):
+    for fname in map(str, map(osp.basename, builds)):
         construct['specs'].append(
-            ' '.join(str(fname.replace('.tar.bz2', '').rsplit('-', 2))))
+            ' '.join(fname.replace('.tar.bz2', '').rsplit('-', 2)))
 
     conda_bld_dir = file2html(osp.dirname(osp.dirname(builds[0])))
 
