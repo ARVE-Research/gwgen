@@ -16,6 +16,11 @@ import gwgen.utils as utils
 from psyplot.config.rcsetup import safe_list
 
 try:
+    from urllib.error import URLError
+except ImportError:
+    URLError = IOError
+
+try:
     from pandas.tseries.offsets import MonthEnd
 except ImportError:
     from pandas.datetools import MonthEnd
@@ -191,14 +196,26 @@ class Test_DailyGHCNData(bt.BaseTest, _ParameterizerTestMixin):
     def test_full_source_exists(self):
         """Test whether the url of the tar ball can be downloaded"""
         src = param.DailyGHCNData.http_source
-        self._test_url(src)
+        try:
+            self._test_url(src)
+        except (URLError, IOError) as e:
+            if bt.on_travis:
+                self.skipTest("Failed to load %s" % src)
+            else:
+                raise
         self.assert_(True)
 
     @unittest.skipIf(not bt.online, 'Only works with internet connection')
     def test_single_source_exists(self):
         """Test whether the url of the tar ball can be downloaded"""
-        src = param.DailyGHCNData.http_single
-        self._test_url(src.format(self.stations[0]) + '.dly')
+        src = param.DailyGHCNData.http_single.format(self.stations[0]) + '.dly'
+        try:
+            self._test_url(src)
+        except (URLError, IOError) as e:
+            if bt.on_travis:
+                self.skipTest("Failed to load %s" % src)
+            else:
+                raise
         self.assert_(True)
 
 
