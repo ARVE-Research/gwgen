@@ -12,9 +12,9 @@ matrix:
     include:
         - env: BUILD_DOCS=true
                PYTHON_VERSION=2.7
-               ONLINE_TESTS=true
           os: linux
         - env: PYTHON_VERSION=3.7
+               ONLINE_TESTS=true
           os: linux
         - env: PYTHON_VERSION=2.7
           os: osx

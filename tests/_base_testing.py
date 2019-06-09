@@ -181,6 +181,7 @@ class BaseTest(unittest.TestCase):
     def _test_url(url, *args, **kwargs):
         if six.PY3:
             from urllib import request
+            kwargs.setdefault('timeout', 60)
             request.urlopen(url, *args, **kwargs)
         else:
             import urllib
