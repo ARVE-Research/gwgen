@@ -15,6 +15,11 @@ import gwgen.parameterization as param
 import gwgen.utils as utils
 from psyplot.config.rcsetup import safe_list
 
+try:
+    from pandas.tseries.offsets import MonthEnd
+except ImportError:
+    from pandas.datetools import MonthEnd
+
 
 #: Message to provide a bit more information on the two data frames
 df_diff_msg = (
@@ -212,7 +217,7 @@ class Test_CompleteDailyGHCNData(bt.BaseTest, _ParameterizerTestMixin):
         monthly['day'] = 1
         s = pd.to_datetime(monthly.reset_index()[['year', 'month', 'day']])
         s.index = monthly.index
-        monthly['ndays'] = ((s + pd.datetools.thisMonthEnd) - s).dt.days + 1
+        monthly['ndays'] = ((s + MonthEnd(0)) - s).dt.days + 1
         difference = monthly['prcp'] != monthly['ndays']
         self.assertTrue(
             (monthly['prcp'] == monthly['ndays']).all(),
@@ -383,7 +388,7 @@ class Test_CompleteDailyCloud(bt.BaseTest, _ParameterizerTestMixin,
         monthly['day'] = 1
         s = pd.to_datetime(monthly.reset_index()[['year', 'month', 'day']])
         s.index = monthly.index
-        monthly['ndays'] = ((s + pd.datetools.thisMonthEnd) - s).dt.days + 1
+        monthly['ndays'] = ((s + MonthEnd(0)) - s).dt.days + 1
         difference = monthly['mean_cloud'] != monthly['ndays']
         self.assertTrue(
             (monthly['mean_cloud'] == monthly['ndays']).all(),

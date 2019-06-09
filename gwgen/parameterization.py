@@ -17,6 +17,11 @@ import gwgen.utils as utils
 from gwgen.utils import docstrings
 from psyplot.compat.pycompat import OrderedDict, filterfalse
 
+try:
+    from pandas.tseries.offsets import MonthEnd
+except ImportError:
+    from pandas.datetools import MonthEnd
+
 
 def _requirement_property(requirement):
 
@@ -1816,7 +1821,7 @@ class MonthlyCloud(CloudParameterizerBase):
         df_nums['day'] = 1
         s = pd.to_datetime(df_nums.reset_index()[['year', 'month', 'day']])
         s.index = df_nums.index
-        df_nums['ndays'] = ((s + pd.datetools.thisMonthEnd) - s).dt.days + 1
+        df_nums['ndays'] = ((s + MonthEnd(0)) - s).dt.days + 1
         cols = ['wet_day', 'tmin', 'tmax', 'mean_cloud', 'wind']
         complete_cols = [col + '_complete' for col in cols]
         for col, tcol in zip(cols, complete_cols):
@@ -2423,14 +2428,14 @@ class CrossCorrelation(Parameterizer):
     def setup_from_scratch(self):
         import dask.dataframe as dd
         if not self.global_config.get('serial'):
-            from dask.multiprocessing import get
+            scheduler = 'processes'
             nprocs = self.global_config.get('nprocs', 'all')
             if nprocs == 'all':
                 import multiprocessing as mp
                 nprocs = mp.cpu_count()
             kws = {'num_workers': nprocs}
         else:
-            from dask.async import get_sync as get
+            scheduler = 'single-threaded'
             kws = {}
         df = self.yearly_cdaily_cloud.data.sort_index()
         df['wind'] = df['wind'] ** 0.5
@@ -2441,7 +2446,8 @@ class CrossCorrelation(Parameterizer):
         ddf = dd.from_pandas(df, chunksize=chunksize)
         cols = self.cols
         # m0
-        self.data = final = ddf[cols].corr().compute(get=get, **kws)
+        self.data = final = ddf[cols].corr().compute(scheduler=scheduler,
+                                                     **kws)
         final.index.name = 'variable'
         # shift the data by one row (day)
         shifted = df.shift(1)
@@ -2454,8 +2460,11 @@ class CrossCorrelation(Parameterizer):
         for col in cols:
             final[col + '1'] = 0
             for col2 in cols:
+                # HACK: rename the shifted column to account for
+                # https://github.com/dask/dask/issues/4906
                 final.loc[col2, col + '1'] = ddf[col].corr(
-                    dshifted[col2]).compute(get=get, **kws)
+                    dshifted[col2].rename('shifted')).compute(
+                        scheduler=scheduler, **kws)
                 final.columns.name = 'variable'
 
     def run(self, info, full_nml):
