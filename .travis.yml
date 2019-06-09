@@ -53,46 +53,18 @@ install:
     - touch matplotlibrc
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
-    - pip install pyyaml  # is somehow not included in the current conda installation
     - hash -r
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
     # Useful for debugging any issues with conda
     - conda info -a
-    # install the conda constructor for releases
-    - conda install -n root constructor conda-build six
-    # HACK: Install constructor from source to make sure we solve
-    # https://github.com/conda/constructor/pull/140
-    - git clone https://github.com/conda/constructor.git &&
-      cd constructor && python setup.py install && cd ../ &&
-      rm -rf constructor
     - conda install -c conda-forge numpy
     - conda env create -f ci/environment_py${PYTHON_VERSION}.yml
-    - source activate test
+    - conda activate test
     - if [[ "$PYTHON_VERSION" == "2.7" ]]; then
           pip install pathlib;
       fi
-    # avoid docrep 0.2.0
-    - if [[ `python -c "import docrep; print(docrep.__version__)"` == 0.2.0 ]]; then
-          conda install -c conda-forge --force "docrep<0.2.0";
-      fi
-    - pip install coveralls pytest
-    - python setup.py install
-    # build conda recipe
-    - python ci/recipe_from_setup.py `pwd` ci/recipe
-    - # prepare constructor files
-    - conda config --add channels chilipp
-    - conda config --add channels conda-forge
-    - if [[ $TRAVIS_TAG == '' ]]; then
-          export PKG_VERSION=0.01;
-      else
-          export PKG_VERSION=${TRAVIS_TAG:1};
-      fi
-    - export ARGS="-v $PKG_VERSION"
-    # build the recipe and prepare the constructor files
-    - python ci/prepare_constructor_files.py ci/recipe/gwgen $ARGS -n test
-      -f ci/environment_py${PYTHON_VERSION}.yml
-    - cat gwgen-conda/construct.yaml
+    - pip install . coveralls pytest
     # install necessary module for the documentation and clone the existing
     # gh-pages for this repo into the *deploy* folder and clear everything
     - export REPO="$(git config remote.origin.url)"
@@ -124,11 +96,6 @@ script:
           sphinx-build . ../deploy;
           cd ..;
       fi
-    # construct conda environment for releases
-    - constructor gwgen-conda &&
-      echo "Testing executable" &&
-      NO_GWGEN_ALIAS=1 bash `ls gwgen-conda-*.sh` -b -p $HOME/gwgen-conda &&
-      $HOME/gwgen-conda/bin/gwgen -h
     - if [[ "$TRAVIS_TAG" != "" && "$BUILD_DOCS" == "true" ]]; then
           cd deploy && zip -r "../gwgen_docs_${TRAVIS_TAG}.zip" . -x *.git* && cd ..;
       fi
@@ -136,23 +103,7 @@ script:
 after_success:
     - coverage combine && coveralls
 
-before_deploy:
-    - if [[ "$TRAVIS_TAG" != "" ]]; then
-          ORIG_FILE=$(ls gwgen-conda-*.sh);
-          export FINAL_FILE="${ORIG_FILE%.sh}_${PYTHON_VERSION}.sh";
-          mv "$ORIG_FILE" "$FINAL_FILE";
-      fi
-
 deploy:
-    - provider: releases
-      user: Chilipp
-      api_key:
-          secure: WsnYoYvjRetkH0CTMiGG1DjeOc/v0nhPteTDnb9I3K0IFh+Vvv2ZrJlJwUnrVh1ETu4CslJTLihq+VuiMEFeLNW+GLrG5dy4oI8U1A8cTjPSqAEMiVer8nGNcZdRoLfFHH0l17yShrGmXEcQ/1UibshQmqsLo1m2RNmSZHVNain4ImO6bXE6wXasS9oIgx45S8e1rg3poXjLDjN5OjF3W4Fz1cetWWWaAfBJ662GLI8oF7vvd2nI7P9fcMjqfD3tMJl9pecw7Qi8KSdo1FoLM1v7qFPt0T1gW7z8r+7kyzNaeYYCgllLXndA/nKyDRZJWSfUN/Oh0eshcwBGnpWvKxOk2oFLO9qhc1VIAOHn5K1KQJRrnowFFTR4U7MhDWk16bg1ytw2QB7/M+ALxcfbj+X8QzAfrDg7LO8FLHV5oIMHeA20KmVMPz5wxltu0AXlfRWg51HasVI46BJpMQ2uDO0tOrELSZ2Dg7ntETRw5AprZUCjd+lmWoxQ5yM6QilnWjDGk2uNbVrIavceEKI8jBzI2RcKpdc2o+j6H3cTAnu51A7bfU+Two44iY4w0kJ8v3JUiY4joCK/gpFZBRGO1HBmcnz3x/uSteyHbxd9RSEATRKoJx6jR2tk7qZROlaBHvCR8edn4UyPJ3cc1rm+U1FTaRk/0Qj+y9jpQzRo7YE=
-      file: "${FINAL_FILE}"
-      skip_cleanup: true
-      overwrite: true
-      on:
-          tags: true
     - provider: releases
       user: Chilipp
       api_key:
