@@ -1,3 +1,7 @@
+v1.0.3
+======
+Compatibility fixes for pandas and dask, and bug fix for random number generator based on https://github.com/ARVE-Research/gwgen_f90/pull/1
+
 v1.0.2
 ======
 Final version for Geoscientific Model Development
