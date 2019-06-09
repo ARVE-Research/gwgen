@@ -9,7 +9,7 @@ dependencies:
     - sphinx
     - seaborn
     - ipython
-    - scipy
+    - scipy<1.3   # for statsmodels compatibility
     - jupyter_client
     - psyplot
     - pip:

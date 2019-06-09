@@ -14,11 +14,11 @@ matrix:
                PYTHON_VERSION=2.7
                ONLINE_TESTS=true
           os: linux
-        - env: PYTHON_VERSION=3.6
+        - env: PYTHON_VERSION=3.7
           os: linux
         - env: PYTHON_VERSION=2.7
           os: osx
-        - env: PYTHON_VERSION=3.6
+        - env: PYTHON_VERSION=3.7
           os: osx
 services:
     - postgresql
