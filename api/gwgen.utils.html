@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gwgen.utils module &mdash; gwgen 1.0.2 documentation</title>
+    <title>gwgen.utils module &mdash; gwgen 1.0.3 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.2',
+        VERSION:     '1.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="gwgen 1.0.2 documentation" href="../index.html" />
+    <link rel="top" title="gwgen 1.0.3 documentation" href="../index.html" />
     <link rel="up" title="Python API Reference" href="gwgen.html" />
     <link rel="next" title="Fortran API Reference" href="../fortran_api/index.html" />
     <link rel="prev" title="gwgen.sensitivity_analysis module" href="gwgen.sensitivity_analysis.html" />
@@ -129,7 +129,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.ordered_move" title="gwgen.utils.ordered_move"><code class="xref py py-obj docutils literal"><span class="pre">ordered_move</span></code></a>(d,&nbsp;to_move,&nbsp;pos)</td>
 <td>Move a key in an ordered dictionary to another position</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.safe_csv_append" title="gwgen.utils.safe_csv_append"><code class="xref py py-obj docutils literal"><span class="pre">safe_csv_append</span></code></a>(df,&nbsp;path,&nbsp;*args,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.safe_csv_append" title="gwgen.utils.safe_csv_append"><code class="xref py py-obj docutils literal"><span class="pre">safe_csv_append</span></code></a>(df,&nbsp;path,&nbsp;<a href="#id25"><span class="problematic" id="id26">*</span></a>args,&nbsp;<a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs)</td>
 <td>Convenience method to dump a data frame to csv without removing the old</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.str_ranges" title="gwgen.utils.str_ranges"><code class="xref py py-obj docutils literal"><span class="pre">str_ranges</span></code></a>(s)</td>
@@ -283,13 +283,13 @@ parameterization task named <em>cloud</em> as connection:</p>
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.create_project" title="gwgen.utils.TaskBase.create_project"><code class="xref py py-obj docutils literal"><span class="pre">create_project</span></code></a>(ds)</td>
 <td>To be reimplemented for each task with <code class="xref py py-attr docutils literal"><span class="pre">has_run</span></code></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.from_organizer" title="gwgen.utils.TaskBase.from_organizer"><code class="xref py py-obj docutils literal"><span class="pre">from_organizer</span></code></a>(organizer,&nbsp;stations,&nbsp;*args,&nbsp;...)</td>
-<td>Create a new instance from a <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.9)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.from_organizer" title="gwgen.utils.TaskBase.from_organizer"><code class="xref py py-obj docutils literal"><span class="pre">from_organizer</span></code></a>(organizer,&nbsp;stations,&nbsp;<a href="#id1"><span class="problematic" id="id2">*</span></a>args,&nbsp;...)</td>
+<td>Create a new instance from a <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.10)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.from_task" title="gwgen.utils.TaskBase.from_task"><code class="xref py py-obj docutils literal"><span class="pre">from_task</span></code></a>(task,&nbsp;*args,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.from_task" title="gwgen.utils.TaskBase.from_task"><code class="xref py py-obj docutils literal"><span class="pre">from_task</span></code></a>(task,&nbsp;<a href="#id3"><span class="problematic" id="id4">*</span></a>args,&nbsp;<a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs)</td>
 <td>Create a new instance from another task</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.get_manager" title="gwgen.utils.TaskBase.get_manager"><code class="xref py py-obj docutils literal"><span class="pre">get_manager</span></code></a>(*args,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.get_manager" title="gwgen.utils.TaskBase.get_manager"><code class="xref py py-obj docutils literal"><span class="pre">get_manager</span></code></a>(<a href="#id7"><span class="problematic" id="id8">*</span></a>args,&nbsp;<a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs)</td>
 <td>Return a manager of this class that can be used to setup and organize</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.get_run_kws" title="gwgen.utils.TaskBase.get_run_kws"><code class="xref py py-obj docutils literal"><span class="pre">get_run_kws</span></code></a>(kwargs)</td>
@@ -313,7 +313,7 @@ parameterization task named <em>cloud</em> as connection:</p>
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.plot_additionals" title="gwgen.utils.TaskBase.plot_additionals"><code class="xref py py-obj docutils literal"><span class="pre">plot_additionals</span></code></a>(pdf)</td>
 <td>Method to be reimplemented to make additional plots (if necessary)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.run" title="gwgen.utils.TaskBase.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(info,&nbsp;*args,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.run" title="gwgen.utils.TaskBase.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(info,&nbsp;<a href="#id11"><span class="problematic" id="id12">*</span></a>args,&nbsp;<a href="#id13"><span class="problematic" id="id14">**</span></a>kwargs)</td>
 <td>Run the task</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.set_requirements" title="gwgen.utils.TaskBase.set_requirements"><code class="xref py py-obj docutils literal"><span class="pre">set_requirements</span></code></a>(requirements)</td>
@@ -322,10 +322,10 @@ parameterization task named <em>cloud</em> as connection:</p>
 <tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>()</td>
 <td>Set up the database for this task</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_db" title="gwgen.utils.TaskBase.setup_from_db"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_db</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_db" title="gwgen.utils.TaskBase.setup_from_db"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_db</span></code></a>(<a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs)</td>
 <td>Set up the task from datatables already created</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_file" title="gwgen.utils.TaskBase.setup_from_file"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_file</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_file" title="gwgen.utils.TaskBase.setup_from_file"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_file</span></code></a>(<a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs)</td>
 <td>Set up the task from already stored files</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_instances" title="gwgen.utils.TaskBase.setup_from_instances"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_instances</span></code></a>(base,&nbsp;instances[,&nbsp;copy])</td>
@@ -334,10 +334,10 @@ parameterization task named <em>cloud</em> as connection:</p>
 <tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.setup_from_scratch" title="gwgen.utils.TaskBase.setup_from_scratch"><code class="xref py py-obj docutils literal"><span class="pre">setup_from_scratch</span></code></a>()</td>
 <td>Setup the data from the configuration settings</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.write2db" title="gwgen.utils.TaskBase.write2db"><code class="xref py py-obj docutils literal"><span class="pre">write2db</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskBase.write2db" title="gwgen.utils.TaskBase.write2db"><code class="xref py py-obj docutils literal"><span class="pre">write2db</span></code></a>(<a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs)</td>
 <td>Write the data from this task to the database given by the</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.write2file" title="gwgen.utils.TaskBase.write2file"><code class="xref py py-obj docutils literal"><span class="pre">write2file</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskBase.write2file" title="gwgen.utils.TaskBase.write2file"><code class="xref py py-obj docutils literal"><span class="pre">write2file</span></code></a>(<a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs)</td>
 <td>Write the database to the <code class="xref py py-attr docutils literal"><span class="pre">datafile</span></code> file</td>
 </tr>
 </tbody>
@@ -351,7 +351,7 @@ parameterization task named <em>cloud</em> as connection:</p>
 <li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the experiment</li>
 <li><strong>project_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The configuration of the underlying project</li>
 <li><strong>global_config</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The global configuration</li>
-<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.1)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
 <li><strong>requirements</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> instances) &#8211; The required instances. If None, you must call the
 <a class="reference internal" href="#gwgen.utils.TaskBase.set_requirements" title="gwgen.utils.TaskBase.set_requirements"><code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code></a> method later</li>
 </ul>
@@ -381,7 +381,7 @@ data is stored</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ds</strong> (<a class="reference external" href="http://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="(in xarray v0.10.7)"><em>xarray.Dataset</em></a>) &#8211; The dataset to plot</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ds</strong> (<a class="reference external" href="http://xarray.pydata.org/en/stable/generated/xarray.Dataset.html#xarray.Dataset" title="(in xarray v0.12.1)"><em>xarray.Dataset</em></a>) &#8211; The dataset to plot</td>
 </tr>
 </tbody>
 </table>
@@ -449,15 +449,15 @@ stored</p>
 <dl class="classmethod">
 <dt id="gwgen.utils.TaskBase.from_organizer">
 <em class="property">classmethod </em><code class="descname">from_organizer</code><span class="sig-paren">(</span><em>organizer</em>, <em>stations</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/utils.html#TaskBase.from_organizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.utils.TaskBase.from_organizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new instance from a <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.9)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></p>
+<dd><p>Create a new instance from a <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.10)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>organizer</strong> (<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.9)"><em>model_organization.ModelOrganizer</em></a>) &#8211; The organizer to use the configuration from</li>
+<li><strong>organizer</strong> (<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.10)"><em>model_organization.ModelOrganizer</em></a>) &#8211; The organizer to use the configuration from</li>
 <li><strong>stations</strong> (<em>list</em>) &#8211; The list of stations to process</li>
-<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.1)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
 <li><strong>requirements</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> instances) &#8211; The required instances. If None, you must call the
 <a class="reference internal" href="#gwgen.utils.TaskBase.set_requirements" title="gwgen.utils.TaskBase.set_requirements"><code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code></a> method later</li>
 </ul>
@@ -491,7 +491,7 @@ all possible arguments</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>task</strong> (<a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><em>TaskBase</em></a>) &#8211; The organizer to use the configuration from. Note that it can also
 be of a different type than this class</li>
-<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.1)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
+<li><strong>data</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) &#8211; The data to use. If None, use the <a class="reference internal" href="#gwgen.utils.TaskBase.setup" title="gwgen.utils.TaskBase.setup"><code class="xref py py-meth docutils literal"><span class="pre">setup()</span></code></a> method</li>
 <li><strong>requirements</strong> (list of <a class="reference internal" href="#gwgen.utils.TaskBase" title="gwgen.utils.TaskBase"><code class="xref py py-class docutils literal"><span class="pre">TaskBase</span></code></a> instances) &#8211; The required instances. If None, you must call the
 <a class="reference internal" href="#gwgen.utils.TaskBase.set_requirements" title="gwgen.utils.TaskBase.set_requirements"><code class="xref py py-meth docutils literal"><span class="pre">set_requirements()</span></code></a> method later</li>
 </ul>
@@ -588,7 +588,7 @@ to manipulate the configuration</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sp</strong> (<a class="reference external" href="http://psyplot.readthedocs.io/en/latest/api/psyplot.project.html#psyplot.project.Project" title="(in psyplot v1.1.1)"><em>psyplot.project.Project</em></a>) &#8211; The project of the data</li>
+<li><strong>sp</strong> (<a class="reference external" href="http://psyplot.readthedocs.io/en/latest/api/psyplot.project.html#psyplot.project.Project" title="(in psyplot v1.2.1)"><em>psyplot.project.Project</em></a>) &#8211; The project of the data</li>
 <li><strong>info</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; The dictionary for saving additional information of the task</li>
 </ul>
 </td>
@@ -642,7 +642,7 @@ data is stored</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdf</strong> (<a class="reference external" href="http://matplotlib.org/api/backend_pdf_api.html#matplotlib.backends.backend_pdf.PdfPages" title="(in Matplotlib v2.2.2)"><em>matplotlib.backends.backend_pdf.PdfPages</em></a>) &#8211; The PdfPages instance which can be used to save the figure</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdf</strong> (<a class="reference external" href="http://matplotlib.org/api/backend_pdf_api.html#matplotlib.backends.backend_pdf.PdfPages" title="(in Matplotlib v3.1.0)"><em>matplotlib.backends.backend_pdf.PdfPages</em></a>) &#8211; The PdfPages instance which can be used to save the figure</td>
 </tr>
 </tbody>
 </table>
@@ -900,7 +900,7 @@ multiprocessing</li>
 <tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskManager.initialize_tasks" title="gwgen.utils.TaskManager.initialize_tasks"><code class="xref py py-obj docutils literal"><span class="pre">initialize_tasks</span></code></a>(stations[,&nbsp;task_kws])</td>
 <td>Initialize the setup of the tasks</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskManager.run" title="gwgen.utils.TaskManager.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(full_info,&nbsp;*args)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.utils.TaskManager.run" title="gwgen.utils.TaskManager.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>(full_info,&nbsp;<a href="#id23"><span class="problematic" id="id24">*</span></a>args)</td>
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#gwgen.utils.TaskManager.setup" title="gwgen.utils.TaskManager.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>(stations[,&nbsp;to_return])</td>
@@ -1297,9 +1297,9 @@ according to this header</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>df</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.1)"><em>pandas.DataFrame</em></a>) &#8211; The data frame to store</li>
+<li><strong>df</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) &#8211; The data frame to store</li>
 <li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The path where to store the data</li>
-<li><strong>**kwargs</strong> &#8211; Any other keyword for the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_csv.html#pandas.DataFrame.to_csv" title="(in pandas v0.23.1)"><code class="xref py py-meth docutils literal"><span class="pre">pandas.DataFrame.to_csv()</span></code></a> method</li>
+<li><strong>**kwargs</strong> &#8211; Any other keyword for the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html#pandas.DataFrame.to_csv" title="(in pandas v0.24.2)"><code class="xref py py-meth docutils literal"><span class="pre">pandas.DataFrame.to_csv()</span></code></a> method</li>
 </ul>
 </td>
 </tr>
@@ -1364,7 +1364,7 @@ converted to <code class="docutils literal"><span class="pre">[2009,2012,</span>
     
 
 <p>
-<a href="https://travis-ci.org/ARVE-Research/gwgen">
+<a class="badge" href="https://travis-ci.org/ARVE-Research/gwgen">
     <img
         alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
         src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
@@ -1423,7 +1423,7 @@ converted to <code class="docutils literal"><span class="pre">[2009,2012,</span>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="../_sources/api/gwgen.utils.txt"

@@ -9,9 +9,7 @@ dependencies:
     - cartopy
     - seaborn
     - bottleneck
-    - scipy
+    - scipy<1.3   # for statsmodels compatibility
     - pip:
-        - cyordereddict
         - sqlalchemy
         - model-organization
-

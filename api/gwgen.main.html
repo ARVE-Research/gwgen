@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gwgen.main module &mdash; gwgen 1.0.2 documentation</title>
+    <title>gwgen.main module &mdash; gwgen 1.0.3 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.2',
+        VERSION:     '1.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="gwgen 1.0.2 documentation" href="../index.html" />
+    <link rel="top" title="gwgen 1.0.3 documentation" href="../index.html" />
     <link rel="up" title="Python API Reference" href="gwgen.html" />
     <link rel="next" title="gwgen.parameterization module" href="gwgen.parameterization.html" />
     <link rel="prev" title="gwgen.evaluation module" href="gwgen.evaluation.html" />
@@ -80,7 +80,7 @@
 <dl class="class">
 <dt id="gwgen.main.GWGENOrganizer">
 <em class="property">class </em><code class="descclassname">gwgen.main.</code><code class="descname">GWGENOrganizer</code><span class="sig-paren">(</span><em>config=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gwgen/main.html#GWGENOrganizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gwgen.main.GWGENOrganizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.9)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.html#model_organization.ModelOrganizer" title="(in model-organization v0.1.10)"><code class="xref py py-class docutils literal"><span class="pre">model_organization.ModelOrganizer</span></code></a></p>
 <p>A class for organizing a model</p>
 <p>This class is indended to have hold the basic functions for organizing a
 model. You can subclass the functions <code class="docutils literal"><span class="pre">setup,</span> <span class="pre">init</span></code> to fit to your model.
@@ -90,7 +90,7 @@ When using the model from the command line, you can also use the
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.config.html#model_organization.config.Config" title="(in model-organization v0.1.9)"><em>model_organization.config.Config</em></a>) &#8211; The configuration of the organizer</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference external" href="http://model-organization.readthedocs.io/en/latest/api/model_organization.config.html#model_organization.config.Config" title="(in model-organization v0.1.10)"><em>model_organization.config.Config</em></a>) &#8211; The configuration of the organizer</td>
 </tr>
 </tbody>
 </table>
@@ -125,7 +125,7 @@ When using the model from the command line, you can also use the
 <tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.poly_bias_correction" title="gwgen.main.GWGENOrganizer.poly_bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">poly_bias_correction</span></code></a>(vname,&nbsp;what,&nbsp;info[,&nbsp;...])</td>
 <td>Perform a bias correction based on percentile and a polynomial fit</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.preproc" title="gwgen.main.GWGENOrganizer.preproc"><code class="xref py py-obj docutils literal"><span class="pre">preproc</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.preproc" title="gwgen.main.GWGENOrganizer.preproc"><code class="xref py py-obj docutils literal"><span class="pre">preproc</span></code></a>(<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs)</td>
 <td>Preprocess the data</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.run" title="gwgen.main.GWGENOrganizer.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>([ifile,&nbsp;ofile,&nbsp;odir,&nbsp;work_dir,&nbsp;remove])</td>
@@ -134,16 +134,16 @@ When using the model from the command line, you can also use the
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.select" title="gwgen.main.GWGENOrganizer.select"><code class="xref py py-obj docutils literal"><span class="pre">select</span></code></a>([grid,&nbsp;grid_output,&nbsp;stations_output,&nbsp;...])</td>
 <td>Select stations based upon a regular grid</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.sensitivity_analysis" title="gwgen.main.GWGENOrganizer.sensitivity_analysis"><code class="xref py py-obj docutils literal"><span class="pre">sensitivity_analysis</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.sensitivity_analysis" title="gwgen.main.GWGENOrganizer.sensitivity_analysis"><code class="xref py py-obj docutils literal"><span class="pre">sensitivity_analysis</span></code></a>(<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)</td>
 <td>Perform a sensitivity analysis on the given parameters</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.setup" title="gwgen.main.GWGENOrganizer.setup"><code class="xref py py-obj docutils literal"><span class="pre">setup</span></code></a>(root_dir[,&nbsp;projectname,&nbsp;link,&nbsp;...])</td>
 <td>Perform the initial setup for the model</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.tmin_bias_correction" title="gwgen.main.GWGENOrganizer.tmin_bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">tmin_bias_correction</span></code></a>(*args,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.tmin_bias_correction" title="gwgen.main.GWGENOrganizer.tmin_bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">tmin_bias_correction</span></code></a>(<a href="#id5"><span class="problematic" id="id6">*</span></a>args,&nbsp;<a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)</td>
 <td>Perform a bias correction for the minimum temperature data</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction" title="gwgen.main.GWGENOrganizer.wind_bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">wind_bias_correction</span></code></a>(*args,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction" title="gwgen.main.GWGENOrganizer.wind_bias_correction"><code class="xref py py-obj docutils literal"><span class="pre">wind_bias_correction</span></code></a>(<a href="#id9"><span class="problematic" id="id10">*</span></a>args,&nbsp;<a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs)</td>
 <td>Perform a bias correction for the wind speed</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#gwgen.main.GWGENOrganizer.wind_bias_correction_logistic" title="gwgen.main.GWGENOrganizer.wind_bias_correction_logistic"><code class="xref py py-obj docutils literal"><span class="pre">wind_bias_correction_logistic</span></code></a>(info[,&nbsp;...])</td>
@@ -660,7 +660,7 @@ option is used</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><em>numpy.ndarray</em></a>) &#8211; The x-data</li>
+<li><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a>) &#8211; The x-data</li>
 <li><strong>a</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The <em>a</em> parameter in the above equation</li>
 <li><strong>b</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The <em>b</em> parameter in the above equation</li>
 </ul>
@@ -688,7 +688,7 @@ option is used</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><em>numpy.ndarray</em></a>) &#8211; The x-data</li>
+<li><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a>) &#8211; The x-data</li>
 <li><strong>L</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the curve&#8217;s maximum value</li>
 <li><strong>k</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The steepness of the curve</li>
 <li><strong>x0</strong> (<em>the x-value of the sigmoid's midpoint</em>) &#8211; </li>
@@ -740,7 +740,7 @@ option is used</li>
     
 
 <p>
-<a href="https://travis-ci.org/ARVE-Research/gwgen">
+<a class="badge" href="https://travis-ci.org/ARVE-Research/gwgen">
     <img
         alt="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
         src="https://secure.travis-ci.org/ARVE-Research/gwgen.svg?branch=master"
@@ -799,7 +799,7 @@ option is used</li>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="../_sources/api/gwgen.main.txt"
