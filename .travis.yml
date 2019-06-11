@@ -96,25 +96,11 @@ script:
           sphinx-build . ../deploy;
           cd ..;
       fi
-    - if [[ "$TRAVIS_TAG" != "" && "$BUILD_DOCS" == "true" ]]; then
-          cd deploy && zip -r "../gwgen_docs_${TRAVIS_TAG}.zip" . -x *.git* && cd ..;
-      fi
 
 after_success:
     - coverage combine && coveralls
 
 deploy:
-    - provider: releases
-      user: Chilipp
-      api_key:
-          secure: WsnYoYvjRetkH0CTMiGG1DjeOc/v0nhPteTDnb9I3K0IFh+Vvv2ZrJlJwUnrVh1ETu4CslJTLihq+VuiMEFeLNW+GLrG5dy4oI8U1A8cTjPSqAEMiVer8nGNcZdRoLfFHH0l17yShrGmXEcQ/1UibshQmqsLo1m2RNmSZHVNain4ImO6bXE6wXasS9oIgx45S8e1rg3poXjLDjN5OjF3W4Fz1cetWWWaAfBJ662GLI8oF7vvd2nI7P9fcMjqfD3tMJl9pecw7Qi8KSdo1FoLM1v7qFPt0T1gW7z8r+7kyzNaeYYCgllLXndA/nKyDRZJWSfUN/Oh0eshcwBGnpWvKxOk2oFLO9qhc1VIAOHn5K1KQJRrnowFFTR4U7MhDWk16bg1ytw2QB7/M+ALxcfbj+X8QzAfrDg7LO8FLHV5oIMHeA20KmVMPz5wxltu0AXlfRWg51HasVI46BJpMQ2uDO0tOrELSZ2Dg7ntETRw5AprZUCjd+lmWoxQ5yM6QilnWjDGk2uNbVrIavceEKI8jBzI2RcKpdc2o+j6H3cTAnu51A7bfU+Two44iY4w0kJ8v3JUiY4joCK/gpFZBRGO1HBmcnz3x/uSteyHbxd9RSEATRKoJx6jR2tk7qZROlaBHvCR8edn4UyPJ3cc1rm+U1FTaRk/0Qj+y9jpQzRo7YE=
-      file: "gwgen_docs_${TRAVIS_TAG}.zip"
-      skip_cleanup: true
-      overwrite: true
-      on:
-          tags: true
-          condition: "$BUILD_DOCS == true"
-    # upload the documentation on master branch
     - provider: script
       script: ci/deploy.sh
       skip_cleanup: true
