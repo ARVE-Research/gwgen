@@ -458,9 +458,8 @@ class QuantileEvaluation(Evaluator):
         idx_name = full[next(v for v in self.names) + '_sim'].dims[-1]
         full = full.rename({idx_name: 'full_index'})
         for vref, vsim in self.all_variables:
-            full.rename({vref: 'all_' + vref, vsim: 'all_' + vsim},
-                        inplace=True)
-        ds.merge(full, inplace=True)
+            full = full.rename({vref: 'all_' + vref, vsim: 'all_' + vsim})
+        ds = ds.merge(full)
         for orig, attrs, (vref, vsim) in zip(
                 self.names, self.names.values(), self.all_variables):
             for prefix in ['', 'all_']:
