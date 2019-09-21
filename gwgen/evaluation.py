@@ -456,7 +456,7 @@ class QuantileEvaluation(Evaluator):
         full = xr.Dataset.from_dataframe(data).drop(list(chain(
             self.data.index.names, ['pctl'])))
         idx_name = full[next(v for v in self.names) + '_sim'].dims[-1]
-        full.rename({idx_name: 'full_index'}, inplace=True)
+        full = full.rename({idx_name: 'full_index'})
         for vref, vsim in self.all_variables:
             full.rename({vref: 'all_' + vref, vsim: 'all_' + vsim},
                         inplace=True)
