@@ -249,7 +249,7 @@ class CloudGHCNMap(CloudPreproc):
         # download inventory
         t.download_src()
         ghcn = t.station_list
-        ghcn = ghcn.ix[ghcn.vname == 'PRCP'].set_index('id')
+        ghcn = ghcn.loc[ghcn.vname == 'PRCP'].set_index('id')
         ghcn.to_sql('ghcn_inventory', self.engine, if_exists='replace')
         create_geog('ghcn_inventory')
 

@@ -466,11 +466,11 @@ class GWGENOrganizer(ModelOrganizer):
         df_centers.set_index(['clon', 'clat'], inplace=True)
         df_stations.set_index(['clon', 'clat'], inplace=True)
         merged = df_centers.merge(
-            df_stations.ix[indices_closest][['id']].rename(
+            df_stations.loc[indices_closest][['id']].rename(
                 columns={'id': 'nearest_station'}),
             left_index=True, right_index=True, how='outer')
         merged = merged.merge(
-            df_stations.ix[indices_longest][['id']].rename(
+            df_stations.loc[indices_longest][['id']].rename(
                 columns={'id': 'longest_record'}),
             left_index=True, right_index=True, how='outer')
 
@@ -685,7 +685,7 @@ class GWGENOrganizer(ModelOrganizer):
 
         def is_complete(s):
             ndays = 366 if calendar.isleap(s.name[1]) else 365
-            s[:] = s.ix[~s.index.duplicated()].count() == ndays
+            s[:] = s.loc[~s.index.duplicated()].count() == ndays
             return s
 
         stations = self._get_stations(stations)
@@ -732,7 +732,7 @@ class GWGENOrganizer(ModelOrganizer):
                             df_bool[col] = df_bool[col].astype(bool)
                         g = df_bool.groupby(level=['station_id', 'year'])
                         mask = g.transform(is_complete).values.any(axis=1)
-                        df = df.ix[mask]
+                        df = df.loc[mask]
 
                     g = df.groupby(['station_id', 'year'],
                                    as_index=False)
@@ -742,7 +742,7 @@ class GWGENOrganizer(ModelOrganizer):
                     self.logger.debug(
                         'Saving EECRA test sample with %i years from %i to '
                         '%s', n, tot, target)
-                    df.ix[1:0].to_csv(target, index=False)
+                    df.iloc[1:0].to_csv(target, index=False)
                     igrp = next(idx_groups)
                     for i, (key, group) in enumerate(g):
                         if i == igrp:
