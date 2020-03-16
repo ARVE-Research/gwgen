@@ -70,7 +70,7 @@ class _ParameterizerTestMixin(object):
             return [task.data]
 
         def no_duplicates(df):
-            return df.ix[~df.index.duplicated(keep=False)]
+            return df.loc[~df.index.duplicated(keep=False)]
 
         if self.param_cls is None:
             return
@@ -145,8 +145,8 @@ class _ParameterizerTestMixin(object):
                 df_ref = no_duplicates(df_ref)
                 mask = (df != df_ref).values.any(axis=1)
                 self.assertIsNone(df_equals(df, df_ref, check_dtype=False),
-                                  msg=df_diff_msg % (df.ix[mask],
-                                                     df_ref.ix[mask]))
+                                  msg=df_diff_msg % (df.loc[mask],
+                                                     df_ref.loc[mask]))
         # check setup from db
         if setup_from_db:
             for fname in filter(None, safe_list(task.datafile)):
@@ -168,8 +168,8 @@ class _ParameterizerTestMixin(object):
                 df_ref = no_duplicates(df_ref)
                 mask = (df != df_ref).values.any(axis=1)
                 self.assertIsNone(df_equals(df, df_ref, check_dtype=False),
-                                  msg=df_diff_msg % (df.ix[mask],
-                                                     df_ref.ix[mask]))
+                                  msg=df_diff_msg % (df.loc[mask],
+                                                     df_ref.loc[mask]))
         return manager
 
 # the usage of distributed is not supported at the moment

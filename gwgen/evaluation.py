@@ -253,7 +253,7 @@ class EvaluationPreparation(Evaluator):
                 ccday[['mean_cloud', 'wind']], left_index=True,
                 right_index=True, how='left')
         except TypeError:  # indices to not match
-            reference = cday.ix[1:0]  # create empty data frame
+            reference = cday.iloc[1:0]  # create empty data frame
             reference['mean_cloud'] = np.array([],
                                                dtype=ccday.mean_cloud.dtype)
             reference['wind'] = np.array([],
@@ -269,10 +269,10 @@ class EvaluationPreparation(Evaluator):
                 ccmonth[['mean_cloud', 'wind']], left_index=True,
                 right_index=True, how='left')
             # set cloud and wind to 0 where we have no reference
-            exp_input.ix[exp_input.mean_cloud.isnull(),
-                         ['mean_cloud', 'wind']] = 0
+            exp_input.loc[exp_input.mean_cloud.isnull(),
+                          ['mean_cloud', 'wind']] = 0
         except TypeError:  # indices do not match
-            exp_input = cmonth.ix[1:0]  # create empty data frame
+            exp_input = cmonth.iloc[1:0]  # create empty data frame
             exp_input['mean_cloud'] = np.array([],
                                                dtype=ccmonth.mean_cloud.dtype)
             exp_input['wind'] = np.array([],
@@ -456,11 +456,10 @@ class QuantileEvaluation(Evaluator):
         full = xr.Dataset.from_dataframe(data).drop(list(chain(
             self.data.index.names, ['pctl'])))
         idx_name = full[next(v for v in self.names) + '_sim'].dims[-1]
-        full.rename({idx_name: 'full_index'}, inplace=True)
+        full = full.rename({idx_name: 'full_index'})
         for vref, vsim in self.all_variables:
-            full.rename({vref: 'all_' + vref, vsim: 'all_' + vsim},
-                        inplace=True)
-        ds.merge(full, inplace=True)
+            full = full.rename({vref: 'all_' + vref, vsim: 'all_' + vsim})
+        ds = ds.merge(full)
         for orig, attrs, (vref, vsim) in zip(
                 self.names, self.names.values(), self.all_variables):
             for prefix in ['', 'all_']:
@@ -516,15 +515,15 @@ class QuantileEvaluation(Evaluator):
             # mask out non-complete months for cloud validation and months with
             # 0 or 1 cloud fraction
             if 'mean_cloud' in names:
-                df.ix[df['mean_cloud_ref'].isnull().values |
-                      (df['mean_cloud'] == 0.0) |
-                      (df['mean_cloud'] == 1.0),
-                      ['mean_cloud_sim', 'mean_cloud_ref']] = np.nan
+                df.loc[df['mean_cloud_ref'].isnull().values |
+                       (df['mean_cloud'] == 0.0) |
+                       (df['mean_cloud'] == 1.0),
+                       ['mean_cloud_sim', 'mean_cloud_ref']] = np.nan
             # mask out non-complete wind for wind validation and months with
             # a mean wind speed of 0
             if 'wind' in names:
-                df.ix[df['wind_ref'].isnull().values | (df['wind'] == 0.0),
-                      ['wind_sim', 'wind_ref']] = np.nan
+                df.loc[df['wind_ref'].isnull().values | (df['wind'] == 0.0),
+                       ['wind_sim', 'wind_ref']] = np.nan
             df.drop(['mean_cloud', 'wind'], 1, inplace=True)
             df.set_index('day', append=True, inplace=True)
 
@@ -699,7 +698,7 @@ class KSEvaluation(QuantileEvaluation):
 
     def significance_fractions(self, series):
         "The percentage of stations with no significant difference"
-        return 100. - (len(series.ix[series.notnull() & (series)]) /
+        return 100. - (len(series.loc[series.notnull() & (series)]) /
                        series.count())*100.
 
     def run(self, info):
@@ -746,7 +745,7 @@ class KSEvaluation(QuantileEvaluation):
             g.agg(dict(zip(names, repeat('sum')))), left_index=True,
             right_index=True, suffixes=['', '_sum'])
         df_lola = EvaluationPreparation.from_task(self).station_list
-        df_lola = df_lola.ix[~df_lola.duplicated('id').values]
+        df_lola = df_lola.loc[~df_lola.duplicated('id').values]
         df_lola.set_index('id', inplace=True)
         df_plot = df_lola.merge(df_fract, how='right', left_index=True,
                                 right_index=True)

@@ -1781,17 +1781,17 @@ class MonthlyCloud(CloudParameterizerBase):
             wet = df.wet_day.values.astype(bool)
             return pd.DataFrame.from_dict(OrderedDict([
                 ('wet_day', [df.wet_day.sum()]),
-                ('mean_cloud_wet', [df.mean_cloud.ix[wet].mean()]),
-                ('mean_cloud_dry', [df.mean_cloud.ix[~wet].mean()]),
+                ('mean_cloud_wet', [df.mean_cloud.loc[wet].mean()]),
+                ('mean_cloud_dry', [df.mean_cloud.loc[~wet].mean()]),
                 ('mean_cloud', [df.mean_cloud.mean()]),
-                ('sd_cloud_wet', [df.mean_cloud.ix[wet].std()]),
-                ('sd_cloud_dry', [df.mean_cloud.ix[~wet].std()]),
+                ('sd_cloud_wet', [df.mean_cloud.loc[wet].std()]),
+                ('sd_cloud_dry', [df.mean_cloud.loc[~wet].std()]),
                 ('sd_cloud', [df.mean_cloud.std()]),
-                ('wind_wet', [df.wind.ix[wet].mean()]),
-                ('wind_dry', [df.wind.ix[~wet].mean()]),
+                ('wind_wet', [df.wind.loc[wet].mean()]),
+                ('wind_dry', [df.wind.loc[~wet].mean()]),
                 ('wind', [df.wind.mean()]),
-                ('sd_wind_wet', [df.wind.ix[wet].std()]),
-                ('sd_wind_dry', [df.wind.ix[~wet].std()]),
+                ('sd_wind_wet', [df.wind.loc[wet].std()]),
+                ('sd_wind_dry', [df.wind.loc[~wet].std()]),
                 ('sd_wind', [df.wind.std()]),
                 ]))
         else:
@@ -1927,7 +1927,7 @@ class YearlyCompleteMonthlyCloud(CompleteMonthlyCloud):
             suffixes=['', '_year']).set_index(names)
 
         ycomplete_cols = [col + '_complete_year' for col in cols]
-        self.data = all_monthly.ix[
+        self.data = all_monthly.loc[
             all_monthly[ycomplete_cols].values.all(axis=1)]
 
 
@@ -2373,7 +2373,7 @@ class YearlyCompleteDailyCloud(CompleteDailyCloud):
             suffixes=['', '_year']).set_index(names)
 
         ycomplete_cols = [col + '_complete_year' for col in cols]
-        monthly = all_monthly.ix[
+        monthly = all_monthly.loc[
             all_monthly[ycomplete_cols].values.all(axis=1)][[]].reset_index()
         self.data = self.cdaily_cloud.data.reset_index().merge(
             monthly, how='inner', on=['id', 'year', 'month'],
